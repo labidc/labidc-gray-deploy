@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.labidc.gray.deploy.eureka.AutoEurekaDiscoveryConfiguration

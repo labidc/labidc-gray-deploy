@@ -1,0 +1,4 @@
+spring:
+  gray:
+    deploy:
+      ribbonRule: RoundRobinGrayDeployRule
