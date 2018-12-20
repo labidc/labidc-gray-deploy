@@ -4,7 +4,7 @@
 ##### 基于spring-boot-starter-parent 2.0.1.RELEASE开发
 #### 前言
 ##### 本来该插件设想是非暴力修改，扩展方式重写 LoadBalancerRule 相关负载均衡器规则，但发现会有并发问题，所以这里暴力重写了LoadBalancerRule 相关类，以后时间允许的情况下再做调整与修改（不忘初心）
-
+##### 该文件使用了
 
 ## 开始
 ##### 1. 该插件开发了两个版本 分别支持 consul 和 eureka 两种注册中心。
