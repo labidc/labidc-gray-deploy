@@ -234,3 +234,6 @@ zuul:
   </dependency>
 
 ```
+
+
+## [DEMO项目地址：https://github.com/labidc/labidc-gray-deploy-demo](https://github.com/labidc/labidc-gray-deploy-demo).
