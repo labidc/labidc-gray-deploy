@@ -125,6 +125,13 @@ spring:
   </dependency>
 
 ```
+相关负载均衡规则修改配置, 有 WeightedResponseTimeGrayDeployRule, RandomGrayDeployRule, AvailabilityFilteringGrayDeployRule, BestAvailableGrayDeployRule, ZoneAvoidanceGrayDeployRule, RetryGrayDeployRule, RoundRobinGrayDeployRule(默认值)
+```yaml
+spring:
+  gray:
+    deploy:
+      ribbonRule: BestAvailableGrayDeployRule
+```
 4. gateway, 由于gateway 基与webflux, 所以使用变通方法解决路由到 【服务1】
 ``` yaml
 spring:
@@ -206,6 +213,13 @@ eureka:
       <version>1.0.1</version>
   </dependency>
 
+```
+相关负载均衡规则修改配置, 有 WeightedResponseTimeGrayDeployRule, RandomGrayDeployRule, AvailabilityFilteringGrayDeployRule, BestAvailableGrayDeployRule, ZoneAvoidanceGrayDeployRule, RetryGrayDeployRule, RoundRobinGrayDeployRule(默认值)
+```yaml
+spring:
+  gray:
+    deploy:
+      ribbonRule: BestAvailableGrayDeployRule
 ```
 
 4. zuul2 
