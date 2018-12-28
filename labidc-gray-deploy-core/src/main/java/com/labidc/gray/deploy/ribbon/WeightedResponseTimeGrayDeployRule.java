@@ -175,12 +175,12 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
                 continue;
             }
 
-            if (server.isAlive()) {
+            /*if (server.isAlive()) {
                 return (server);
-            }
-
+            }*/
+            return (server);
             // Next.
-            server = null;
+            //server = null;
         }
         return server;
     }
