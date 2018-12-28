@@ -72,7 +72,8 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
 
         answer = subRule.choose(key);
 
-        if (((answer == null) || (!answer.isAlive()))
+        //if (((answer == null) || (!answer.isAlive()))
+        if (((answer == null) )
                 && (System.currentTimeMillis() < deadline)) {
 
             InterruptTask task = new InterruptTask(deadline
@@ -81,7 +82,8 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
             while (!Thread.interrupted()) {
                 answer = subRule.choose(key);
 
-                if (((answer == null) || (!answer.isAlive()))
+                //if (((answer == null) || (!answer.isAlive()))
+                if (((answer == null))
                         && (System.currentTimeMillis() < deadline)) {
                     /* pause and retry hoping it's transient */
                     Thread.yield();
@@ -93,7 +95,8 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
             task.cancel();
         }
 
-        if ((answer == null) || (!answer.isAlive())) {
+        // if ((answer == null) || (!answer.isAlive())) {
+        if (answer == null) {
             return null;
         } else {
             return answer;

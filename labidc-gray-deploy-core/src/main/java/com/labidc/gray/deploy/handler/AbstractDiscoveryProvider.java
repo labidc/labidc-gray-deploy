@@ -2,6 +2,7 @@ package com.labidc.gray.deploy.handler;
 
 import com.labidc.gray.deploy.constant.GrayDeployConstant;
 import com.netflix.loadbalancer.Server;
+import lombok.extern.java.Log;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import static java.util.stream.Collectors.toList;
  * @author: ChenXingLiang
  * @date: 2018-11-08 17:44
  **/
+@Log
 public abstract class AbstractDiscoveryProvider {
 
     /**
@@ -75,7 +77,14 @@ public abstract class AbstractDiscoveryProvider {
      */
     public String getRequestHeaderVersion() {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if(requestAttributes == null){
+
+            log.warning("==========================wei kong ");
+            return null;
+        }
+
         HttpServletRequest request = requestAttributes.getRequest();
+        ///request.getHeaderNames()
         return request.getHeader(GrayDeployConstant.VERSION);
     }
 
