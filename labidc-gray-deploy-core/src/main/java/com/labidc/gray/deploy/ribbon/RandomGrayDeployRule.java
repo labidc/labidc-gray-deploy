@@ -1,14 +1,17 @@
 package com.labidc.gray.deploy.ribbon;
 
 import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
+import com.netflix.loadbalancer.ZoneAwareLoadBalancer;
 import lombok.extern.java.Log;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Random;
 
@@ -18,9 +21,11 @@ import java.util.Random;
  * @author: ChenXingLiang
  * @date: 2018-11-08 17:10
  **/
+@Log
 public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
 
 
+    @Resource(name="DiscoveryProvider")
     @Autowired
     private AbstractDiscoveryProvider abstractDiscoveryProvider;
 
@@ -39,7 +44,14 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             return null;
         }
         Server server = null;
+        if(this.abstractDiscoveryProvider == null) {
+            this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
+        }
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
+
+
+        log.warning("=======================进入循环====================");
+
         while (server == null) {
             if (Thread.interrupted()) {
                 return null;
@@ -61,7 +73,15 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
                 upList = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
                 allList = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
             }
+            // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
+            log.warning("=======================服务总数"+lb.getAllServers().size());
+            log.warning("=======================真实服务总数"+lb.getReachableServers().size());
+            log.warning("======================key名称"+key);
+            log.warning("======================类名称"+lb.getClass().getSimpleName());
+            log.warning("======================类名称"+lb.toString());
+            log.warning("======================类名称"+((ZoneAwareLoadBalancer)lb).getName());
 
+            log.warning("======================对象总数"+ SpringContextUtils.getBeans(ILoadBalancer.class).size());
 
             int serverCount = allList.size();
             if (serverCount == 0) {
@@ -73,7 +93,8 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             }
 
             int index = rand.nextInt(serverCount);
-            server = upList.get(index);
+            server = allList.get(index);
+            ///server = upList.get(index);
 
             if (server == null) {
                 /*
@@ -85,13 +106,14 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
                 continue;
             }
 
-            if (server.isAlive()) {
+            /*if (server.isAlive()) {
                 return (server);
-            }
+            }*/
+            return server;
 
             // Shouldn't actually happen.. but must be transient or a bug.
-            server = null;
-            Thread.yield();
+            //server = null;
+            //Thread.yield();
         }
 
         return server;
