@@ -41,7 +41,7 @@ public class FeignHeadConfiguration {
                         String value = request.getHeader(name);
                         // 遍历请求头里面的属性字段，将logId和token添加到新的请求头中转发到下游服务
                         if (GrayDeployConstant.VERSION.equalsIgnoreCase(name)) {
-                            logger.debug("======================获取到指定请求头：");
+                            //logger.debug("======================获取到指定请求头：");
                             requestTemplate.header(name, value);
                             break;
                         }

@@ -3,11 +3,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>labidc.manager</artifactId>
+        <artifactId>labidc-gray-deploy</artifactId>
         <groupId>com.labidc</groupId>
-        <version>1.0.0</version>
+        <version>1.0.3</version>
     </parent>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>labidc-gray-deploy-eureka</artifactId>
     <name>labidc-gray-deploy-eureka</name>
@@ -17,7 +17,7 @@
         <dependency>
             <groupId>com.labidc</groupId>
             <artifactId>labidc-gray-deploy-core</artifactId>
-            <version>1.0.30</version>
+            <version>1.0.3</version>
             <scope>compile</scope>
         </dependency>
 
