@@ -123,7 +123,7 @@ spring:
   <dependency>
     <groupId>com.labidc</groupId>
     <artifactId>labidc-gray-deploy-eureka</artifactId>
-    <version>1.0.30</version>
+    <version>1.0.3</version>
   </dependency>
 
 ```
@@ -212,7 +212,7 @@ eureka:
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.3</version>
   </dependency>
 
 ```
@@ -246,7 +246,7 @@ zuul:
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.3</version>
   </dependency>
 
 ```
