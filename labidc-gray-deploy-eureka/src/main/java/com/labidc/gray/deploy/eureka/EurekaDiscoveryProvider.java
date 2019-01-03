@@ -1,10 +1,13 @@
 package com.labidc.gray.deploy.eureka;
 
+import com.labidc.gray.deploy.constant.GrayDeployConstant;
 import com.labidc.gray.deploy.exception.DiscoveryServerException;
 import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.netflix.loadbalancer.Server;
 import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
@@ -18,6 +21,10 @@ import java.util.Map;
 @Component(value = "DiscoveryProvider")
 public class EurekaDiscoveryProvider extends AbstractDiscoveryProvider {
 
+
+    @Autowired
+    private EurekaInstanceConfigBean eurekaInstanceConfigBean;
+
     @Override
     public Map<String, String> getServerMetadata(Server server) {
         if (server instanceof DiscoveryEnabledServer) {
@@ -25,5 +32,14 @@ public class EurekaDiscoveryProvider extends AbstractDiscoveryProvider {
             return eurekaServer.getInstanceInfo().getMetadata();
         }
         throw new DiscoveryServerException("该服务器实例不是Eureka提供，它是："+server.getClass().getSimpleName());
+    }
+
+    @Override
+    public String getCurrentVersion() {
+        Map<String, String> metadataMap = this.eurekaInstanceConfigBean.getMetadataMap();
+        if (metadataMap != null && metadataMap.size() > 0) {
+            return metadataMap.containsKey(GrayDeployConstant.VERSION) ? metadataMap.get(GrayDeployConstant.VERSION) :  null;
+        }
+        return null;
     }
 }

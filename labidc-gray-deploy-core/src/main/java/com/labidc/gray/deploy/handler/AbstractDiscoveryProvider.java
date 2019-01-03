@@ -65,6 +65,13 @@ public abstract class AbstractDiscoveryProvider {
 
 
     /**
+     * 获取当前服务的版本号
+     * @param
+     * @return 如果不存在版本号，则为null
+     */
+    public abstract String getCurrentVersion();
+
+    /**
      * 根据当前服务对象的元数据字段获取到服务的版本号
      * @param server
      * @return
