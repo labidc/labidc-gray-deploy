@@ -5,7 +5,7 @@
 
 	<groupId>com.labidc</groupId>
 	<artifactId>labidc-gray-deploy</artifactId>
-     <version>1.0.3</version>
+	<version>1.0.3</version>
 	<packaging>pom</packaging>
 
 	<name>labidc-gray-deploy</name>
@@ -15,7 +15,10 @@
         <module>labidc-gray-deploy-core</module>
         <module>labidc-gray-deploy-consul</module>
         <module>labidc-gray-deploy-eureka</module>
-    </modules>
+		<module>labidc-gray-deploy-gateway</module>
+		<module>labidc-gray-deploy-core-servlet</module>
+		<module>labidc-gray-deploy-core-gateway</module>
+	</modules>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -44,7 +47,7 @@
 		<xstream.version>1.4.10</xstream.version>
 		<commons-io.version>2.6</commons-io.version>
 
-
+		<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>
 	</properties>
 
 
@@ -58,8 +61,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
-
 
 			<!--小辣椒工具-->
 			<dependency>
@@ -81,6 +82,31 @@
 				<groupId>com.alibaba</groupId>
 				<artifactId>fastjson</artifactId>
 				<version>${alibaba.fastjson.version}</version>
+			</dependency>
+
+
+			<dependency>
+				<groupId>com.labidc</groupId>
+				<artifactId>labidc-gray-deploy-core</artifactId>
+				<version>${labidc-gray-deploy.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.labidc</groupId>
+				<artifactId>labidc-gray-deploy-consul</artifactId>
+				<version>${labidc-gray-deploy.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.labidc</groupId>
+				<artifactId>labidc-gray-deploy-eureka</artifactId>
+				<version>${labidc-gray-deploy.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.labidc</groupId>
+				<artifactId>labidc-gray-deploy-core-servlet</artifactId>
+				<version>${labidc-gray-deploy.version}</version>
 			</dependency>
 
 

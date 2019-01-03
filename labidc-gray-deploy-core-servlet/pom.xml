@@ -8,22 +8,20 @@
         <version>1.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>labidc-gray-deploy-consul</artifactId>
-    <name>labidc-gray-deploy-consul</name>
-    <dependencies>
+    <artifactId>labidc-gray-deploy-core-servlet</artifactId>
+    <name>labidc-gray-deploy-core-servlet</name>
 
+    <dependencies>
         <dependency>
-            <groupId>com.labidc</groupId>
-            <artifactId>labidc-gray-deploy-core-servlet</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+            <groupId>com.labidc</groupId>
+            <artifactId>labidc-gray-deploy-core</artifactId>
         </dependency>
-
     </dependencies>
-
 
 </project>

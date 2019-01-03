@@ -17,6 +17,7 @@ import java.util.Map;
  **/
 @Component(value = "DiscoveryProvider")
 public class EurekaDiscoveryProvider extends AbstractDiscoveryProvider {
+
     @Override
     public Map<String, String> getServerMetadata(Server server) {
         if (server instanceof DiscoveryEnabledServer) {

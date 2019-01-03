@@ -7,7 +7,6 @@
         <groupId>com.labidc</groupId>
         <version>1.0.3</version>
     </parent>
-    <version>1.0.3</version>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>labidc-gray-deploy-eureka</artifactId>
     <name>labidc-gray-deploy-eureka</name>
@@ -16,8 +15,7 @@
 
         <dependency>
             <groupId>com.labidc</groupId>
-            <artifactId>labidc-gray-deploy-core</artifactId>
-            <version>1.0.3</version>
+            <artifactId>labidc-gray-deploy-core-servlet</artifactId>
             <scope>compile</scope>
         </dependency>
 

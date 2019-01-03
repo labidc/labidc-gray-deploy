@@ -8,11 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.serviceregistry.Registration;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
+import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -28,6 +25,7 @@ import static java.util.stream.Collectors.toList;
  **/
 @Log
 public abstract class AbstractDiscoveryProvider {
+
 
     /**
      * 日志控制器
@@ -53,6 +51,11 @@ public abstract class AbstractDiscoveryProvider {
     }
 
 
+    @Resource(name="VersionProvider")
+    @Autowired
+    protected AbstractVersionProvider abstractVersionProvider;
+
+
     /**
      * 获取元数据
      * @param server
@@ -71,22 +74,15 @@ public abstract class AbstractDiscoveryProvider {
         return this.getServerMetadata(server).get(GrayDeployConstant.VERSION);
     }
 
+
     /**
-     * 获取当前请头的版本号
+     * 获取版本号
      * @return
      */
     public String getRequestHeaderVersion() {
-        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if(requestAttributes == null){
-
-            log.warning("==========================wei kong ");
-            return null;
-        }
-
-        HttpServletRequest request = requestAttributes.getRequest();
-        ///request.getHeaderNames()
-        return request.getHeader(GrayDeployConstant.VERSION);
+        return abstractVersionProvider.getRequestHeaderVersion();
     }
+
 
     /**
      * 返回生产服务

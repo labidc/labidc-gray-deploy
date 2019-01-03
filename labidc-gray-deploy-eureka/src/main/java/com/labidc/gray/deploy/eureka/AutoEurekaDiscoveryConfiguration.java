@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
  * @date: 2018-11-10 13:29
  **/
 @Import({GrayDeployAutoConfiguration.class})
-@ComponentScan(value = "labidc-gray-deploy-eureka")
+@ComponentScan(value = "com.labidc.gray.deploy.eureka")
 @AutoConfigureBefore(GrayDeployAutoConfiguration.class)
 public class AutoEurekaDiscoveryConfiguration {
 }
