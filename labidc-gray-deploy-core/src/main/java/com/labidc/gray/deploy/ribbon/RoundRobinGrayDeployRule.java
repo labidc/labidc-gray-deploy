@@ -80,13 +80,13 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
                 allServers = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
             }
             // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
-            System.out.println ("=======================服务总数"+lb.getAllServers().size());
-            System.out.println("=======================真实服务总数"+lb.getReachableServers().size());
-            System.out.println("======================key名称"+key);
-            System.out.println("======================类名称"+lb.getClass().getSimpleName());
-            System.out.println("======================类名称"+lb.toString());
-            System.out.println("======================类名称"+((ZoneAwareLoadBalancer)lb).getName());
-            System.out.println("======================对象总数"+ SpringContextUtils.getBeans(ILoadBalancer.class).size());
+            // System.out.println ("=======================服务总数"+lb.getAllServers().size());
+            // System.out.println("=======================真实服务总数"+lb.getReachableServers().size());
+            // System.out.println("======================key名称"+key);
+            // System.out.println("======================类名称"+lb.getClass().getSimpleName());
+            // System.out.println("======================类名称"+lb.toString());
+            // System.out.println("======================类名称"+((ZoneAwareLoadBalancer)lb).getName());
+            // System.out.println("======================对象总数"+ SpringContextUtils.getBeans(ILoadBalancer.class).size());
 
             int upCount = reachableServers.size();
             int serverCount = allServers.size();

@@ -6,7 +6,6 @@ import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
-import com.netflix.loadbalancer.ZoneAwareLoadBalancer;
 import lombok.extern.java.Log;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +49,7 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
 
 
-        log.warning("=======================进入循环====================");
+        //log.warning("=======================进入循环====================");
 
         while (server == null) {
             if (Thread.interrupted()) {
@@ -69,11 +68,12 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             }
 
             if(StringUtils.isNotEmpty(requestHeaderVersion) &&
-                    (upList.size()==0 || allList.size()==0)) {
+                    (allList.size()==0)) {
                 upList = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
                 allList = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
             }
             // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
+            /*
             log.warning("=======================服务总数"+lb.getAllServers().size());
             log.warning("=======================真实服务总数"+lb.getReachableServers().size());
             log.warning("======================key名称"+key);
@@ -82,7 +82,7 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             log.warning("======================类名称"+((ZoneAwareLoadBalancer)lb).getName());
 
             log.warning("======================对象总数"+ SpringContextUtils.getBeans(ILoadBalancer.class).size());
-
+             */
             int serverCount = allList.size();
             if (serverCount == 0) {
                 /*

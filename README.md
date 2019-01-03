@@ -83,9 +83,7 @@ graph LR
 
 6. 对于服务2，服务1 整个调用链中间的服务，同样需要适应上面第5条，如果是灰度服务就需要标注灰度版本，同时需要安装插件。
 
-7. 由于 gateway 基于 netty+webflux，和zuul 核心原理不同，zuul 基于 Servlet 容器, 每个请求独立单线程处理，
-webflux 已经不止一个线程跑到底，所以在当前请求线程上下文拿不到原请求的ThreadLocal 对象。 因此zuul 可以直接使用该插件
-gateway 无法直接使用，所以 gateway 需要一种变通的方式来处理，下面会讲到，实例也会有对应的配置。
+7. 由于 gateway 基于 netty+webflux，和zuul 核心原理不同，zuul 基于 Servlet 容器, 可以直接使用。但是gateway 有一个专属版本，以自己实现一个过滤器实现。
 
 8. 重点：核心原则，服务如果没有加入【版本标识】，该插件会识别成正式服务，如果有【版本标识】该插件会识别成灰度服务。
 但是【正常请求】，如果访问下层服务没有正式服务，只有灰度服务的时候，不会调用，会报告异常，也就是说，整个调用链条所有服务必须要有正式服务，
@@ -119,11 +117,12 @@ spring:
            - version=1.0.1
 ```
 3. 【服务1】，【服务2】 maven添加插件
+#### labidc-gray-deploy-consul 依赖了 spring-cloud-starter-consul-discovery,spring-cloud-starter-zipkin 所以不用重复引用
 ``` 
   <dependency>
     <groupId>com.labidc</groupId>
-    <artifactId>labidc-gray-deploy-eureka</artifactId>
-    <version>1.0.30</version>
+    <artifactId>labidc-gray-deploy-consul</artifactId>
+    <version>1.0.4</version>
   </dependency>
 
 ```
@@ -134,52 +133,25 @@ spring:
     deploy:
       ribbonRule: BestAvailableGrayDeployRule
 ```
-4. gateway, 由于gateway 基与webflux, 所以使用变通方法解决路由到 【服务1】
-``` yaml
+4. 【网关】, gateway, 由于gateway 基与webflux 使用Netty 作为容器, 所有有个专门为gateway实现的一个插件（注意该插件以来了consul,如果需要和eureka配合使用，请自行修改源码）, 其他配置方法一样
+##### labidc-gray-deploy-gateway 依赖了 spring-cloud-starter-consul-discovery 所以不用重复引用
+``` maven
+    <dependency>
+        <groupId>com.labidc</groupId>
+        <artifactId>labidc-gray-deploy-gateway</artifactId>
+        <version>1.0.4</version>
+   </dependency>
+```
+```yaml
 spring:
-  application:
-    name: ${app_name:service-geteway}
-  cloud:
-    consul:
-      host: localhost
-      port: 8500
-      discovery:
-        healthCheckInterval: 15s
-        instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
-        tags:
-          - 网关路由
-        instance-group: 工具
-        query-passing: true
-        prefer-ip-address: true
-    # gateway 自带了tag 可以做分流和限流操作，自行百度
-    gateway:
+  cloud: 
+   gateway:
       discovery:
         locator:
           enabled: true
-          #route-id-prefix: test_
-          #include-expression: metadata['edge'] != ''
-          #lower-case-service-id: true
       routes:
-      #===========================灰度发布设置主要这里开始
-      - id: gray_demo # 灰度请求路由
-        # 新版本请求会走这里，带version请求的，全是这条路由
-        uri: lb://product-service-demo1-gray # 启动一个最上层灰度服务，当然这里你也可以启动一个正式版本服务
-        predicates:
-        # 断言到根路径是test_service 走这条路由
-        - Path=/test_service/**
-        # 断言到请求头有version 走这条路由
-        - Header=version, (.*?)
-        filters:
-          # 转发给服务的时候取消掉test_service路径
-          - StripPrefix=1
-          # 路由熔断器
-          - name: Hystrix
-            args:
-              name: fallbackcmd
-              fallbackUri: forward:/fallback
-      - id: prod_demo # 正常请求路由
-        # 正式版本，没有version请求头的，全是正常请求
-        uri: lb://product-service-demo1  # 正式服务
+      - id: gray_demo
+        uri: lb://product-service-demo3
         predicates:
         - Path=/test_service/**
         filters:
@@ -188,9 +160,7 @@ spring:
             args:
               name: fallbackcmd
               fallbackUri: forward:/fallback
-      #===========================灰度发布设置主要这里结束
 ```
-
 
 ### 二、网关：zuul2，注册中心：eureka ，以上面讲的案例为例子。
 1.  【服务3】，添加元数据map
@@ -208,11 +178,12 @@ eureka:
       version: 1.0.0
 ```
 3. 【服务1】，【服务2】 maven添加插件
+#### labidc-gray-deploy-eureka 依赖了 spring-cloud-starter-netflix-eureka-client,spring-cloud-starter-zipkin 所以不用重复引用
 ``` 
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.4</version>
   </dependency>
 
 ```
@@ -224,7 +195,7 @@ spring:
       ribbonRule: BestAvailableGrayDeployRule
 ```
 
-4. zuul2 
+4. 【网关】zuul2 
 ``` yaml
 # 路由规则配置
 zuul:
@@ -246,7 +217,7 @@ zuul:
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.1</version>
+      <version>1.0.4</version>
   </dependency>
 
 ```

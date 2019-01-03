@@ -43,13 +43,11 @@ public class DefaultRibbonConfig {
     @Bean
     public IRule ribbonRule() {
 
-        logger.error("======================加载了负载均衡器");
+        //logger.error("======================加载了负载均衡器");
         if(this.grayDeployProerties == null){
             return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(null, this.abstractDiscoveryProvider);
         }
         return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(this.grayDeployProerties.getRibbonRule(), this.abstractDiscoveryProvider);
-
-
     }
 
     @Bean

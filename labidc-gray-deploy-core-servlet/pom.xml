@@ -8,20 +8,24 @@
         <version>1.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>labidc-gray-deploy-eureka</artifactId>
-    <name>labidc-gray-deploy-eureka</name>
+    <artifactId>labidc-gray-deploy-core-servlet</artifactId>
+    <name>labidc-gray-deploy-core-servlet</name>
 
     <dependencies>
-
         <dependency>
-            <groupId>com.labidc</groupId>
-            <artifactId>labidc-gray-deploy-core-servlet</artifactId>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
             <scope>compile</scope>
         </dependency>
 
         <dependency>
+            <groupId>com.labidc</groupId>
+            <artifactId>labidc-gray-deploy-core</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
         </dependency>
 
     </dependencies>

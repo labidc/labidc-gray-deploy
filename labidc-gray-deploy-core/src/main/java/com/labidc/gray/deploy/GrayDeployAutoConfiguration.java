@@ -39,36 +39,4 @@ public class GrayDeployAutoConfiguration {
      */
     @Autowired
     private GrayDeployProerties grayDeployProerties;
-
-    /**
-     * 日志控制器
-     */
-    private static final Logger logger = LoggerFactory.getLogger(GrayDeployAutoConfiguration.class);
-
-
-
-    //@Bean
-   // @LoadBalanced
-   // public RestTemplate getRestTemplate() {
-        //return new RestTemplate();
-   // }
-
-
-
-    /**
-     * 加载自定义负载均衡器
-     * @return
-
-    @Bean
-    public IRule getLoadBalancedRule() {
-        //return  new RandomRule();
-        logger.error("======================加载了负载均衡器");
-        if(this.grayDeployProerties == null){
-            return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(null, this.abstractDiscoveryProvider);
-        }
-        return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(this.grayDeployProerties.getRibbonRule(), this.abstractDiscoveryProvider);
-
-    }
-     */
-
 }
