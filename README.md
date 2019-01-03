@@ -117,7 +117,7 @@ spring:
            - version=1.0.1
 ```
 3. 【服务1】，【服务2】 maven添加插件
-#### labidc-gray-deploy-consul 依赖了 spring-cloud-starter-consul-discovery, 所以不用重复引用
+#### labidc-gray-deploy-consul 依赖了 spring-cloud-starter-consul-discovery,spring-cloud-starter-zipkin 所以不用重复引用
 ``` 
   <dependency>
     <groupId>com.labidc</groupId>
@@ -178,7 +178,7 @@ eureka:
       version: 1.0.0
 ```
 3. 【服务1】，【服务2】 maven添加插件
-#### labidc-gray-deploy-eureka 依赖了 spring-cloud-starter-netflix-eureka-client, 所以不用重复引用
+#### labidc-gray-deploy-eureka 依赖了 spring-cloud-starter-netflix-eureka-client,spring-cloud-starter-zipkin 所以不用重复引用
 ``` 
   <dependency>
       <groupId>com.labidc</groupId>
