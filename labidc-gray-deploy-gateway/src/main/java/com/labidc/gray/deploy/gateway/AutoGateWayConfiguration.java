@@ -21,12 +21,11 @@ import org.springframework.context.annotation.Import;
 @ComponentScan(value = "com.labidc.gray.deploy")
 public class AutoGateWayConfiguration {
 
-    @Autowired
-    private SpringClientFactory clientFactory;
+
 
     @Bean
     public GlobalFilter loadLoadBalancerFilter(){
-        return new GateWayLoadBalancerClientFilter(new GateWayRibbonLoadBalancerClient(this.clientFactory));
+        return new GateWayLoadBalancerClientFilter();
     }
 
 
