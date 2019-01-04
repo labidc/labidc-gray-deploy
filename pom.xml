@@ -48,7 +48,6 @@
 		<xstream.version>1.4.10</xstream.version>
 		<commons-io.version>2.6</commons-io.version>
 		<findbugs.version>3.0.0</findbugs.version>
-		<netflix.servo.version>0.7.5</netflix.servo.version>
 
 
 	</properties>
@@ -77,12 +76,6 @@
 				<groupId>com.google.code.findbugs</groupId>
 				<artifactId>annotations</artifactId>
 				<version>${findbugs.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.netflix.servo</groupId>
-				<artifactId>servo-core</artifactId>
-				<version>${netflix.servo.version}</version>
 			</dependency>
 
 
