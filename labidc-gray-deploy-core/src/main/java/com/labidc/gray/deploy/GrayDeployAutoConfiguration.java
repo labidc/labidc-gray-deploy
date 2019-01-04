@@ -28,15 +28,4 @@ import javax.annotation.Resource;
 @Configuration
 public class GrayDeployAutoConfiguration {
 
-
-
-    @Resource(name="DiscoveryProvider")
-    @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
-
-    /**
-     * 灰度发布配置规则
-     */
-    @Autowired
-    private GrayDeployProerties grayDeployProerties;
 }

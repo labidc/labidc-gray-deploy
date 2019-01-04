@@ -6,8 +6,10 @@ import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.netflix.loadbalancer.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.cloud.consul.discovery.ConsulServer;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +26,11 @@ import java.util.Optional;
 @Component(value = "DiscoveryProvider")
 public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
 
-    @Value("${spring.cloud.consul.discovery.tags}")
-    private List<String> tags = null;
+
+    @Autowired
+    private ConsulDiscoveryProperties consulDiscoveryProperties;
+
+    private static final int VERSION_SPLIT_LENGTH = 2;
 
     /**
      * 日志控制器
@@ -43,13 +48,18 @@ public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
         throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是："+server.getClass().getSimpleName());
     }
 
+
+
     @Override
     public String getCurrentVersion() {
 
-        if (this.tags != null && this.tags.size() > 0) {
-            Optional<String> optional = this.tags.stream().filter(c -> c.startsWith(GrayDeployConstant.VERSION)).findFirst();
-            if (optional.isPresent()) {
-                return optional.get().split("=")[1].trim();
+        String versionStartsWith = GrayDeployConstant.VERSION + "=";
+
+        Optional<String> optional = this.consulDiscoveryProperties.getTags().stream().filter(c -> c.startsWith(versionStartsWith)).findFirst();
+        if (optional.isPresent()) {
+            String[] versionSplit = optional.get().split("=", VERSION_SPLIT_LENGTH);
+            if (versionSplit.length == VERSION_SPLIT_LENGTH) {
+                return versionSplit[versionSplit.length - 1];
             }
         }
         return null;

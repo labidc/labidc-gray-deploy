@@ -43,7 +43,6 @@ public class DefaultRibbonConfig {
     @Bean
     public IRule ribbonRule() {
 
-        //logger.error("======================加载了负载均衡器");
         if(this.grayDeployProerties == null){
             return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(null, this.abstractDiscoveryProvider);
         }
@@ -54,11 +53,6 @@ public class DefaultRibbonConfig {
     public IPing ribbonPing() {
         return new PingUrl();
     }
-
-    //@Bean
-    //public ServerList<Server> ribbonServerList(IClientConfig config) {
-      //  return new RibbonClientDefaultConfigurationTestsConfig.BazServiceList(config);
-    //}
 
     @Bean
     public ServerListSubsetFilter serverListFilter() {
