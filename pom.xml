@@ -5,7 +5,7 @@
 
 	<groupId>com.labidc</groupId>
 	<artifactId>labidc-gray-deploy</artifactId>
-	<version>1.0.5</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>labidc-gray-deploy</name>
@@ -37,8 +37,8 @@
 		<dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
 
 		<!--默认继承的版本 -->
-		<labidc-gray-deploy.version>1.0.5</labidc-gray-deploy.version>
-
+		<labidc-gray-deploy.version>1.0.5-SNAPSHOT</labidc-gray-deploy.version>
+	<!--	<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>-->
 
 		<!--第三方库版本号-->
 		<lombok.version>1.16.18</lombok.version>
@@ -46,7 +46,7 @@
 		<xstream.version>1.4.10</xstream.version>
 		<commons-io.version>2.6</commons-io.version>
 
-		<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>
+
 	</properties>
 
 

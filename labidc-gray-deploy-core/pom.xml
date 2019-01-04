@@ -4,7 +4,7 @@
     <parent>
         <artifactId>labidc-gray-deploy</artifactId>
         <groupId>com.labidc</groupId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
     <properties>
         <findbugs.version>3.0.0</findbugs.version>
