@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.0.7.RELEASE</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
 
 	<groupId>com.labidc</groupId>
 	<artifactId>labidc-gray-deploy</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
+	<modelVersion>4.0.0</modelVersion>
 
 	<name>labidc-gray-deploy</name>
 	<description>后台管理根项目</description>
@@ -19,12 +26,7 @@
 		<module>labidc-gray-deploy-core-servlet</module>
 	</modules>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.7.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+
 
 	<properties>
 		<!--系统配置-->
@@ -37,26 +39,27 @@
 		<dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
 
 		<!--默认继承的版本 -->
-		<labidc-gray-deploy.version>1.0.5</labidc-gray-deploy.version>
-
+		<labidc-gray-deploy.version>1.0.5-SNAPSHOT</labidc-gray-deploy.version>
+	<!--	<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>-->
 
 		<!--第三方库版本号-->
 		<lombok.version>1.16.18</lombok.version>
 		<alibaba.fastjson.version>1.2.47</alibaba.fastjson.version>
 		<xstream.version>1.4.10</xstream.version>
 		<commons-io.version>2.6</commons-io.version>
+		<findbugs.version>3.0.0</findbugs.version>
 
-		<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>
+
 	</properties>
 
 
 	<dependencyManagement>
 		<dependencies>
-			<!--基于spring-cloud的Finchley.SR1 版本非Finchley.RELEASE版本-->
+			<!--基于spring-cloud的Finchley.SR2 版本非Finchley.RELEASE版本-->
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Finchley.RELEASE</version>
+				<version>Finchley.SR1</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -69,18 +72,10 @@
 				<scope>provided</scope>
 			</dependency>
 
-			<!--xml转换工具-->
 			<dependency>
-				<groupId>com.thoughtworks.xstream</groupId>
-				<artifactId>xstream</artifactId>
-				<version>${xstream.version}</version>
-			</dependency>
-
-			<!--阿里巴巴json处理包-->
-			<dependency>
-				<groupId>com.alibaba</groupId>
-				<artifactId>fastjson</artifactId>
-				<version>${alibaba.fastjson.version}</version>
+				<groupId>com.google.code.findbugs</groupId>
+				<artifactId>annotations</artifactId>
+				<version>${findbugs.version}</version>
 			</dependency>
 
 
@@ -111,6 +106,13 @@
 
 		</dependencies>
 	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 
 	<!--自定义仓库地址-->
 	<repositories>
@@ -177,28 +179,28 @@
 					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
 				</configuration>
 			</plugin>
-				<plugin>
-					<groupId>com.spotify</groupId><!--该插件建议别翻墙-->
+				<!--<plugin>
+					<groupId>com.spotify</groupId>&lt;!&ndash;该插件建议别翻墙&ndash;&gt;
 					<artifactId>dockerfile-maven-plugin</artifactId>
 					<version>${dockerfile-maven-plugin.version}</version>
 					<configuration>
 						<repository>${docker.image.prefix}/${project.artifactId}</repository>
 						<tag>${project.version}</tag>
-						<buildArgs><!--jar包默认名称-->
+						<buildArgs>&lt;!&ndash;jar包默认名称&ndash;&gt;
 							<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
 						</buildArgs>
 					</configuration>
 					<executions>
 						<execution>
 							<id>default</id>
-							<phase>install</phase><!--绑定maven生命周期的某个阶段-->
+							<phase>install</phase>&lt;!&ndash;绑定maven生命周期的某个阶段&ndash;&gt;
 							<goals>
-								<goal>build</goal><!--执行的命令-->
-								<!--<goal>push</goal>-->
+								<goal>build</goal>&lt;!&ndash;执行的命令&ndash;&gt;
+								&lt;!&ndash;<goal>push</goal>&ndash;&gt;
 							</goals>
 						</execution>
 					</executions>
-				</plugin>
+				</plugin>-->
 		   </plugins>
 	   </pluginManagement>
 	</build>

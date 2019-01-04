@@ -93,7 +93,7 @@ graph LR
 
 
 9. 如何发起【灰度请求】呢，前端程序请求的时候，增加一个自定义头 version, 自定义头内容为版本号，这里的版本号会对应上面【第5条】提到
-服务版本标识。注意哟，请求头的版本号要和服务的版本标识完全对应上哟，不然无法识别，会调用正式服务去，再啰嗦一句，正式服务不要加版本识，空值也不行
+服务版本标识。注意哟，请求头的版本号要和服务的版本标识完全对应上哟，不然无法识别，会调用正式服务去，再啰嗦一句，正式服务不要加版本识
 
 
 ## 开始安装
@@ -117,13 +117,23 @@ spring:
            - version=1.0.1
 ```
 3. 【服务1】，【服务2】 maven添加插件
-#### labidc-gray-deploy-consul 依赖了 spring-cloud-starter-consul-discovery,spring-cloud-starter-zipkin 所以不用重复引用
+#### labidc-gray-deploy-consul
 ``` 
   <dependency>
     <groupId>com.labidc</groupId>
     <artifactId>labidc-gray-deploy-consul</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </dependency>
+  
+  <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+  </dependency>
+  
+  <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-zipkin</artifactId>
+    </dependency>
 
 ```
 相关负载均衡规则修改配置, 有 WeightedResponseTimeGrayDeployRule, RandomGrayDeployRule, AvailabilityFilteringGrayDeployRule, BestAvailableGrayDeployRule, ZoneAvoidanceGrayDeployRule, RetryGrayDeployRule, RoundRobinGrayDeployRule(默认值)
@@ -134,12 +144,31 @@ spring:
       ribbonRule: BestAvailableGrayDeployRule
 ```
 4. 【网关】, gateway, 由于gateway 基与webflux 使用Netty 作为容器, 所有有个专门为gateway实现的一个插件（注意该插件以来了consul,如果需要和eureka配合使用，请自行修改源码）, 其他配置方法一样
-##### labidc-gray-deploy-gateway 依赖了 spring-cloud-starter-consul-discovery 所以不用重复引用
+##### labidc-gray-deploy-gateway
 ``` maven
     <dependency>
         <groupId>com.labidc</groupId>
         <artifactId>labidc-gray-deploy-gateway</artifactId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
+   </dependency>
+  <dependency>
+       <groupId>org.springframework.cloud</groupId>
+       <artifactId>spring-cloud-starter-gateway</artifactId>
+   </dependency>
+
+   <dependency>
+       <groupId>org.springframework.cloud</groupId>
+       <artifactId>spring-cloud-gateway-webflux</artifactId>
+   </dependency>
+
+   <dependency>
+       <groupId>org.springframework.cloud</groupId>
+       <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+   </dependency>
+
+   <dependency>
+       <groupId>org.springframework.cloud</groupId>
+       <artifactId>spring-cloud-starter-consul-discovery</artifactId>
    </dependency>
 ```
 ```yaml
@@ -178,13 +207,22 @@ eureka:
       version: 1.0.0
 ```
 3. 【服务1】，【服务2】 maven添加插件
-#### labidc-gray-deploy-eureka 依赖了 spring-cloud-starter-netflix-eureka-client,spring-cloud-starter-zipkin 所以不用重复引用
+#### labidc-gray-deploy-eureka 
 ``` 
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5</version>
   </dependency>
+  <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+  </dependency>
+   <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-zipkin</artifactId>
+  </dependency>
+
 
 ```
 相关负载均衡规则修改配置, 有 WeightedResponseTimeGrayDeployRule, RandomGrayDeployRule, AvailabilityFilteringGrayDeployRule, BestAvailableGrayDeployRule, ZoneAvoidanceGrayDeployRule, RetryGrayDeployRule, RoundRobinGrayDeployRule(默认值)
@@ -217,7 +255,7 @@ zuul:
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.4</version>
+      <version>1.0.5</version>
   </dependency>
 
 ```
