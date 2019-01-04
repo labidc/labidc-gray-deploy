@@ -7,7 +7,6 @@ import com.netflix.loadbalancer.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.cloud.consul.discovery.ConsulServer;
 import org.springframework.stereotype.Component;
 
@@ -43,13 +42,16 @@ public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
         throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是："+server.getClass().getSimpleName());
     }
 
+    private static final int VERSION_SPLIT_LENGTH=2;
     @Override
     public String getCurrentVersion() {
+        String versionStartsWith = GrayDeployConstant.VERSION + "=";
 
-        if (this.tags != null && this.tags.size() > 0) {
-            Optional<String> optional = this.tags.stream().filter(c -> c.startsWith(GrayDeployConstant.VERSION)).findFirst();
-            if (optional.isPresent()) {
-                return optional.get().split("=")[1].trim();
+        Optional<String> optional = this.tags.stream().filter(c -> c.startsWith(versionStartsWith)).findFirst();
+        if (optional.isPresent()) {
+            String[] versionSplit = optional.get().split("=", VERSION_SPLIT_LENGTH);
+            if (versionSplit.length == VERSION_SPLIT_LENGTH) {
+                return versionSplit[versionSplit.length - 1];
             }
         }
         return null;

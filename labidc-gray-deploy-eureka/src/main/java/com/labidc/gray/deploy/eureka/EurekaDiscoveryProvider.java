@@ -5,7 +5,6 @@ import com.labidc.gray.deploy.exception.DiscoveryServerException;
 import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.netflix.loadbalancer.Server;
 import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
-import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.stereotype.Component;
@@ -38,7 +37,8 @@ public class EurekaDiscoveryProvider extends AbstractDiscoveryProvider {
     public String getCurrentVersion() {
         Map<String, String> metadataMap = this.eurekaInstanceConfigBean.getMetadataMap();
         if (metadataMap != null && metadataMap.size() > 0) {
-            return metadataMap.containsKey(GrayDeployConstant.VERSION) ? metadataMap.get(GrayDeployConstant.VERSION) :  null;
+            //return metadataMap.containsKey(GrayDeployConstant.VERSION) ? metadataMap.get(GrayDeployConstant.VERSION) :  null;
+            return metadataMap.get(GrayDeployConstant.VERSION);
         }
         return null;
     }

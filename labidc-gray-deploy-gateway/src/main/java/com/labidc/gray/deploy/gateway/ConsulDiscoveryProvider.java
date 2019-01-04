@@ -39,15 +39,19 @@ public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
             ConsulServer consulServer = (ConsulServer) server;
             return consulServer.getMetadata();
         }
-        throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是："+server.getClass().getSimpleName());
+        throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是：" + server.getClass().getSimpleName());
     }
 
+    private static final int VERSION_SPLIT_LENGTH=2;
     @Override
     public String getCurrentVersion() {
-        if (this.tags != null && this.tags.size() > 0) {
-            Optional<String> optional = this.tags.stream().filter(c -> c.startsWith(GrayDeployConstant.VERSION)).findFirst();
-            if (optional.isPresent()) {
-                return optional.get().split("=")[1].trim();
+        String versionStartsWith = GrayDeployConstant.VERSION + "=";
+
+        Optional<String> optional = this.tags.stream().filter(c -> c.startsWith(versionStartsWith)).findFirst();
+        if (optional.isPresent()) {
+            String[] versionSplit = optional.get().split("=", VERSION_SPLIT_LENGTH);
+            if (versionSplit.length == VERSION_SPLIT_LENGTH) {
+                return versionSplit[versionSplit.length - 1];
             }
         }
         return null;
