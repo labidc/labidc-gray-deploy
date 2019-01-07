@@ -1,14 +1,6 @@
 package com.labidc.gray.deploy.ribbon;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-
-import javax.annotation.Resource;
-
-import static com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum.RANDOM;
-import static com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum.WEIGHTED_RESPONSE_TIME;
 
 /**
  * @program: labidc-manager
