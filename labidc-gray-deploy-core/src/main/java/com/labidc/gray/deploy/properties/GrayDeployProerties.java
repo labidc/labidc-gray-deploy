@@ -1,12 +1,9 @@
 package com.labidc.gray.deploy.properties;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum;
 import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleFactory;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +17,6 @@ import org.springframework.stereotype.Component;
 @Component
 @Data
 public class GrayDeployProerties {
-
-
-
-    @Qualifier("DiscoveryProvider")
-    @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
 
     /**
      * 负载均衡规则

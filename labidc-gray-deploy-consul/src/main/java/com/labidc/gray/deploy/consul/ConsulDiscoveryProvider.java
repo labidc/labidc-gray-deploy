@@ -7,13 +7,10 @@ import com.netflix.loadbalancer.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.cloud.consul.discovery.ConsulServer;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -25,7 +22,6 @@ import java.util.Optional;
  **/
 @Component(value = "DiscoveryProvider")
 public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
-
 
     @Autowired
     private ConsulDiscoveryProperties consulDiscoveryProperties;
@@ -52,7 +48,6 @@ public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
 
     @Override
     public String getCurrentVersion() {
-
         String versionStartsWith = GrayDeployConstant.VERSION + "=";
 
         Optional<String> optional = this.consulDiscoveryProperties.getTags().stream().filter(c -> c.startsWith(versionStartsWith)).findFirst();

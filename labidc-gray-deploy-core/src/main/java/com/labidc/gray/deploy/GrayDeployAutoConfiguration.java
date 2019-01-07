@@ -1,21 +1,7 @@
 package com.labidc.gray.deploy;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
-import com.labidc.gray.deploy.properties.GrayDeployProerties;
-import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleFactory;
-import com.netflix.loadbalancer.IRule;
-import com.netflix.loadbalancer.RandomRule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
-import org.springframework.web.client.RestTemplate;
-
-import javax.annotation.Resource;
 
 /**
  * @program: labidc-manager

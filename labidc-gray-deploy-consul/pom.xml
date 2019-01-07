@@ -15,12 +15,12 @@
         <dependency>
             <groupId>com.labidc</groupId>
             <artifactId>labidc-gray-deploy-core-servlet</artifactId>
-            <scope>compile</scope>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>
