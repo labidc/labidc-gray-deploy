@@ -26,7 +26,20 @@
         <module>labidc-gray-deploy-zipkin</module>
     </modules>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>meicanyun-snapshot</id>
+            <name>meicanyun Snapshot</name>
+            <url>http://maven.chongkouwei.com/nexus/content/repositories/snapshots/</url>
+            <uniqueVersion>true</uniqueVersion>
+        </snapshotRepository>
 
+        <repository>
+            <id>meicanyun-release</id>
+            <name>meicanyun Release</name>
+            <url>http://maven.chongkouwei.com/nexus/content/repositories/releases/</url>
+        </repository>
+    </distributionManagement>
     <properties>
         <!--系统配置-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
