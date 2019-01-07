@@ -60,12 +60,7 @@ public class DelegatingGrayDeployFilter implements Filter {
         HttpServletRequest httpServletRequest =  (HttpServletRequest) request;
 
         Span currentSpan = this.tracer.currentSpan();
-        if (currentSpan == null) {
-            chain.doFilter(request, response);
-            return;
-        }
-
-        if(StringUtils.isEmpty(httpServletRequest.getHeader(GrayDeployConstant.VERSION))){
+        if (currentSpan == null || StringUtils.isEmpty(httpServletRequest.getHeader(GrayDeployConstant.VERSION))) {
             chain.doFilter(request, response);
             return;
         }
