@@ -1,6 +1,5 @@
 package com.labidc.gray.deploy.ribbon;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 
 /**
@@ -11,12 +10,14 @@ import com.netflix.loadbalancer.AbstractLoadBalancerRule;
  **/
 public class GrayDeployRibbonRuleFactory {
 
+
+
     /**
      * 规则名称
      * @param robinRuleName
      * @return
      */
-    public static AbstractLoadBalancerRule CreateRoundRobinRule(String robinRuleName, AbstractDiscoveryProvider abstractDiscoveryProvider)
+    public static AbstractLoadBalancerRule CreateRoundRobinRule(GrayDeployRibbonRuleEnum robinRuleName)
     {
 
         if(robinRuleName ==null) {
@@ -25,19 +26,19 @@ public class GrayDeployRibbonRuleFactory {
 
         switch (robinRuleName)
         {
-            case "WeightedResponseTimeGrayDeployRule":
+            case WEIGHTED_RESPONSE_TIME:
                 return new WeightedResponseTimeGrayDeployRule();
-            case "RandomGrayDeployRule":
+            case RANDOM:
                 return new RandomGrayDeployRule();
-            case "RoundRobinGrayDeployRule":
+            case ROUND_ROBIN:
                 return new RoundRobinGrayDeployRule();
-            case "AvailabilityFilteringGrayDeployRule":
+            case AVAILABILITY_FILTERING:
                 return new AvailabilityFilteringGrayDeployRule();
-            case "BestAvailableGrayDeployRule":
+            case BEST_AVAILABLE:
                 return new BestAvailableGrayDeployRule();
-            case "ZoneAvoidanceGrayDeployRule":
+            case ZONE_AVOIDANCE:
                 return new ZoneAvoidanceGrayDeployRule();
-            case "RetryGrayDeployRule":
+            case RETRY:
                 return new RetryGrayDeployRule();
             default:
                 return new RoundRobinGrayDeployRule();

@@ -1,17 +1,14 @@
 package com.labidc.gray.deploy;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.labidc.gray.deploy.properties.GrayDeployProerties;
-import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleFactory;
-import com.netflix.client.config.IClientConfig;
-import com.netflix.loadbalancer.*;
+import com.netflix.loadbalancer.IPing;
+import com.netflix.loadbalancer.IRule;
+import com.netflix.loadbalancer.PingUrl;
+import com.netflix.loadbalancer.ServerListSubsetFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.Resource;
 
 /**
  * @program: servicedemo
@@ -30,35 +27,15 @@ public class DefaultRibbonConfig {
 
 
 
-    @Resource(name="DiscoveryProvider")
-    @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
-
-    /**
-     * 灰度发布配置规则
-     */
-    @Autowired
-    private GrayDeployProerties grayDeployProerties;
-
     @Bean
-    public IRule ribbonRule() {
-
-        //logger.error("======================加载了负载均衡器");
-        if(this.grayDeployProerties == null){
-            return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(null, this.abstractDiscoveryProvider);
-        }
-        return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(this.grayDeployProerties.getRibbonRule(), this.abstractDiscoveryProvider);
+    public IRule ribbonRule(GrayDeployProerties grayDeployProerties) {
+        return grayDeployProerties.loadRibbonRule();
     }
 
     @Bean
     public IPing ribbonPing() {
         return new PingUrl();
     }
-
-    //@Bean
-    //public ServerList<Server> ribbonServerList(IClientConfig config) {
-      //  return new RibbonClientDefaultConfigurationTestsConfig.BazServiceList(config);
-    //}
 
     @Bean
     public ServerListSubsetFilter serverListFilter() {

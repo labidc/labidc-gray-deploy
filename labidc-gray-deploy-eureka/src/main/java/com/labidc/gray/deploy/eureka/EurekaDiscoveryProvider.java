@@ -8,6 +8,7 @@ import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 
@@ -37,8 +38,11 @@ public class EurekaDiscoveryProvider extends AbstractDiscoveryProvider {
     public String getCurrentVersion() {
         Map<String, String> metadataMap = this.eurekaInstanceConfigBean.getMetadataMap();
         if (metadataMap != null && metadataMap.size() > 0) {
-            //return metadataMap.containsKey(GrayDeployConstant.VERSION) ? metadataMap.get(GrayDeployConstant.VERSION) :  null;
-            return metadataMap.get(GrayDeployConstant.VERSION);
+            String version = metadataMap.get(GrayDeployConstant.VERSION);
+            if(StringUtils.isEmpty(version)){
+                return null;
+            }
+            return version;
         }
         return null;
     }

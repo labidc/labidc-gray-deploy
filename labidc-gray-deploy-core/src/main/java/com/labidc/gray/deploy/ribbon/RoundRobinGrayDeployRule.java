@@ -79,6 +79,7 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
                 reachableServers = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
                 allServers = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
             }
+            //System.out.println("======================当前对象hash: "+ this.toString());
             // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
             // System.out.println ("=======================服务总数"+lb.getAllServers().size());
             // System.out.println("=======================真实服务总数"+lb.getReachableServers().size());

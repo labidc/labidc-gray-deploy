@@ -1,207 +1,239 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.0.7.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.7.RELEASE</version>
+        <relativePath /> <!-- lookup parent from repository  -->
+    </parent>
 
-	<groupId>com.labidc</groupId>
-	<artifactId>labidc-gray-deploy</artifactId>
-	<version>1.0.5-SNAPSHOT</version>
-	<packaging>pom</packaging>
-	<modelVersion>4.0.0</modelVersion>
+    <groupId>com.labidc</groupId>
+    <artifactId>labidc-gray-deploy</artifactId>
+    <version>1.0.6-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
 
-	<name>labidc-gray-deploy</name>
-	<description>后台管理根项目</description>
+    <name>labidc-gray-deploy</name>
+    <description>后台管理根项目</description>
 
-	<modules>
+    <modules>
         <module>labidc-gray-deploy-core</module>
         <module>labidc-gray-deploy-consul</module>
         <module>labidc-gray-deploy-eureka</module>
-		<module>labidc-gray-deploy-gateway</module>
-		<module>labidc-gray-deploy-core-servlet</module>
-	</modules>
+        <module>labidc-gray-deploy-gateway</module>
+        <module>labidc-gray-deploy-core-servlet</module>
+        <module>labidc-gray-deploy-zipkin</module>
+    </modules>
+
+    <properties>
+        <!--系统配置-->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <java.version>1.8</java.version>
+
+        <!--插件-->
+        <docker.image.prefix>labidc</docker.image.prefix>
+        <dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
+
+        <!--默认继承的版本 -->
+        <labidc-gray-deploy.version>1.0.6-SNAPSHOT</labidc-gray-deploy.version>
+        <!--	<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>-->
+
+        <!--第三方库版本号-->
+        <lombok.version>1.16.18</lombok.version>
+        <alibaba.fastjson.version>1.2.47</alibaba.fastjson.version>
+        <xstream.version>1.4.10</xstream.version>
+        <commons-io.version>2.6</commons-io.version>
+        <findbugs.version>3.0.0</findbugs.version>
+
+
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <!--基于spring-cloud的Finchley.SR2 版本非Finchley.RELEASE版本-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Finchley.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!--小辣椒工具-->
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!--<dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${findbugs.version}</version>
+            </dependency>-->
+
+
+            <dependency>
+                <groupId>com.labidc</groupId>
+                <artifactId>labidc-gray-deploy-core</artifactId>
+                <version>${labidc-gray-deploy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.labidc</groupId>
+                <artifactId>labidc-gray-deploy-consul</artifactId>
+                <version>${labidc-gray-deploy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.labidc</groupId>
+                <artifactId>labidc-gray-deploy-eureka</artifactId>
+                <version>${labidc-gray-deploy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.labidc</groupId>
+                <artifactId>labidc-gray-deploy-core-servlet</artifactId>
+                <version>${labidc-gray-deploy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.labidc</groupId>
+                <artifactId>labidc-gray-deploy-zipkin</artifactId>
+                <version>${labidc-gray-deploy.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.labidc</groupId>
+                <artifactId>labidc-gray-deploy-gateway</artifactId>
+                <version>${labidc-gray-deploy.version}</version>
+            </dependency>
 
 
 
-	<properties>
-		<!--系统配置-->
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<java.version>1.8</java.version>
+        </dependencies>
+    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
-		<!--插件-->
-		<docker.image.prefix>labidc</docker.image.prefix>
-		<dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
+    <!--自定义仓库地址-->
+    <repositories>
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun Nexus</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>spring-releases</id>
+            <name>Spring Releases</name>
+            <url>https://repo.spring.io/release</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>spring-snapshots</id>
+            <name>Spring Snapshots</name>
+            <url>https://repo.spring.io/libs-snapshot</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jgit-repository</id>
+            <url>https://repo.eclipse.org/content/groups/releases/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
 
-		<!--默认继承的版本 -->
-		<labidc-gray-deploy.version>1.0.5-SNAPSHOT</labidc-gray-deploy.version>
-	<!--	<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>-->
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
-		<!--第三方库版本号-->
-		<lombok.version>1.16.18</lombok.version>
-		<alibaba.fastjson.version>1.2.47</alibaba.fastjson.version>
-		<xstream.version>1.4.10</xstream.version>
-		<commons-io.version>2.6</commons-io.version>
-		<findbugs.version>3.0.0</findbugs.version>
-
-
-	</properties>
-
-
-	<dependencyManagement>
-		<dependencies>
-			<!--基于spring-cloud的Finchley.SR2 版本非Finchley.RELEASE版本-->
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Finchley.SR1</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<!--小辣椒工具-->
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>${lombok.version}</version>
-				<scope>provided</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>com.google.code.findbugs</groupId>
-				<artifactId>annotations</artifactId>
-				<version>${findbugs.version}</version>
-			</dependency>
-
-
-			<dependency>
-				<groupId>com.labidc</groupId>
-				<artifactId>labidc-gray-deploy-core</artifactId>
-				<version>${labidc-gray-deploy.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.labidc</groupId>
-				<artifactId>labidc-gray-deploy-consul</artifactId>
-				<version>${labidc-gray-deploy.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.labidc</groupId>
-				<artifactId>labidc-gray-deploy-eureka</artifactId>
-				<version>${labidc-gray-deploy.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.labidc</groupId>
-				<artifactId>labidc-gray-deploy-core-servlet</artifactId>
-				<version>${labidc-gray-deploy.version}</version>
-			</dependency>
-
-
-		</dependencies>
-	</dependencyManagement>
-	<dependencies>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
-
-	<!--自定义仓库地址-->
-	<repositories>
-		<repository>
-			<id>aliyun</id>
-			<name>aliyun Nexus</name>
-			<url>http://maven.aliyun.com/nexus/content/groups/public/</url>
-		</repository>
-		<repository>
-			<id>spring-releases</id>
-			<name>Spring Releases</name>
-			<url>https://repo.spring.io/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>spring-milestones</id>
-			<name>Spring Milestones</name>
-			<url>https://repo.spring.io/libs-milestone</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>spring-snapshots</id>
-			<name>Spring Snapshots</name>
-			<url>https://repo.spring.io/libs-snapshot</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>jgit-repository</id>
-			<url>https://repo.eclipse.org/content/groups/releases/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
-
-	<build>
-	   <pluginManagement>
-		  <plugins>
-			<plugin><!--git-commit-id-plugin 生成 info git信息-->
-				<groupId>pl.project13.maven</groupId>
-				<artifactId>git-commit-id-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>revision</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
-				</configuration>
-			</plugin>
-				<!--<plugin>
-					<groupId>com.spotify</groupId>&lt;!&ndash;该插件建议别翻墙&ndash;&gt;
-					<artifactId>dockerfile-maven-plugin</artifactId>
-					<version>${dockerfile-maven-plugin.version}</version>
-					<configuration>
-						<repository>${docker.image.prefix}/${project.artifactId}</repository>
-						<tag>${project.version}</tag>
-						<buildArgs>&lt;!&ndash;jar包默认名称&ndash;&gt;
-							<JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-						</buildArgs>
-					</configuration>
-					<executions>
-						<execution>
-							<id>default</id>
-							<phase>install</phase>&lt;!&ndash;绑定maven生命周期的某个阶段&ndash;&gt;
-							<goals>
-								<goal>build</goal>&lt;!&ndash;执行的命令&ndash;&gt;
-								&lt;!&ndash;<goal>push</goal>&ndash;&gt;
-							</goals>
-						</execution>
-					</executions>
-				</plugin>-->
-		   </plugins>
-	   </pluginManagement>
-	</build>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin><!--git-commit-id-plugin 生成 info git信息-->
+                    <groupId>pl.project13.maven</groupId>
+                    <artifactId>git-commit-id-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>revision</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1</version>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--<plugin>
+                    <groupId>com.spotify</groupId>&lt;!&ndash;该插件建议别翻墙&ndash;&gt;
+                    <artifactId>dockerfile-maven-plugin</artifactId>
+                    <version>${dockerfile-maven-plugin.version}</version>
+                    <configuration>
+                        <repository>${docker.image.prefix}/${project.artifactId}</repository>
+                        <tag>${project.version}</tag>
+                        <buildArgs>&lt;!&ndash;jar包默认名称&ndash;&gt;
+                            <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                        </buildArgs>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>default</id>
+                            <phase>install</phase>&lt;!&ndash;绑定maven生命周期的某个阶段&ndash;&gt;
+                            <goals>
+                                <goal>build</goal>&lt;!&ndash;执行的命令&ndash;&gt;
+                                &lt;!&ndash;<goal>push</goal>&ndash;&gt;
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>-->
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
