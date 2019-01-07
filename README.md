@@ -1,4 +1,4 @@
-
+## [DEMO项目地址：https://github.com/labidc/labidc-gray-deploy-demo](https://github.com/labidc/labidc-gray-deploy-demo).
 # labidc-gray-deploy 
 ##### spring cloud 非侵入式轻量级灰度发布插件
 ##### 基于spring-boot-starter-parent 2.0.7.RELEASE开发
@@ -229,4 +229,4 @@ zuul:
 ```
 
 
-## [DEMO项目地址：https://github.com/labidc/labidc-gray-deploy-demo](https://github.com/labidc/labidc-gray-deploy-demo).
+
