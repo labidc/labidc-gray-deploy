@@ -121,7 +121,7 @@ spring:
   <dependency>
     <groupId>com.labidc</groupId>
     <artifactId>labidc-gray-deploy-consul</artifactId>
-    <version>1.0.5</version>
+    <version>${labidc-gray-deploy.version}</version>
   </dependency>
   
   <dependency>
@@ -137,7 +137,7 @@ spring:
     <dependency>
         <groupId>com.labidc</groupId>
         <artifactId>labidc-gray-deploy-gateway</artifactId>
-        <version>1.0.5</version>
+        <version>${labidc-gray-deploy.version}</version>
    </dependency>
    
    <dependency>
@@ -186,7 +186,7 @@ spring:
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.5</version>
+      <version>${labidc-gray-deploy.version}</version>
   </dependency>
   
   <dependency>
@@ -218,7 +218,7 @@ zuul:
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.5</version>
+      <version>${labidc-gray-deploy.version}</version>
   </dependency>
   
    <dependency>
@@ -229,4 +229,12 @@ zuul:
 ```
 
 
-
+### 三、调用链追加记录
+调用链记录服务版本加入依赖
+```
+  <dependency>
+      <groupId>com.labidc</groupId>
+      <artifactId>labidc-gray-deploy-zipkin</artifactId>
+      <version>${labidc-gray-deploy.version}</version>
+  </dependency>
+```
