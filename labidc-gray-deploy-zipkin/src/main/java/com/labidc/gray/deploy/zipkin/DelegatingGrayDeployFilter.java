@@ -1,4 +1,4 @@
-package com.labidc.gray.deploy.servlet;
+package com.labidc.gray.deploy.zipkin;
 
 
 import brave.Span;
@@ -11,12 +11,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import static org.springframework.web.context.support.WebApplicationContextUtils.getRequiredWebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -53,7 +51,7 @@ public class DelegatingGrayDeployFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        this.applicationContext = getRequiredWebApplicationContext(filterConfig.getServletContext());
+        this.applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(filterConfig.getServletContext());
     }
 
     @Override
@@ -62,23 +60,17 @@ public class DelegatingGrayDeployFilter implements Filter {
         HttpServletRequest httpServletRequest =  (HttpServletRequest) request;
 
         Span currentSpan = this.tracer.currentSpan();
-        if (currentSpan == null) {
-            chain.doFilter(request, response);
-            return;
-        }
-        String deploy_version = "";
-        if (!StringUtils.isEmpty(httpServletRequest.getHeader(GrayDeployConstant.VERSION))) {
-            AbstractDiscoveryProvider abstractDiscoveryProvider = this.applicationContext.getBean("DiscoveryProvider", AbstractDiscoveryProvider.class);
-            deploy_version = " >> " + this.serviceName + "_" + (abstractDiscoveryProvider.getCurrentVersion() == null ? "releases" : abstractDiscoveryProvider.getCurrentVersion());
-            // 加入调用链，把版本号tag打上去
-            currentSpan.tag(GrayDeployConstant.VERSION, deploy_version);
-            System.out.println("当前服务版本："+GrayDeployConstant.VERSION+"===="+deploy_version);
+        if (currentSpan == null || StringUtils.isEmpty(httpServletRequest.getHeader(GrayDeployConstant.VERSION))) {
             chain.doFilter(request, response);
             return;
         }
 
+        AbstractDiscoveryProvider abstractDiscoveryProvider = this.applicationContext.getBean("DiscoveryProvider", AbstractDiscoveryProvider.class);
+        String deployVersion = " >> " + this.serviceName + "_" + (abstractDiscoveryProvider.getCurrentVersion() == null ? "releases" : abstractDiscoveryProvider.getCurrentVersion());
+        // 加入调用链，把版本号tag打上去
+        currentSpan.tag(GrayDeployConstant.VERSION, deployVersion);
+        //System.out.println("当前服务版本："+GrayDeployConstant.VERSION+"===="+deployVersion);
         chain.doFilter(request, response);
-
     }
 
     @Override

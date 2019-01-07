@@ -37,7 +37,6 @@ public class EurekaDiscoveryProvider extends AbstractDiscoveryProvider {
     public String getCurrentVersion() {
         Map<String, String> metadataMap = this.eurekaInstanceConfigBean.getMetadataMap();
         if (metadataMap != null && metadataMap.size() > 0) {
-            //return metadataMap.containsKey(GrayDeployConstant.VERSION) ? metadataMap.get(GrayDeployConstant.VERSION) :  null;
             return metadataMap.get(GrayDeployConstant.VERSION);
         }
         return null;
