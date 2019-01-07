@@ -10,7 +10,7 @@
 
     <groupId>com.labidc</groupId>
     <artifactId>labidc-gray-deploy</artifactId>
-    <version>1.0.6-SNAPSHOT</version>
+    <version>1.0.6</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
