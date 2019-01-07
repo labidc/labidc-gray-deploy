@@ -42,6 +42,7 @@ public class DelegatingGrayDeployFilter implements Filter {
 
     /**
      * 构造函数
+     *
      * @param tracer
      */
     public DelegatingGrayDeployFilter(Tracer tracer) {
@@ -57,7 +58,7 @@ public class DelegatingGrayDeployFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         // HttpServletResponse httpServletResponse =  (HttpServletResponse) response;
-        HttpServletRequest httpServletRequest =  (HttpServletRequest) request;
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         Span currentSpan = this.tracer.currentSpan();
         if (currentSpan == null || StringUtils.isEmpty(httpServletRequest.getHeader(GrayDeployConstant.VERSION))) {
@@ -66,7 +67,12 @@ public class DelegatingGrayDeployFilter implements Filter {
         }
 
         AbstractDiscoveryProvider abstractDiscoveryProvider = this.applicationContext.getBean("DiscoveryProvider", AbstractDiscoveryProvider.class);
-        String deployVersion = " >> " + this.serviceName + "_" + (abstractDiscoveryProvider.getCurrentVersion() == null ? "releases" : abstractDiscoveryProvider.getCurrentVersion());
+        if (StringUtils.isEmpty(abstractDiscoveryProvider.getCurrentVersion())) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String deployVersion = " >> " + this.serviceName + "_" + abstractDiscoveryProvider.getCurrentVersion();
         // 加入调用链，把版本号tag打上去
         currentSpan.tag(GrayDeployConstant.VERSION, deployVersion);
         //System.out.println("当前服务版本："+GrayDeployConstant.VERSION+"===="+deployVersion);

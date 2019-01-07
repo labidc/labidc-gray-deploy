@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.cloud.consul.discovery.ConsulServer;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.util.Map;
 import java.util.Optional;
@@ -54,7 +55,11 @@ public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
         if (optional.isPresent()) {
             String[] versionSplit = optional.get().split("=", VERSION_SPLIT_LENGTH);
             if (versionSplit.length == VERSION_SPLIT_LENGTH) {
-                return versionSplit[versionSplit.length - 1];
+                String version = versionSplit[versionSplit.length - 1];
+                if(StringUtils.isEmpty(version)){
+                    return null;
+                }
+                return version;
             }
         }
         return null;
