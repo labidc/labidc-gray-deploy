@@ -64,13 +64,12 @@ public class DelegatingGrayDeployFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
-        String deploy_version = "";
         if (!StringUtils.isEmpty(httpServletRequest.getHeader(GrayDeployConstant.VERSION))) {
             AbstractDiscoveryProvider abstractDiscoveryProvider = this.applicationContext.getBean("DiscoveryProvider", AbstractDiscoveryProvider.class);
-            deploy_version = " >> " + this.serviceName + "_" + (abstractDiscoveryProvider.getCurrentVersion() == null ? "releases" : abstractDiscoveryProvider.getCurrentVersion());
+            String deployVersion = " >> " + this.serviceName + "_" + (abstractDiscoveryProvider.getCurrentVersion() == null ? "releases" : abstractDiscoveryProvider.getCurrentVersion());
             // 加入调用链，把版本号tag打上去
-            currentSpan.tag(GrayDeployConstant.VERSION, deploy_version);
-            System.out.println("当前服务版本："+GrayDeployConstant.VERSION+"===="+deploy_version);
+            currentSpan.tag(GrayDeployConstant.VERSION, deployVersion);
+            //System.out.println("当前服务版本："+GrayDeployConstant.VERSION+"===="+deployVersion);
             chain.doFilter(request, response);
             return;
         }
