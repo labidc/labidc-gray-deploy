@@ -67,7 +67,12 @@ public class DelegatingGrayDeployFilter implements Filter {
         }
 
         AbstractDiscoveryProvider abstractDiscoveryProvider = this.applicationContext.getBean("DiscoveryProvider", AbstractDiscoveryProvider.class);
-        String deployVersion = " >> " + this.serviceName + "_" + (StringUtils.isEmpty(abstractDiscoveryProvider.getCurrentVersion()) ? "releases" : abstractDiscoveryProvider.getCurrentVersion());
+        if (StringUtils.isEmpty(abstractDiscoveryProvider.getCurrentVersion())) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        String deployVersion = " >> " + this.serviceName + "_" + abstractDiscoveryProvider.getCurrentVersion();
         // 加入调用链，把版本号tag打上去
         currentSpan.tag(GrayDeployConstant.VERSION, deployVersion);
         //System.out.println("当前服务版本："+GrayDeployConstant.VERSION+"===="+deployVersion);
