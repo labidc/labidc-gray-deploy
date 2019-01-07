@@ -22,18 +22,18 @@
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-gateway-webflux</artifactId>
             <scope>provided</scope>
-        </dependency>
+        </dependency>-->
 
-        <dependency>
+      <!--  <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
             <scope>provided</scope>
         </dependency>
-
+      -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-consul-discovery</artifactId>

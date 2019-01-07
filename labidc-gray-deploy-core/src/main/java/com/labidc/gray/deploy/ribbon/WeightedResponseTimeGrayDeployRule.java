@@ -80,9 +80,11 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
     void initialize(ILoadBalancer lb) {
         if (serverWeightTimer != null) {
             serverWeightTimer.cancel();
+            //serverWeightTimer.shutdown();
         }
         serverWeightTimer = new Timer("NFLoadBalancer-serverWeightTimer-"
                 + name, true);
+
         serverWeightTimer.schedule(new WeightedResponseTimeGrayDeployRule.DynamicServerWeightTask(), 0,
                 serverWeightTaskTimerInterval);
         // do a initial run
@@ -90,11 +92,13 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
         sw.maintainWeights();
 
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
             public void run() {
                 logger
                         .info("Stopping NFLoadBalancer-serverWeightTimer-"
                                 + name);
                 serverWeightTimer.cancel();
+                //serverWeightTimer.shutdown();
             }
         }));
     }
@@ -103,6 +107,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
         if (serverWeightTimer != null) {
             logger.info("Stopping NFLoadBalancer-serverWeightTimer-" + name);
             serverWeightTimer.cancel();
+            //serverWeightTimer.shutdown();
         }
     }
 
@@ -110,7 +115,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
         return Collections.unmodifiableList(accumulatedWeights);
     }
 
-    @edu.umd.cs.findbugs.annotations.SuppressWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE")
+    @SuppressWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE")
     @Override
     public Server choose(ILoadBalancer lb, Object key) {
         if (lb == null) {
@@ -186,6 +191,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
     }
 
     class DynamicServerWeightTask extends TimerTask {
+        @Override
         public void run() {
             WeightedResponseTimeGrayDeployRule.ServerWeight serverWeight = new WeightedResponseTimeGrayDeployRule.ServerWeight();
             try {

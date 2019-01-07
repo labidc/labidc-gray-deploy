@@ -1,10 +1,7 @@
 package com.labidc.gray.deploy.gateway;
 
 import com.labidc.gray.deploy.GrayDeployAutoConfiguration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
-import org.springframework.cloud.gateway.filter.LoadBalancerClientFilter;
-import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
