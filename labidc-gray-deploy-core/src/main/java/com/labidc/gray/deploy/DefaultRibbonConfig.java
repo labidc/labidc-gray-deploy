@@ -43,9 +43,7 @@ public class DefaultRibbonConfig {
 
     @Bean
     public IRule ribbonRule() {
-        // Ribbon 会为每个服务创建一个IRule
-
-        log.warning("创建了一次对象==================");
+        //log.warning("创建了一次对象==================");
         return grayDeployProerties.loadRibbonRule();
         /*
         if(this.grayDeployProerties == null){
