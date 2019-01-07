@@ -129,11 +129,6 @@ spring:
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-consul-discovery</artifactId>
   </dependency>
-  
-  <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-zipkin</artifactId>
-    </dependency>
 
 ```
 相关负载均衡规则修改配置, 查看 com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum
@@ -217,10 +212,6 @@ eureka:
   <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-  </dependency>
-   <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-zipkin</artifactId>
   </dependency>
    <dependency>
       <groupId>io.github.openfeign</groupId>

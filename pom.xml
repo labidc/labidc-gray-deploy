@@ -23,6 +23,7 @@
         <module>labidc-gray-deploy-eureka</module>
         <module>labidc-gray-deploy-gateway</module>
         <module>labidc-gray-deploy-core-servlet</module>
+        <module>labidc-gray-deploy-zipkin</module>
     </modules>
 
 
@@ -100,11 +101,19 @@
                 <artifactId>labidc-gray-deploy-core-servlet</artifactId>
                 <version>${labidc-gray-deploy.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.labidc</groupId>
+                <artifactId>labidc-gray-deploy-zipkin</artifactId>
+                <version>${labidc-gray-deploy.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-gateway</artifactId>
                 <version>${labidc-gray-deploy.version}</version>
             </dependency>
+
 
 
         </dependencies>

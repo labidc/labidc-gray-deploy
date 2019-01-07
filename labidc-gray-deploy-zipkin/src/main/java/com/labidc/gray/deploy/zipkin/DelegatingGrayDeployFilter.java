@@ -1,4 +1,4 @@
-package com.labidc.gray.deploy.servlet;
+package com.labidc.gray.deploy.zipkin;
 
 
 import brave.Span;
@@ -11,12 +11,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import static org.springframework.web.context.support.WebApplicationContextUtils.getRequiredWebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -53,7 +51,7 @@ public class DelegatingGrayDeployFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-        this.applicationContext = getRequiredWebApplicationContext(filterConfig.getServletContext());
+        this.applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(filterConfig.getServletContext());
     }
 
     @Override
