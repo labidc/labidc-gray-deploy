@@ -44,7 +44,6 @@ public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
         throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是：" + server.getClass().getSimpleName());
     }
 
-    private static final int VERSION_SPLIT_LENGTH=2;
     @Override
     public String getCurrentVersion() {
         String versionStartsWith = GrayDeployConstant.VERSION + "=";
