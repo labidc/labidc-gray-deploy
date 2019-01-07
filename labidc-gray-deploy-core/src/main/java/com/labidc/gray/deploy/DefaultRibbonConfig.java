@@ -5,11 +5,13 @@ import com.labidc.gray.deploy.properties.GrayDeployProerties;
 import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleFactory;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.*;
+import lombok.extern.java.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 
 import javax.annotation.Resource;
 
@@ -21,6 +23,7 @@ import javax.annotation.Resource;
  **/
 
 @Configuration
+@Log
 public class DefaultRibbonConfig {
 
     /**
@@ -30,9 +33,7 @@ public class DefaultRibbonConfig {
 
 
 
-    @Resource(name="DiscoveryProvider")
-    @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
+
 
     /**
      * 灰度发布配置规则
@@ -42,11 +43,16 @@ public class DefaultRibbonConfig {
 
     @Bean
     public IRule ribbonRule() {
+        // Ribbon 会为每个服务创建一个IRule
 
+        log.warning("创建了一次对象==================");
+        return grayDeployProerties.loadRibbonRule();
+        /*
         if(this.grayDeployProerties == null){
             return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(null, this.abstractDiscoveryProvider);
         }
         return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(this.grayDeployProerties.getRibbonRule(), this.abstractDiscoveryProvider);
+       */
     }
 
     @Bean
