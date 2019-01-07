@@ -98,7 +98,8 @@ graph LR
 
 ## 开始安装
 ### 一、网关：gateway，注册中心：consul ，以上面讲的案例为例子。
-1.  【服务3】，添加tag
+
+1. 添加tag
 ```yaml
 spring:
    cloud: 
@@ -107,16 +108,14 @@ spring:
          tags:
            - version=1.0.1
 ```
-2. 【服务1】，【服务2】 添加tag
+相关负载均衡规则修改配置, 查看 com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum
 ```yaml
 spring:
-   cloud: 
-     consul: 
-       discovery:
-         tags:
-           - version=1.0.1
+  gray:
+    deploy:
+      ribbonRule: ROUND_ROBIN
 ```
-3. 【服务1】，【服务2】 maven添加插件
+2. maven添加依赖
 #### labidc-gray-deploy-consul
 ``` 
   <dependency>
@@ -131,14 +130,8 @@ spring:
   </dependency>
 
 ```
-相关负载均衡规则修改配置, 查看 com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum
-```yaml
-spring:
-  gray:
-    deploy:
-      ribbonRule: ROUND_ROBIN
-```
-4. 【网关】, gateway, 由于gateway 基与webflux 使用Netty 作为容器, 所有有个专门为gateway实现的一个插件（注意该插件以来了consul,如果需要和eureka配合使用，请自行修改源码）, 其他配置方法一样
+
+3. 【网关】, gateway, 由于gateway 基与webflux 使用Netty 作为容器, 所有有个专门为gateway实现的一个插件（注意该插件以来了consul,如果需要和eureka配合使用，请自行修改源码）, 其他配置方法一样
 ##### labidc-gray-deploy-gateway
 ``` maven
     <dependency>
@@ -146,21 +139,7 @@ spring:
         <artifactId>labidc-gray-deploy-gateway</artifactId>
         <version>1.0.5</version>
    </dependency>
-  <dependency>
-       <groupId>org.springframework.cloud</groupId>
-       <artifactId>spring-cloud-starter-gateway</artifactId>
-   </dependency>
-
-   <dependency>
-       <groupId>org.springframework.cloud</groupId>
-       <artifactId>spring-cloud-gateway-webflux</artifactId>
-   </dependency>
-
-   <dependency>
-       <groupId>org.springframework.cloud</groupId>
-       <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
-   </dependency>
-
+   
    <dependency>
        <groupId>org.springframework.cloud</groupId>
        <artifactId>spring-cloud-starter-consul-discovery</artifactId>
@@ -187,38 +166,12 @@ spring:
 ```
 
 ### 二、网关：zuul2，注册中心：eureka ，以上面讲的案例为例子。
-1.  【服务3】，添加元数据map
+1. 添加元数据map
 ```yaml
 eureka:
   instance:
     metadata-map:
       version: 1.0.0
-```
-2. 【服务1】，【服务2】 添加元数据map
-```yaml
-eureka:
-  instance:
-    metadata-map:
-      version: 1.0.0
-```
-3. 【服务1】，【服务2】 maven添加插件
-#### labidc-gray-deploy-eureka 
-``` 
-  <dependency>
-      <groupId>com.labidc</groupId>
-      <artifactId>labidc-gray-deploy-eureka</artifactId>
-      <version>1.0.5</version>
-  </dependency>
-  <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-  </dependency>
-   <dependency>
-      <groupId>io.github.openfeign</groupId>
-      <artifactId>feign-core</artifactId>
-  </dependency>
-
-
 ```
 相关负载均衡规则修改配置, 查看 com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum
 ```yaml
@@ -227,8 +180,23 @@ spring:
     deploy:
       ribbonRule: ROUND_ROBIN
 ```
+2. maven添加依赖
+#### labidc-gray-deploy-eureka 
+``` 
+  <dependency>
+      <groupId>com.labidc</groupId>
+      <artifactId>labidc-gray-deploy-eureka</artifactId>
+      <version>1.0.5</version>
+  </dependency>
+  
+  <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+  </dependency>
 
-4. 【网关】zuul2 
+
+```
+3. 【网关】zuul2 
 ``` yaml
 # 路由规则配置
 zuul:
@@ -252,6 +220,11 @@ zuul:
       <artifactId>labidc-gray-deploy-eureka</artifactId>
       <version>1.0.5</version>
   </dependency>
+  
+   <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+   </dependency>
 
 ```
 
