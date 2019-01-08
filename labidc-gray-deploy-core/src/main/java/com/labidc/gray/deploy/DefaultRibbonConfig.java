@@ -1,6 +1,7 @@
 package com.labidc.gray.deploy;
 
 import com.labidc.gray.deploy.properties.GrayDeployProerties;
+import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleFactory;
 import com.netflix.loadbalancer.IPing;
 import com.netflix.loadbalancer.IRule;
 import com.netflix.loadbalancer.PingUrl;
@@ -29,7 +30,7 @@ public class DefaultRibbonConfig {
 
     @Bean
     public IRule ribbonRule(GrayDeployProerties grayDeployProerties) {
-        return grayDeployProerties.loadRibbonRule();
+        return GrayDeployRibbonRuleFactory.createRoundRobinRule(grayDeployProerties);
     }
 
     @Bean

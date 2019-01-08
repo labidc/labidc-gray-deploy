@@ -42,7 +42,7 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
         setLoadBalancer(lb);
     }
 
-
+    // TODO: 2019/1/8 xiaxia
     public Server choose(ILoadBalancer lb, Object key) {
         if (lb == null) {
             log.warn("no load balancer");

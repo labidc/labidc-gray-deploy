@@ -37,6 +37,6 @@ public enum GrayDeployRibbonRuleEnum {
      * 先按照RoundRobinRule的策略获取服务,如果获取服务失败,则在指定时间内会进行重试,获取可用的服务;
      * 原代码就是包含数组合了 RoundRobinGrayDeployRule 的策略
      */
-    RETRY,
+    //RETRY,
     ;
 }

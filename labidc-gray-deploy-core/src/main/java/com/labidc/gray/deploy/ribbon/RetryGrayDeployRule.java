@@ -64,6 +64,7 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
      * subRule, because we're not spawning additional threads and returning
      * early.
      */
+    // TODO: 2019/1/8 xiaxia
     public Server choose(ILoadBalancer lb, Object key) {
         long requestTime = System.currentTimeMillis();
         long deadline = requestTime + maxRetryMillis;

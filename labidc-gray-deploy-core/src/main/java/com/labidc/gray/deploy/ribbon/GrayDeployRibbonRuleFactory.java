@@ -1,5 +1,6 @@
 package com.labidc.gray.deploy.ribbon;
 
+import com.labidc.gray.deploy.properties.GrayDeployProerties;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 
 /**
@@ -11,21 +12,28 @@ import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 public class GrayDeployRibbonRuleFactory {
 
 
+    /**
+     * 获取当前设置的负载均衡规则
+     */
+    public static AbstractLoadBalancerRule createRoundRobinRule(GrayDeployProerties grayDeployProerties) {
+        AbstractLoadBalancerRule rule = createRoundRobinRule(grayDeployProerties.getRibbonRuleName());
+
+        if (grayDeployProerties.getRetry() != null && grayDeployProerties.getRetry()) {
+            return new RetryGrayDeployRule(rule, grayDeployProerties.getMaxRetryMillis());
+        }
+
+        return rule;
+    }
 
     /**
-     * 规则名称
-     * @param robinRuleName
-     * @return
+     * 获取当前设置的负载均衡规则
      */
-    public static AbstractLoadBalancerRule createRoundRobinRule(GrayDeployRibbonRuleEnum robinRuleName)
-    {
-
-        if(robinRuleName ==null) {
+    private static AbstractLoadBalancerRule createRoundRobinRule(GrayDeployRibbonRuleEnum ruleEnum) {
+        if (ruleEnum == null) {
             return new RoundRobinGrayDeployRule();
         }
 
-        switch (robinRuleName)
-        {
+        switch (ruleEnum) {
             case WEIGHTED_RESPONSE_TIME:
                 return new WeightedResponseTimeGrayDeployRule();
             case RANDOM:
@@ -38,8 +46,8 @@ public class GrayDeployRibbonRuleFactory {
                 return new BestAvailableGrayDeployRule();
             case ZONE_AVOIDANCE:
                 return new ZoneAvoidanceGrayDeployRule();
-            case RETRY:
-                return new RetryGrayDeployRule();
+            //case RETRY:
+            //    return new RetryGrayDeployRule();
             default:
                 return new RoundRobinGrayDeployRule();
         }
