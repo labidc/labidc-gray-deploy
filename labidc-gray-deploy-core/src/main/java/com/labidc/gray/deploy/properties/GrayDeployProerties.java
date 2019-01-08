@@ -26,7 +26,7 @@ public class GrayDeployProerties {
     private Boolean retry=false;
 
     /**
-     * 最长重试时间(毫秒)
+     * 最长重试时间(毫秒) (当重试策略启用时有效)
      */
     private long maxRetryMillis=500L;
 
