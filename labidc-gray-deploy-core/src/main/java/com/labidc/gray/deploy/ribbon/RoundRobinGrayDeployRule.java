@@ -57,7 +57,7 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
         int count = 0;
         while (count++ < 10) {
 
-            List<Server> allServers = abstractDiscoveryProvider.getServices(lb.getAllServers(), requestHeaderVersion);
+            List<Server> allServers = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
             int serverCount = allServers.size();
 
             if (serverCount == 0) {

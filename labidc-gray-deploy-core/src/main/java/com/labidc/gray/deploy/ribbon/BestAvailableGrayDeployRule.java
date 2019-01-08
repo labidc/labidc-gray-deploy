@@ -25,9 +25,9 @@ public class BestAvailableGrayDeployRule extends ClientConfigEnabledRoundRobinGr
         if (loadBalancerStats == null) {
             return super.choose(key);
         }
-        
+
         String requestHeaderVersion = this.abstractDiscoveryProvider.getRequestHeaderVersion();
-        List<Server> serverList = abstractDiscoveryProvider.getServices(getLoadBalancer().getAllServers(), requestHeaderVersion);
+        List<Server> serverList = abstractDiscoveryProvider.getServicesAuto(getLoadBalancer().getAllServers(), requestHeaderVersion);
 
         int minimalConcurrentConnections = Integer.MAX_VALUE;
         long currentTime = System.currentTimeMillis();

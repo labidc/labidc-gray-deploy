@@ -125,7 +125,7 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
             if (Thread.interrupted()) {
                 return null;
             }
-            List<Server> allList = abstractDiscoveryProvider.getServices(getLoadBalancer().getAllServers(), requestHeaderVersion);
+            List<Server> allList = abstractDiscoveryProvider.getServicesAuto(getLoadBalancer().getAllServers(), requestHeaderVersion);
             int serverCount = allList.size();
 
             if (serverCount == 0) {

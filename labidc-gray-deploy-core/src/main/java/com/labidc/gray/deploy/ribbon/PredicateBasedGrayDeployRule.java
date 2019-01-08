@@ -41,7 +41,7 @@ public abstract class PredicateBasedGrayDeployRule extends ClientConfigEnabledRo
         }
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
 
-        List<Server> serverList =  abstractDiscoveryProvider.getServices(getLoadBalancer().getAllServers(), requestHeaderVersion);
+        List<Server> serverList =  abstractDiscoveryProvider.getServicesAuto(getLoadBalancer().getAllServers(), requestHeaderVersion);
 
         Optional<Server> server = getPredicate().chooseRoundRobinAfterFiltering(serverList, key);
         if (server.isPresent()) {

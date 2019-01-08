@@ -133,7 +133,7 @@ public abstract class AbstractDiscoveryProvider {
      * @param requestHeaderVersion
      * @return
      */
-    public List<Server> getServices(List<Server> serverList, String requestHeaderVersion) {
+    public List<Server> getServicesAuto(List<Server> serverList, String requestHeaderVersion) {
         if (StringUtils.isNotBlank(requestHeaderVersion)) {
             List<Server> grayServices = this.getGrayServices(serverList, requestHeaderVersion);
             if (CollectionUtils.isNotEmpty(grayServices)) {

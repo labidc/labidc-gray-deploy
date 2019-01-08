@@ -57,7 +57,7 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
                 return null;
             }
 
-            List<Server> allList = abstractDiscoveryProvider.getServices(lb.getAllServers(), requestHeaderVersion);
+            List<Server> allList = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
 
             // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
             /*
