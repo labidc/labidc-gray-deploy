@@ -3,6 +3,7 @@ package com.labidc.gray.deploy.handler;
 import com.labidc.gray.deploy.constant.GrayDeployConstant;
 import com.netflix.loadbalancer.Server;
 import lombok.extern.java.Log;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,18 +49,19 @@ public abstract class AbstractDiscoveryProvider {
      * Servlet PostConstruct操作
      */
     @PostConstruct
-    private void init(){
-        logger.debug("时间："+df.format(new Date())+" 执行@PostConstruct修饰的 init()方法...");
+    private void init() {
+        logger.debug("时间：" + df.format(new Date()) + " 执行@PostConstruct修饰的 init()方法...");
     }
 
 
-    @Resource(name="VersionProvider")
+    @Resource(name = "VersionProvider")
     @Autowired
     protected AbstractVersionProvider abstractVersionProvider;
 
 
     /**
      * 获取元数据
+     *
      * @param server
      * @return
      */
@@ -68,6 +70,7 @@ public abstract class AbstractDiscoveryProvider {
 
     /**
      * 获取当前服务的版本号
+     *
      * @param
      * @return 如果不存在版本号，则为null
      */
@@ -75,17 +78,19 @@ public abstract class AbstractDiscoveryProvider {
 
     /**
      * 根据当前服务对象的元数据字段获取到服务的版本号
+     *
      * @param server
      * @return
      * @throws Exception
      */
-    public String getVersion(Server server)  {
+    public String getVersion(Server server) {
         return this.getServerMetadata(server).get(GrayDeployConstant.VERSION);
     }
 
 
     /**
      * 获取版本号
+     *
      * @return
      */
     public String getRequestHeaderVersion() {
@@ -95,20 +100,22 @@ public abstract class AbstractDiscoveryProvider {
 
     /**
      * 返回生产服务
+     *
      * @param serverList
      * @return
      */
-    public List<Server> getProdServices(List<Server> serverList){
-       return serverList.stream().filter((item) -> StringUtils.isEmpty(this.getVersion(item))).collect(toList());
+    public List<Server> getProdServices(List<Server> serverList) {
+        return serverList.stream().filter((item) -> StringUtils.isEmpty(this.getVersion(item))).collect(toList());
     }
 
     /**
      * 返指定版本号的回灰度服务
+     *
      * @param serverList
      * @return
      */
     public List<Server> getGrayServices(List<Server> serverList, String requestHeaderVersion) {
-        if(StringUtils.isBlank(requestHeaderVersion)){
+        if (StringUtils.isBlank(requestHeaderVersion)) {
             return Collections.emptyList();
         }
         return serverList.stream().filter((item) ->
@@ -119,23 +126,28 @@ public abstract class AbstractDiscoveryProvider {
 
     /**
      * 返回服务
-     * 如果  requestHeaderVersion 为 null || "" 则返回正式版本服务
-     * 如果  requestHeaderVersion 不为 null 则返回该版本服务
+     * 1. 如果有 requestHeaderVersion 返回 <灰度版本>  否则 返回 <正式版本>
+     * 2. 如果<灰度版本>不存在 则返回 <正式版本>
+     *
      * @param serverList
      * @param requestHeaderVersion
      * @return
      */
-    public List<Server> getServices(List<Server> serverList, String requestHeaderVersion){
-        if(StringUtils.isBlank(requestHeaderVersion)){
-            return this.getProdServices(serverList);
-        }else {
-            return this.getGrayServices(serverList,requestHeaderVersion);
+    public List<Server> getServices(List<Server> serverList, String requestHeaderVersion) {
+        if (StringUtils.isNotBlank(requestHeaderVersion)) {
+            List<Server> grayServices = this.getGrayServices(serverList, requestHeaderVersion);
+            if (CollectionUtils.isNotEmpty(grayServices)) {
+                return grayServices;
+            }
         }
+
+        return this.getProdServices(serverList);
     }
 
 
     /**
      * 根据当前请求版本的头获取灰度服务
+     *
      * @param serverList
      * @return
      */
