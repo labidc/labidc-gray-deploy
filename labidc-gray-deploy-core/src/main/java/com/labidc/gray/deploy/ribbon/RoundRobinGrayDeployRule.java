@@ -42,7 +42,6 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
         setLoadBalancer(lb);
     }
 
-    // TODO: 2019/1/8 xiaxia
     public Server choose(ILoadBalancer lb, Object key) {
         if (lb == null) {
             log.warn("no load balancer");
@@ -54,9 +53,10 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
             this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
         }
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
+
+        Server server = null;
         int count = 0;
         while (count++ < 10) {
-
             List<Server> allServers = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
             int serverCount = allServers.size();
 
@@ -66,19 +66,27 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
             }
 
             int nextServerIndex = incrementAndGetModulo(serverCount);
-            Server server = allServers.get(nextServerIndex);
+            server = allServers.get(nextServerIndex);
 
-            if (server != null) {
-                return server;
+            if (server == null) {
+                /* Transient. */
+                Thread.yield();
+                continue;
             }
 
-            /* Transient. */
-            Thread.yield();
+            if (server.isAlive() && (server.isReadyToServe())) {
+                return (server);
+            }
+
+            // Next.
+            server = null;
         }
 
-        log.warn("No available alive servers after 10 tries from load balancer: "
-                + lb);
-        return null;
+        if (count >= 10) {
+            log.warn("No available alive servers after 10 tries from load balancer: "
+                    + lb);
+        }
+        return server;
     }
 
     /**

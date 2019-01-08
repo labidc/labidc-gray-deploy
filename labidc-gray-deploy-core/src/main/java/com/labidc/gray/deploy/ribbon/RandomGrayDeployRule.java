@@ -23,7 +23,7 @@ import java.util.Random;
 public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
 
 
-    @Resource(name="DiscoveryProvider")
+    @Resource(name = "DiscoveryProvider")
     @Autowired
     private AbstractDiscoveryProvider abstractDiscoveryProvider;
 
@@ -42,34 +42,21 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             return null;
         }
 
-        if(this.abstractDiscoveryProvider == null) {
+        if (this.abstractDiscoveryProvider == null) {
             this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
         }
 
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
 
 
-        //log.warning("=======================进入循环====================");
-
-        // TODO: 2019/1/8 xiaxia
         while (true) {
             if (Thread.interrupted()) {
                 return null;
             }
-
+            List<Server> upList = abstractDiscoveryProvider.getServicesAuto(lb.getReachableServers(), requestHeaderVersion);
             List<Server> allList = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
 
-            // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
-            /*
-            log.warning("=======================服务总数"+lb.getAllServers().size());
-            log.warning("=======================真实服务总数"+lb.getReachableServers().size());
-            log.warning("======================key名称"+key);
-            log.warning("======================类名称"+lb.getClass().getSimpleName());
-            log.warning("======================类名称"+lb.toString());
-            log.warning("======================类名称"+((ZoneAwareLoadBalancer)lb).getName());
 
-            log.warning("======================对象总数"+ SpringContextUtils.getBeans(ILoadBalancer.class).size());
-             */
             int serverCount = allList.size();
             if (serverCount == 0) {
                 /*
@@ -80,9 +67,9 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             }
 
             int index = rand.nextInt(serverCount);
-            Server server = allList.get(index);
+            Server server = upList.get(index);
 
-            if (server != null) {
+            if (server != null && server.isAlive()) {
                 return server;
             }
 
@@ -91,9 +78,9 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
              * somehow trimmed. This is a transient condition. Retry after
              * yielding.
              */
+            // Shouldn't actually happen.. but must be transient or a bug.
             Thread.yield();
         }
-
     }
 
     @Override

@@ -2,10 +2,7 @@ package com.labidc.gray.deploy;
 
 import com.labidc.gray.deploy.properties.GrayDeployProerties;
 import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleFactory;
-import com.netflix.loadbalancer.IPing;
 import com.netflix.loadbalancer.IRule;
-import com.netflix.loadbalancer.PingUrl;
-import com.netflix.loadbalancer.ServerListSubsetFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -33,14 +30,9 @@ public class DefaultRibbonConfig {
         return GrayDeployRibbonRuleFactory.createRoundRobinRule(grayDeployProerties);
     }
 
-    @Bean
-    public IPing ribbonPing() {
-        return new PingUrl();
-    }
-
-    @Bean
-    public ServerListSubsetFilter serverListFilter() {
-        ServerListSubsetFilter filter = new ServerListSubsetFilter();
-        return filter;
-    }
+    //@Bean
+    //public ServerListSubsetFilter serverListFilter() {
+    //    ServerListSubsetFilter filter = new ServerListSubsetFilter();
+    //    return filter;
+    //}
 }

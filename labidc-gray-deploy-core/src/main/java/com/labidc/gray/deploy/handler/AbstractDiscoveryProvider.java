@@ -136,7 +136,8 @@ public abstract class AbstractDiscoveryProvider {
     public List<Server> getServicesAuto(List<Server> serverList, String requestHeaderVersion) {
         if (StringUtils.isNotBlank(requestHeaderVersion)) {
             List<Server> grayServices = this.getGrayServices(serverList, requestHeaderVersion);
-            if (CollectionUtils.isNotEmpty(grayServices)) {
+            if (CollectionUtils.isNotEmpty(grayServices)
+                    && grayServices.stream().anyMatch(Server::isAlive)) {
                 return grayServices;
             }
         }

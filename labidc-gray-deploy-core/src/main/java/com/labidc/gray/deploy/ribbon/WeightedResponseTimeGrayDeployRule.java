@@ -112,7 +112,6 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
     }
 
     @Override
-    // TODO: 2019/1/8 xiaxia
     public Server choose(ILoadBalancer lb, Object key) {
         if (lb == null) {
             return null;
@@ -126,6 +125,7 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
                 return null;
             }
             List<Server> allList = abstractDiscoveryProvider.getServicesAuto(getLoadBalancer().getAllServers(), requestHeaderVersion);
+
             int serverCount = allList.size();
 
             if (serverCount == 0) {
@@ -166,12 +166,12 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
                 continue;
             }
 
-            /*if (server.isAlive()) {
+            if (server.isAlive()) {
                 return (server);
-            }*/
-            return (server);
+            }
+
             // Next.
-            //server = null;
+            server = null;
         }
         return server;
     }
