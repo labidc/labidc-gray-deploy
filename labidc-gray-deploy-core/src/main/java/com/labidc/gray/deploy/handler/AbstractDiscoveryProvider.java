@@ -8,9 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.serviceregistry.Registration;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -106,10 +108,29 @@ public abstract class AbstractDiscoveryProvider {
      * @return
      */
     public List<Server> getGrayServices(List<Server> serverList, String requestHeaderVersion) {
+        if(StringUtils.isBlank(requestHeaderVersion)){
+            return Collections.emptyList();
+        }
         return serverList.stream().filter((item) ->
                 StringUtils.isNotEmpty(this.getVersion(item)) &&
                         this.getVersion(item).toUpperCase().trim().equals(requestHeaderVersion.toUpperCase().trim())
         ).collect(toList());
+    }
+
+    /**
+     * 返回服务
+     * 如果  requestHeaderVersion 为 null || "" 则返回正式版本服务
+     * 如果  requestHeaderVersion 不为 null 则返回该版本服务
+     * @param serverList
+     * @param requestHeaderVersion
+     * @return
+     */
+    public List<Server> getServices(List<Server> serverList, String requestHeaderVersion){
+        if(StringUtils.isBlank(requestHeaderVersion)){
+            return this.getProdServices(serverList);
+        }else {
+            return this.getGrayServices(serverList,requestHeaderVersion);
+        }
     }
 
 

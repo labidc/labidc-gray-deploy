@@ -7,7 +7,6 @@ import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
 import lombok.extern.java.Log;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
@@ -42,36 +41,24 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
         if (lb == null) {
             return null;
         }
-        Server server = null;
+
         if(this.abstractDiscoveryProvider == null) {
             this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
         }
+
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
 
 
         //log.warning("=======================进入循环====================");
 
-        while (server == null) {
+        // TODO: 2019/1/8 xiaxia
+        while (true) {
             if (Thread.interrupted()) {
                 return null;
             }
 
-            List<Server> upList = null;
-            List<Server> allList = null;
+            List<Server> allList = abstractDiscoveryProvider.getServices(lb.getAllServers(), requestHeaderVersion);
 
-            if(StringUtils.isEmpty(requestHeaderVersion)){
-                upList = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
-                allList = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
-            } else {
-                upList = abstractDiscoveryProvider.getGrayServices(lb.getReachableServers(), requestHeaderVersion);
-                allList =  abstractDiscoveryProvider.getGrayServices(lb.getAllServers(), requestHeaderVersion);
-            }
-
-            if(StringUtils.isNotEmpty(requestHeaderVersion) &&
-                    (allList.size()==0)) {
-                upList = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
-                allList = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
-            }
             // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
             /*
             log.warning("=======================服务总数"+lb.getAllServers().size());
@@ -93,30 +80,19 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             }
 
             int index = rand.nextInt(serverCount);
-            server = allList.get(index);
-            ///server = upList.get(index);
+            Server server = allList.get(index);
 
-            if (server == null) {
-                /*
-                 * The only time this should happen is if the server list were
-                 * somehow trimmed. This is a transient condition. Retry after
-                 * yielding.
-                 */
-                Thread.yield();
-                continue;
+            if (server != null) {
+                return server;
             }
 
-            /*if (server.isAlive()) {
-                return (server);
-            }*/
-            return server;
-
-            // Shouldn't actually happen.. but must be transient or a bug.
-            //server = null;
-            //Thread.yield();
+            /*
+             * The only time this should happen is if the server list were
+             * somehow trimmed. This is a transient condition. Retry after
+             * yielding.
+             */
+            Thread.yield();
         }
-
-        return server;
 
     }
 

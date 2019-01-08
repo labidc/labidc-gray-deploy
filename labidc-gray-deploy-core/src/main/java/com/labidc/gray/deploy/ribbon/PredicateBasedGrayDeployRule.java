@@ -6,7 +6,6 @@ import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.loadbalancer.AbstractServerPredicate;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -42,17 +41,7 @@ public abstract class PredicateBasedGrayDeployRule extends ClientConfigEnabledRo
         }
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
 
-        List<Server> serverList = null;
-        if(StringUtils.isEmpty(requestHeaderVersion)){
-            serverList = abstractDiscoveryProvider.getProdServices(getLoadBalancer().getAllServers());
-        } else {
-            serverList =  abstractDiscoveryProvider.getGrayServices(getLoadBalancer().getAllServers(), requestHeaderVersion);
-        }
-
-        if(StringUtils.isNotEmpty(requestHeaderVersion) &&
-                (serverList.size()==0 )){
-            serverList = abstractDiscoveryProvider.getProdServices(getLoadBalancer().getAllServers());
-        }
+        List<Server> serverList =  abstractDiscoveryProvider.getServices(getLoadBalancer().getAllServers(), requestHeaderVersion);
 
         Optional<Server> server = getPredicate().chooseRoundRobinAfterFiltering(serverList, key);
         if (server.isPresent()) {

@@ -4,7 +4,6 @@ import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.client.config.IClientConfigKey;
 import com.netflix.loadbalancer.*;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,17 +128,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
             if (Thread.interrupted()) {
                 return null;
             }
-            List<Server> allList = null;
-            if(StringUtils.isEmpty(requestHeaderVersion)){
-                allList = abstractDiscoveryProvider.getProdServices(getLoadBalancer().getAllServers());
-            } else {
-                allList =  abstractDiscoveryProvider.getGrayServices(getLoadBalancer().getAllServers(), requestHeaderVersion);
-            }
-            if(StringUtils.isNotEmpty(requestHeaderVersion) &&
-                    (allList.size()==0 )){
-                allList = abstractDiscoveryProvider.getProdServices(getLoadBalancer().getAllServers());
-            }
-
+            List<Server> allList =  abstractDiscoveryProvider.getServices(getLoadBalancer().getAllServers(), requestHeaderVersion);
             int serverCount = allList.size();
 
             if (serverCount == 0) {
