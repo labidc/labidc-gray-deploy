@@ -36,8 +36,7 @@
         <docker.image.prefix>labidc</docker.image.prefix>
         <dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
 
-        <!--默认继承的版本 -->
-        <!--	<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>-->
+  
 
         <!--第三方库版本号-->
         <lombok.version>1.16.18</lombok.version>

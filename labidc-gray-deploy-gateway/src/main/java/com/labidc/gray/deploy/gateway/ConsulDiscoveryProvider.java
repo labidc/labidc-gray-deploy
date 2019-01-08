@@ -41,7 +41,7 @@ public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
             ConsulServer consulServer = (ConsulServer) server;
             return consulServer.getMetadata();
         }
-        throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是：" + server.getClass().getSimpleName());
+        throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是："+server.getClass().getSimpleName());
     }
 
     @Override
