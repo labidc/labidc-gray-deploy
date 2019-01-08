@@ -6,11 +6,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
 
 /**
  * @program: labidc-manager
@@ -33,19 +33,11 @@ public class FeignHeadConfiguration {
             ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (attrs != null) {
                 HttpServletRequest request = attrs.getRequest();
-                Enumeration<String> headerNames = request.getHeaderNames();
-                if (headerNames != null) {
 
-                    while (headerNames.hasMoreElements()) {
-                        String name = headerNames.nextElement();
-                        String value = request.getHeader(name);
-                        // 遍历请求头里面的属性字段，将logId和token添加到新的请求头中转发到下游服务
-                        if (GrayDeployConstant.VERSION.equalsIgnoreCase(name)) {
-                            //logger.debug("======================获取到指定请求头：");
-                            requestTemplate.header(name, value);
-                            break;
-                        }
-                    }
+                // 将请求头中version转发到下游服务
+                String version = request.getHeader(GrayDeployConstant.VERSION);
+                if(!StringUtils.isEmpty(version)){
+                    requestTemplate.header(GrayDeployConstant.VERSION, version);
                 }
             }
         };
