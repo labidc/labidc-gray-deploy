@@ -1,5 +1,6 @@
 package com.labidc.gray.deploy;
 
+import org.springframework.cloud.netflix.ribbon.RibbonClients;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
 
 @ComponentScan(value = "com.labidc.gray.deploy")
 @Configuration
+@RibbonClients(defaultConfiguration = DefaultRibbonConfig.class)
 public class GrayDeployAutoConfiguration {
 
 }
