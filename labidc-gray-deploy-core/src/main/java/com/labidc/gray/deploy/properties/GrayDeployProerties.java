@@ -28,6 +28,6 @@ public class GrayDeployProerties {
      * @return
      */
     public AbstractLoadBalancerRule loadRibbonRule(){
-        return GrayDeployRibbonRuleFactory.CreateRoundRobinRule(this.ribbonRuleName);
+        return GrayDeployRibbonRuleFactory.createRoundRobinRule(this.ribbonRuleName);
     }
 }

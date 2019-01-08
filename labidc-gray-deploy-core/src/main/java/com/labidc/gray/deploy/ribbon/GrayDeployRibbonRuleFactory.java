@@ -17,7 +17,7 @@ public class GrayDeployRibbonRuleFactory {
      * @param robinRuleName
      * @return
      */
-    public static AbstractLoadBalancerRule CreateRoundRobinRule(GrayDeployRibbonRuleEnum robinRuleName)
+    public static AbstractLoadBalancerRule createRoundRobinRule(GrayDeployRibbonRuleEnum robinRuleName)
     {
 
         if(robinRuleName ==null) {
