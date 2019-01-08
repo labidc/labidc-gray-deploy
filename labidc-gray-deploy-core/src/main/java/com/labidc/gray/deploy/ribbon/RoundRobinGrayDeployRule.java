@@ -57,10 +57,12 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
         Server server = null;
         int count = 0;
         while (count++ < 10) {
+            List<Server> reachableServers = abstractDiscoveryProvider.getServicesAuto(lb.getReachableServers(), requestHeaderVersion);
             List<Server> allServers = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
+            int upCount = reachableServers.size();
             int serverCount = allServers.size();
 
-            if (serverCount == 0) {
+            if ((upCount == 0) || (serverCount == 0)) {
                 log.warn("No up servers available from load balancer: " + lb);
                 return null;
             }
