@@ -10,7 +10,7 @@
 
     <groupId>com.labidc</groupId>
     <artifactId>labidc-gray-deploy</artifactId>
-    <version>1.0.6</version>
+    <version>1.0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
@@ -36,9 +36,7 @@
         <docker.image.prefix>labidc</docker.image.prefix>
         <dockerfile-maven-plugin.version>1.4.4</dockerfile-maven-plugin.version>
 
-        <!--默认继承的版本 -->
-        <labidc-gray-deploy.version>1.0.6</labidc-gray-deploy.version>
-        <!--	<labidc-gray-deploy.version>${project.version}</labidc-gray-deploy.version>-->
+  
 
         <!--第三方库版本号-->
         <lombok.version>1.16.18</lombok.version>
@@ -80,37 +78,37 @@
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-core</artifactId>
-                <version>${labidc-gray-deploy.version}</version>
+                <version>1.0.7-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-consul</artifactId>
-                <version>${labidc-gray-deploy.version}</version>
+                <version>1.0.7-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-eureka</artifactId>
-                <version>${labidc-gray-deploy.version}</version>
+                <version>1.0.7-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-core-servlet</artifactId>
-                <version>${labidc-gray-deploy.version}</version>
+                <version>1.0.7-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-zipkin</artifactId>
-                <version>${labidc-gray-deploy.version}</version>
+                <version>1.0.7-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-gateway</artifactId>
-                <version>${labidc-gray-deploy.version}</version>
+                <version>1.0.7-SNAPSHOT</version>
             </dependency>
 
 

@@ -4,7 +4,6 @@ import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.client.config.IClientConfigKey;
 import com.netflix.loadbalancer.*;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @program: labidc-manager
- * @description: 根据平均响应时间计算所有服务的权重,响应时间越快,服务权重越大,被选中的机率越高;
+ * @description: 根据平均响应时间计算所有服务的权重, 响应时间越快, 服务权重越大, 被选中的机率越高;
  * 继承 RoundRobinGrayDeployRule 对象，原继承 RoundRobinRule
  * @author: ChenXingLiang
  * @date: 2018-11-08 16:48
  **/
-public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRule  {
+public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule {
 
     @Autowired
     private AbstractDiscoveryProvider abstractDiscoveryProvider;
@@ -45,7 +44,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
 
     private int serverWeightTaskTimerInterval = DEFAULT_TIMER_INTERVAL;
 
-    private static final Logger logger = LoggerFactory.getLogger(WeightedResponseTimeRule.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(WeightedResponseTimeRule.class);
 
     // holds the accumulated weight from index 0 to current index
     // for example, element at index 2 holds the sum of weight of servers from 0 to 2
@@ -82,8 +81,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
             serverWeightTimer.cancel();
             //serverWeightTimer.shutdown();
         }
-        serverWeightTimer = new Timer("NFLoadBalancer-serverWeightTimer-"
-                + name, true);
+        serverWeightTimer = new Timer("NFLoadBalancer-serverWeightTimer-" + name, true);
 
         serverWeightTimer.schedule(new WeightedResponseTimeGrayDeployRule.DynamicServerWeightTask(), 0,
                 serverWeightTaskTimerInterval);
@@ -94,9 +92,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
-                logger
-                        .info("Stopping NFLoadBalancer-serverWeightTimer-"
-                                + name);
+                LOGGER.info("Stopping NFLoadBalancer-serverWeightTimer-" + name);
                 serverWeightTimer.cancel();
                 //serverWeightTimer.shutdown();
             }
@@ -105,7 +101,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
 
     public void shutdown() {
         if (serverWeightTimer != null) {
-            logger.info("Stopping NFLoadBalancer-serverWeightTimer-" + name);
+            LOGGER.info("Stopping NFLoadBalancer-serverWeightTimer-" + name);
             serverWeightTimer.cancel();
             //serverWeightTimer.shutdown();
         }
@@ -115,7 +111,6 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
         return Collections.unmodifiableList(accumulatedWeights);
     }
 
-    @SuppressWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE")
     @Override
     public Server choose(ILoadBalancer lb, Object key) {
         if (lb == null) {
@@ -129,16 +124,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
             if (Thread.interrupted()) {
                 return null;
             }
-            List<Server> allList = null;
-            if(StringUtils.isEmpty(requestHeaderVersion)){
-                allList = abstractDiscoveryProvider.getProdServices(getLoadBalancer().getAllServers());
-            } else {
-                allList =  abstractDiscoveryProvider.getGrayServices(getLoadBalancer().getAllServers(), requestHeaderVersion);
-            }
-            if(StringUtils.isNotEmpty(requestHeaderVersion) &&
-                    (allList.size()==0 )){
-                allList = abstractDiscoveryProvider.getProdServices(getLoadBalancer().getAllServers());
-            }
+            List<Server> allList = abstractDiscoveryProvider.getServicesAuto(getLoadBalancer().getAllServers(), requestHeaderVersion);
 
             int serverCount = allList.size();
 
@@ -153,8 +139,8 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
             // No server has been hit yet and total weight is not initialized
             // fallback to use round robin
             if (maxTotalWeight < 0.001d || serverCount != currentWeights.size()) {
-                server =  super.choose(getLoadBalancer(), key);
-                if(server == null) {
+                server = super.choose(getLoadBalancer(), key);
+                if (server == null) {
                     return server;
                 }
             } else {
@@ -180,12 +166,12 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
                 continue;
             }
 
-            /*if (server.isAlive()) {
+            if (server.isAlive()) {
                 return (server);
-            }*/
-            return (server);
+            }
+
             // Next.
-            //server = null;
+            server = null;
         }
         return server;
     }
@@ -193,11 +179,11 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
     class DynamicServerWeightTask extends TimerTask {
         @Override
         public void run() {
-            WeightedResponseTimeGrayDeployRule.ServerWeight serverWeight = new WeightedResponseTimeGrayDeployRule.ServerWeight();
             try {
+                WeightedResponseTimeGrayDeployRule.ServerWeight serverWeight = new WeightedResponseTimeGrayDeployRule.ServerWeight();
                 serverWeight.maintainWeights();
             } catch (Exception e) {
-                logger.error("Error running DynamicServerWeightTask for {}", name, e);
+                LOGGER.error("Error running DynamicServerWeightTask for {}", name, e);
             }
         }
     }
@@ -211,12 +197,12 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
                 return;
             }
 
-            if (!serverWeightAssignmentInProgress.compareAndSet(false,  true))  {
+            if (!serverWeightAssignmentInProgress.compareAndSet(false, true)) {
                 return;
             }
 
             try {
-                logger.info("Weight adjusting job started");
+                LOGGER.info("Weight adjusting job started");
                 AbstractLoadBalancer nlb = (AbstractLoadBalancer) lb;
                 LoadBalancerStats stats = nlb.getLoadBalancerStats();
                 if (stats == null) {
@@ -246,7 +232,7 @@ public class WeightedResponseTimeGrayDeployRule  extends RoundRobinGrayDeployRul
                 }
                 setWeights(finalWeights);
             } catch (Exception e) {
-                logger.error("Error calculating server weights", e);
+                LOGGER.error("Error calculating server weights", e);
             } finally {
                 serverWeightAssignmentInProgress.set(false);
             }

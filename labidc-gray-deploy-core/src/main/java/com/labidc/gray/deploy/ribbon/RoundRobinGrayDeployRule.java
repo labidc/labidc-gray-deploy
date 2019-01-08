@@ -3,9 +3,10 @@ package com.labidc.gray.deploy.ribbon;
 import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
 import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.client.config.IClientConfig;
-import com.netflix.loadbalancer.*;
-import lombok.extern.java.Log;
-import org.apache.commons.lang.StringUtils;
+import com.netflix.loadbalancer.AbstractLoadBalancerRule;
+import com.netflix.loadbalancer.ILoadBalancer;
+import com.netflix.loadbalancer.RoundRobinRule;
+import com.netflix.loadbalancer.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,6 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
         setLoadBalancer(lb);
     }
 
-
     public Server choose(ILoadBalancer lb, Object key) {
         if (lb == null) {
             log.warn("no load balancer");
@@ -53,53 +53,16 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
             this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
         }
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
+
         Server server = null;
         int count = 0;
-        while (server == null && count++ < 10) {
-
-            List<Server> reachableServers = null;
-            List<Server> allServers = null;
-            if(StringUtils.isEmpty(requestHeaderVersion)){
-                reachableServers = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
-                allServers = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
-            } else {
-                reachableServers = abstractDiscoveryProvider.getGrayServices(lb.getReachableServers(), requestHeaderVersion);
-                allServers =  abstractDiscoveryProvider.getGrayServices(lb.getAllServers(), requestHeaderVersion);
-            }
-
-            /*
-            if(StringUtils.isNotEmpty(requestHeaderVersion) &&
-                    (reachableServers.size()==0 || allServers.size()==0)){
-                reachableServers = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
-                allServers = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
-            }*/
-
-            if(StringUtils.isNotEmpty(requestHeaderVersion) &&
-                    (allServers.size()==0)){
-                reachableServers = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
-                allServers = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
-            }
-            //System.out.println("======================当前对象hash: "+ this.toString());
-            // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
-            // System.out.println ("=======================服务总数"+lb.getAllServers().size());
-            // System.out.println("=======================真实服务总数"+lb.getReachableServers().size());
-            // System.out.println("======================key名称"+key);
-            // System.out.println("======================类名称"+lb.getClass().getSimpleName());
-            // System.out.println("======================类名称"+lb.toString());
-            // System.out.println("======================类名称"+((ZoneAwareLoadBalancer)lb).getName());
-            // System.out.println("======================对象总数"+ SpringContextUtils.getBeans(ILoadBalancer.class).size());
-
+        while (count++ < 10) {
+            List<Server> reachableServers = abstractDiscoveryProvider.getServicesAuto(lb.getReachableServers(), requestHeaderVersion);
+            List<Server> allServers = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
             int upCount = reachableServers.size();
             int serverCount = allServers.size();
 
-            /*
             if ((upCount == 0) || (serverCount == 0)) {
-                log.warn("No up servers available from load balancer: " + lb);
-                return null;
-            }*/
-
-
-            if (serverCount == 0) {
                 log.warn("No up servers available from load balancer: " + lb);
                 return null;
             }
@@ -113,14 +76,12 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
                 continue;
             }
 
-
-            return (server);
-           /* if (server.isAlive() && (server.isReadyToServe())) {
+            if (server.isAlive() && (server.isReadyToServe())) {
                 return (server);
-            }*/
+            }
 
             // Next.
-            //server = null;
+            server = null;
         }
 
         if (count >= 10) {

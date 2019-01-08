@@ -3,7 +3,10 @@ package com.labidc.gray.deploy.ribbon;
 import com.labidc.gray.deploy.ribbon.predicate.AvailabilityGrayDeployPredicate;
 import com.labidc.gray.deploy.ribbon.predicate.ZoneAvoidanceGrayDeployPredicate;
 import com.netflix.client.config.IClientConfig;
-import com.netflix.loadbalancer.*;
+import com.netflix.loadbalancer.AbstractServerPredicate;
+import com.netflix.loadbalancer.CompositePredicate;
+import com.netflix.loadbalancer.LoadBalancerStats;
+import com.netflix.loadbalancer.ZoneSnapshot;
 
 import java.util.*;
 
@@ -15,7 +18,7 @@ import java.util.*;
  **/
 public class ZoneAvoidanceGrayDeployRule  extends PredicateBasedGrayDeployRule  {
 
-    private static final Random random = new Random();
+    private static final Random RANDOM = new Random();
 
     private CompositePredicate compositePredicate;
 
@@ -64,7 +67,7 @@ public class ZoneAvoidanceGrayDeployRule  extends PredicateBasedGrayDeployRule  
         for (String zone : chooseFrom) {
             totalServerCount += snapshot.get(zone).getInstanceCount();
         }
-        int index = random.nextInt(totalServerCount) + 1;
+        int index = RANDOM.nextInt(totalServerCount) + 1;
         int sum = 0;
         for (String zone : chooseFrom) {
             sum += snapshot.get(zone).getInstanceCount();

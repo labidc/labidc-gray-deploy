@@ -7,7 +7,6 @@ import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
 import lombok.extern.java.Log;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.Resource;
@@ -24,7 +23,7 @@ import java.util.Random;
 public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
 
 
-    @Resource(name="DiscoveryProvider")
+    @Resource(name = "DiscoveryProvider")
     @Autowired
     private AbstractDiscoveryProvider abstractDiscoveryProvider;
 
@@ -42,47 +41,22 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
         if (lb == null) {
             return null;
         }
-        Server server = null;
-        if(this.abstractDiscoveryProvider == null) {
+
+        if (this.abstractDiscoveryProvider == null) {
             this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
         }
+
         String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
 
 
-        //log.warning("=======================进入循环====================");
-
-        while (server == null) {
+        while (true) {
             if (Thread.interrupted()) {
                 return null;
             }
+            List<Server> upList = abstractDiscoveryProvider.getServicesAuto(lb.getReachableServers(), requestHeaderVersion);
+            List<Server> allList = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
 
-            List<Server> upList = null;
-            List<Server> allList = null;
 
-            if(StringUtils.isEmpty(requestHeaderVersion)){
-                upList = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
-                allList = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
-            } else {
-                upList = abstractDiscoveryProvider.getGrayServices(lb.getReachableServers(), requestHeaderVersion);
-                allList =  abstractDiscoveryProvider.getGrayServices(lb.getAllServers(), requestHeaderVersion);
-            }
-
-            if(StringUtils.isNotEmpty(requestHeaderVersion) &&
-                    (allList.size()==0)) {
-                upList = abstractDiscoveryProvider.getProdServices(lb.getReachableServers());
-                allList = abstractDiscoveryProvider.getProdServices(lb.getAllServers());
-            }
-            // ZoneAwareLoadBalancer 会根据不同的区域找不同的对象
-            /*
-            log.warning("=======================服务总数"+lb.getAllServers().size());
-            log.warning("=======================真实服务总数"+lb.getReachableServers().size());
-            log.warning("======================key名称"+key);
-            log.warning("======================类名称"+lb.getClass().getSimpleName());
-            log.warning("======================类名称"+lb.toString());
-            log.warning("======================类名称"+((ZoneAwareLoadBalancer)lb).getName());
-
-            log.warning("======================对象总数"+ SpringContextUtils.getBeans(ILoadBalancer.class).size());
-             */
             int serverCount = allList.size();
             if (serverCount == 0) {
                 /*
@@ -93,31 +67,20 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             }
 
             int index = rand.nextInt(serverCount);
-            server = allList.get(index);
-            ///server = upList.get(index);
+            Server server = upList.get(index);
 
-            if (server == null) {
-                /*
-                 * The only time this should happen is if the server list were
-                 * somehow trimmed. This is a transient condition. Retry after
-                 * yielding.
-                 */
-                Thread.yield();
-                continue;
+            if (server != null && server.isAlive()) {
+                return server;
             }
 
-            /*if (server.isAlive()) {
-                return (server);
-            }*/
-            return server;
-
+            /*
+             * The only time this should happen is if the server list were
+             * somehow trimmed. This is a transient condition. Retry after
+             * yielding.
+             */
             // Shouldn't actually happen.. but must be transient or a bug.
-            //server = null;
-            //Thread.yield();
+            Thread.yield();
         }
-
-        return server;
-
     }
 
     @Override

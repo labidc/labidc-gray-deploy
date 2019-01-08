@@ -59,7 +59,7 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
         subRule.setLoadBalancer(lb);
     }
 
-    /*
+    /**
      * Loop if necessary. Note that the time CAN be exceeded depending on the
      * subRule, because we're not spawning additional threads and returning
      * early.
@@ -72,8 +72,7 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
 
         answer = subRule.choose(key);
 
-        //if (((answer == null) || (!answer.isAlive()))
-        if (((answer == null) )
+        if (((answer == null) || (!answer.isAlive()))
                 && (System.currentTimeMillis() < deadline)) {
 
             InterruptTask task = new InterruptTask(deadline
@@ -82,8 +81,7 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
             while (!Thread.interrupted()) {
                 answer = subRule.choose(key);
 
-                //if (((answer == null) || (!answer.isAlive()))
-                if (((answer == null))
+                if (((answer == null) || (!answer.isAlive()))
                         && (System.currentTimeMillis() < deadline)) {
                     /* pause and retry hoping it's transient */
                     Thread.yield();
@@ -95,8 +93,7 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
             task.cancel();
         }
 
-        // if ((answer == null) || (!answer.isAlive())) {
-        if (answer == null) {
+         if ((answer == null) || (!answer.isAlive())) {
             return null;
         } else {
             return answer;
