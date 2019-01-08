@@ -16,7 +16,7 @@ public class GrayDeployRibbonRuleFactory {
      * 获取当前设置的负载均衡规则
      */
     public static AbstractLoadBalancerRule createRoundRobinRule(GrayDeployProerties grayDeployProerties) {
-        AbstractLoadBalancerRule rule = createRoundRobinRule(grayDeployProerties.getRibbonRuleName());
+        AbstractLoadBalancerRule rule = createRoundRobinRule(grayDeployProerties.getRibbonRule());
 
         if (grayDeployProerties.getRetry() != null && grayDeployProerties.getRetry()) {
             return new RetryGrayDeployRule(rule, grayDeployProerties.getMaxRetryMillis());

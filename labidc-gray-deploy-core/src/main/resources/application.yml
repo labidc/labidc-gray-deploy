@@ -1,4 +1,0 @@
-spring:
-  gray:
-    deploy:
-      ribbonRule: ROUND_ROBIN

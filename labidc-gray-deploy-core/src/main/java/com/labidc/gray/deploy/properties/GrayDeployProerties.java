@@ -18,7 +18,7 @@ public class GrayDeployProerties {
     /**
      * 负载均衡规则
      */
-    private GrayDeployRibbonRuleEnum ribbonRuleName = GrayDeployRibbonRuleEnum.ROUND_ROBIN;
+    private GrayDeployRibbonRuleEnum ribbonRule = GrayDeployRibbonRuleEnum.ROUND_ROBIN;
 
     /**
      * 启用重试策略
