@@ -242,10 +242,10 @@ zuul:
 ### 四、自定义 header/attribute 传递
 当前请求的 header/attribute 需要传递到下游服务
 > 注意  
-> 1. 下游服务请求中已有的header不会被配置覆盖  
-> 2. attribute 会转换为 header 传递到下游服务
-> 3. 优先等级  原有 header > header > attribute
-> 4. attribute 默认传递 String 和 基本类型    对象需要实现接口 HeadTransmitAttributeObjectTransform 并 注册为bean
+> 1. 向下游服务的请求中已有的header不会被配置覆盖  
+> 2. attribute 会转换为 header 传递到下游服务  
+> 3. 优先等级  原有 header > header > attribute  
+> 4. attribute 默认传递 String 和 基本类型    对象需要实现接口 HeadTransmitAttributeObjectTransform 并 注册为bean  
 ```yaml
 spring:
   gray:
