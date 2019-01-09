@@ -1,7 +1,6 @@
 package com.labidc.gray.deploy.servlet.feign;
 
 import com.labidc.gray.deploy.constant.GrayDeployConstant;
-import com.labidc.gray.deploy.servlet.properties.GrayDeployTransmitProerties;
 import com.labidc.gray.deploy.servlet.transmit.HeadTransmit;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -36,7 +35,7 @@ public class FeignHeadConfiguration {
      * @return
      */
     @Bean
-    public RequestInterceptor requestInterceptor(GrayDeployTransmitProerties grayDeployTransmitProerties) {
+    public RequestInterceptor requestInterceptor() {
         return requestTemplate -> {
             ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (attrs != null) {
