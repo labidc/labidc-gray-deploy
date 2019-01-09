@@ -11,7 +11,7 @@ import java.util.List;
  * @author xiongchuang
  * @date 2018-01-15
  */
-public abstract class AbstractHeadTransmit<S,N> implements HeadTransmit<S,N> {
+public abstract class AbstractHeadTransmit<S, N> implements HeadTransmit<S, N> {
 
 
     private GrayDeployTransmitProerties grayDeployTransmitProerties;
@@ -19,6 +19,7 @@ public abstract class AbstractHeadTransmit<S,N> implements HeadTransmit<S,N> {
 
     public AbstractHeadTransmit(GrayDeployTransmitProerties grayDeployTransmitProerties, HeadTransmitAttributeObjectTransform headTransmitAttributeObjectTransform) {
         this.grayDeployTransmitProerties = grayDeployTransmitProerties;
+        this.headTransmitAttributeObjectTransform = headTransmitAttributeObjectTransform;
     }
 
 
@@ -53,7 +54,7 @@ public abstract class AbstractHeadTransmit<S,N> implements HeadTransmit<S,N> {
      * 设置传输的 header
      */
     @Override
-    public void transmit(S transmitSource,N needTransmit) {
+    public void transmit(S transmitSource, N needTransmit) {
         // 将请求头中指定headers的转发到下游服务
         List<String> headers = grayDeployTransmitProerties.getHeaders();
         if (!CollectionUtils.isEmpty(headers)) {

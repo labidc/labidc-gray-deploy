@@ -4,6 +4,7 @@ import com.labidc.gray.deploy.servlet.properties.GrayDeployTransmitProerties;
 import com.labidc.gray.deploy.servlet.transmit.HeadTransmit;
 import com.labidc.gray.deploy.servlet.transmit.HeadTransmitAttributeObjectTransform;
 import com.labidc.gray.deploy.servlet.transmit.HeadTransmitServlet;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,9 +21,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GrayDeployServletAutoConfiguration {
 
+    @Autowired(required = false)
+    private HeadTransmitAttributeObjectTransform headTransmitAttributeObjectTransform;
+
     @Bean
     @ConditionalOnMissingBean(HeadTransmit.class)
-    public HeadTransmitServlet transmitServlet(GrayDeployTransmitProerties grayDeployTransmitProerties, HeadTransmitAttributeObjectTransform headTransmitAttributeObjectTransform){
+    public HeadTransmitServlet transmitServlet(GrayDeployTransmitProerties grayDeployTransmitProerties){
         return new HeadTransmitServlet(grayDeployTransmitProerties,headTransmitAttributeObjectTransform);
     }
 }
