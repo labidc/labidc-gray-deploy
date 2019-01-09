@@ -1,4 +1,4 @@
-package com.labidc.gray.deploy.servlet;
+package com.labidc.gray.deploy.servlet.provider;
 
 import com.labidc.gray.deploy.constant.GrayDeployConstant;
 import com.labidc.gray.deploy.handler.AbstractVersionProvider;

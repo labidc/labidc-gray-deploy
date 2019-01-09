@@ -1,4 +1,4 @@
-package com.labidc.gray.deploy.feign;
+package com.labidc.gray.deploy.servlet.feign;
 
 import com.netflix.hystrix.HystrixThreadPoolKey;
 import com.netflix.hystrix.HystrixThreadPoolProperties;
