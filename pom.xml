@@ -115,6 +115,7 @@
 
         </dependencies>
     </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -176,7 +177,9 @@
     </repositories>
 
     <build>
-        <pluginManagement>
+        <finalName>${project.artifactId}</finalName>
+        <sourceDirectory>src/main/java</sourceDirectory>
+        <testSourceDirectory>src/test/java</testSourceDirectory>
             <plugins>
                 <plugin><!--git-commit-id-plugin 生成 info git信息-->
                     <groupId>pl.project13.maven</groupId>
@@ -208,29 +211,17 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--<plugin>
-                    <groupId>com.spotify</groupId>&lt;!&ndash;该插件建议别翻墙&ndash;&gt;
-                    <artifactId>dockerfile-maven-plugin</artifactId>
-                    <version>${dockerfile-maven-plugin.version}</version>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5.3</version>
                     <configuration>
-                        <repository>${docker.image.prefix}/${project.artifactId}</repository>
-                        <tag>${project.version}</tag>
-                        <buildArgs>&lt;!&ndash;jar包默认名称&ndash;&gt;
-                            <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
-                        </buildArgs>
+                        <!--
+                          During release:perform, enable the "release" profile
+                         -->
+                        <releaseProfiles>release</releaseProfiles>
                     </configuration>
-                    <executions>
-                        <execution>
-                            <id>default</id>
-                            <phase>install</phase>&lt;!&ndash;绑定maven生命周期的某个阶段&ndash;&gt;
-                            <goals>
-                                <goal>build</goal>&lt;!&ndash;执行的命令&ndash;&gt;
-                                &lt;!&ndash;<goal>push</goal>&ndash;&gt;
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>-->
+                </plugin>
             </plugins>
-        </pluginManagement>
     </build>
 </project>
