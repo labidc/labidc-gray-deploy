@@ -25,7 +25,7 @@ public interface ServerFilter {
     List<Server> getProdServices(List<Server> serverList);
 
     /**
-     * 返回回灰服务
+     * 返回灰度服务
      *
      * @param serverList
      * @return
