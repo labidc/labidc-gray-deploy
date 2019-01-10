@@ -1,4 +1,4 @@
-package com.labidc.gray.deploy.ribbon.predicate;/**
+package com.labidc.gray.deploy.ribbon.rules.predicate;/**
  * @author ChenXingLiang
  * @date date time
  */

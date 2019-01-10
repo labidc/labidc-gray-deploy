@@ -1,6 +1,7 @@
 package com.labidc.gray.deploy.ribbon;
 
 import com.labidc.gray.deploy.properties.GrayDeployProerties;
+import com.labidc.gray.deploy.ribbon.rules.*;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 
 /**

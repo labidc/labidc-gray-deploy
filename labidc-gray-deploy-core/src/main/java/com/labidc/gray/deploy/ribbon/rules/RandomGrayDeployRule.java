@@ -1,4 +1,4 @@
-package com.labidc.gray.deploy.ribbon;
+package com.labidc.gray.deploy.ribbon.rules;
 
 import com.labidc.gray.deploy.filter.ServerFilter;
 import com.labidc.gray.deploy.utils.SpringContextUtils;

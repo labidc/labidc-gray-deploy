@@ -1,6 +1,6 @@
-package com.labidc.gray.deploy.ribbon.predicate;
+package com.labidc.gray.deploy.ribbon.rules.predicate;
 
-import com.labidc.gray.deploy.ribbon.ZoneAvoidanceGrayDeployRule;
+import com.labidc.gray.deploy.ribbon.rules.ZoneAvoidanceGrayDeployRule;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.config.DynamicBooleanProperty;
 import com.netflix.config.DynamicDoubleProperty;

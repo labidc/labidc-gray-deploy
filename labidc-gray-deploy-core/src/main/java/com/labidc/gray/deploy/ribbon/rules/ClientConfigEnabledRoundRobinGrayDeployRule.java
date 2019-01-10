@@ -1,4 +1,4 @@
-package com.labidc.gray.deploy.ribbon;
+package com.labidc.gray.deploy.ribbon.rules;
 
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;

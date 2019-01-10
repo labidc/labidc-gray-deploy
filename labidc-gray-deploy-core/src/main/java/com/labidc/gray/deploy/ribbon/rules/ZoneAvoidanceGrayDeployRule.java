@@ -1,7 +1,7 @@
-package com.labidc.gray.deploy.ribbon;
+package com.labidc.gray.deploy.ribbon.rules;
 
-import com.labidc.gray.deploy.ribbon.predicate.AvailabilityGrayDeployPredicate;
-import com.labidc.gray.deploy.ribbon.predicate.ZoneAvoidanceGrayDeployPredicate;
+import com.labidc.gray.deploy.ribbon.rules.predicate.AvailabilityGrayDeployPredicate;
+import com.labidc.gray.deploy.ribbon.rules.predicate.ZoneAvoidanceGrayDeployPredicate;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractServerPredicate;
 import com.netflix.loadbalancer.CompositePredicate;

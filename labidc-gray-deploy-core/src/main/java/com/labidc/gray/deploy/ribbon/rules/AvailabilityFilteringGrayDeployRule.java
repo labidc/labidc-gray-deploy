@@ -1,4 +1,4 @@
-package com.labidc.gray.deploy.ribbon;
+package com.labidc.gray.deploy.ribbon.rules;
 
 import com.google.common.collect.Collections2;
 import com.netflix.client.config.IClientConfig;
