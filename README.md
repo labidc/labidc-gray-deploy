@@ -17,7 +17,7 @@
 ### 实现原理：
 1. 一般我们微服务调用是多层级的，比如 
 
-``` mermaid
+```mermaid
 graph LR
     start[正常请求] --> input[网关 gateway/zuul ]
     input --> conditionA{负载均衡算法}
@@ -28,7 +28,7 @@ graph LR
 ```
 2. 这个时候，如果我们整个链条下的某个服务开发了新版本需要灰度发布，但是其他服务是正式版本, 比如 服务1 有个灰度版本需要上线
 
-``` mermaid
+```mermaid
 graph LR
     start[正常请求] --> input[网关 gateway/zuul ]
     start2[灰度请求] -. version:1.0.1 .-> input[网关 gateway/zuul ]
@@ -43,7 +43,7 @@ graph LR
 
 3. 如果我们 服务2 有灰度版本，如下
 
-``` mermaid
+```mermaid
 graph LR
     start[正常请求] --> input[网关 gateway/zuul ]
     start2[灰度请求] -. version:1.0.1 .-> input[网关 gateway/zuul ]
@@ -61,7 +61,7 @@ graph LR
 
 4. 或者所有服务都有灰度版本
 
-``` mermaid
+```mermaid
 graph LR
     start[正常请求] --> input[网关 gateway/zuul ]
     input --> conditionA{负载均衡算法}
