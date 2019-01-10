@@ -2,14 +2,13 @@ package com.labidc.gray.deploy.consul;
 
 import com.labidc.gray.deploy.constant.GrayDeployConstant;
 import com.labidc.gray.deploy.exception.DiscoveryServerException;
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.handler.DiscoveryProvider;
 import com.netflix.loadbalancer.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.consul.discovery.ConsulDiscoveryProperties;
 import org.springframework.cloud.consul.discovery.ConsulServer;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
@@ -21,8 +20,7 @@ import java.util.Optional;
  * @author: ChenXingLiang
  * @date: 2018-11-08 20:43
  **/
-@Component(value = "DiscoveryProvider")
-public class ConsulDiscoveryProvider extends AbstractDiscoveryProvider {
+public class ConsulDiscoveryProvider implements DiscoveryProvider {
 
     @Autowired
     private ConsulDiscoveryProperties consulDiscoveryProperties;

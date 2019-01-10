@@ -1,6 +1,6 @@
 package com.labidc.gray.deploy.ribbon;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.filter.ServerFilter;
 import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
@@ -24,7 +24,7 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
 
 
     @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
+    private ServerFilter serverFilter;
 
     private AtomicInteger nextServerCyclicCounter;
     private static final boolean AVAILABLE_ONLY_SERVERS = true;
@@ -49,16 +49,16 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
         }
 
         // RetryGrayDeployRule 依赖了 RoundRobinGrayDeployRule对象，内部new 创建，所以无法注入，这里需检查
-        if(this.abstractDiscoveryProvider == null) {
-            this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
+        if(this.serverFilter == null) {
+            this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
         }
-        String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
+
 
         Server server = null;
         int count = 0;
         while (count++ < 10) {
-            List<Server> reachableServers = abstractDiscoveryProvider.getServicesAuto(lb.getReachableServers(), requestHeaderVersion);
-            List<Server> allServers = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
+            List<Server> reachableServers = serverFilter.getServicesAuto(lb.getReachableServers());
+            List<Server> allServers = serverFilter.getServicesAuto(lb.getAllServers());
             int upCount = reachableServers.size();
             int serverCount = allServers.size();
 

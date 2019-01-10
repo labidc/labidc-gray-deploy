@@ -1,6 +1,10 @@
 package com.labidc.gray.deploy.gateway;
 
 import com.labidc.gray.deploy.GrayDeployAutoConfiguration;
+import com.labidc.gray.deploy.handler.DiscoveryProvider;
+import com.labidc.gray.deploy.handler.VersionProvider;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -15,15 +19,31 @@ import org.springframework.context.annotation.Import;
  **/
 @Configuration
 @Import({GrayDeployAutoConfiguration.class})
-@ComponentScan(value = "com.labidc.gray.deploy")
+@ComponentScan(value = "com.labidc.gray.deploy.gateway")
 public class AutoGateWayConfiguration {
 
 
 
+
+
     @Bean
+    @ConditionalOnMissingBean(VersionProvider.class)
+    public GateWayVersionProvider versionProvider(){
+        return new GateWayVersionProvider();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(DiscoveryProvider.class)
+    public DiscoveryProvider discoveryProvider(){
+        return new ConsulDiscoveryProvider();
+    }
+
+    @Bean
+    @ConditionalOnBean(GateWayVersionProvider.class)
     public GlobalFilter loadLoadBalancerFilter(){
         return new GateWayLoadBalancerClientFilter();
     }
+
 
 
 }

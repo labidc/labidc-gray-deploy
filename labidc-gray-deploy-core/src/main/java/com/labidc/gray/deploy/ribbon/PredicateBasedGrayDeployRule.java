@@ -1,7 +1,7 @@
 package com.labidc.gray.deploy.ribbon;
 
 import com.google.common.base.Optional;
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.filter.ServerFilter;
 import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.loadbalancer.AbstractServerPredicate;
 import com.netflix.loadbalancer.ILoadBalancer;
@@ -20,7 +20,7 @@ import java.util.List;
 public abstract class PredicateBasedGrayDeployRule extends ClientConfigEnabledRoundRobinGrayDeployRule {
 
     @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
+    private ServerFilter serverFilter;
 
     /**
      * Method that provides an instance of {@link AbstractServerPredicate} to be used by this class.
@@ -36,12 +36,11 @@ public abstract class PredicateBasedGrayDeployRule extends ClientConfigEnabledRo
     public Server choose(Object key) {
         ILoadBalancer lb = getLoadBalancer();
 
-        if(this.abstractDiscoveryProvider == null) {
-            this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
+        if(this.serverFilter == null) {
+            this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
         }
-        String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
 
-        List<Server> serverList =  abstractDiscoveryProvider.getServicesAuto(getLoadBalancer().getAllServers(), requestHeaderVersion);
+        List<Server> serverList =  serverFilter.getServicesAuto(getLoadBalancer().getAllServers());
 
         Optional<Server> server = getPredicate().chooseRoundRobinAfterFiltering(serverList, key);
         if (server.isPresent()) {

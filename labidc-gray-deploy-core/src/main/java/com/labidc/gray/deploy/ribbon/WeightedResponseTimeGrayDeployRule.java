@@ -1,6 +1,7 @@
 package com.labidc.gray.deploy.ribbon;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.filter.ServerFilter;
+import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.client.config.IClientConfigKey;
 import com.netflix.loadbalancer.*;
@@ -21,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule {
 
     @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
+    private ServerFilter serverFilter;
 
     public static final IClientConfigKey<Integer> WEIGHT_TASK_TIMER_INTERVAL_CONFIG_KEY = new IClientConfigKey<Integer>() {
         @Override
@@ -116,15 +117,20 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
         if (lb == null) {
             return null;
         }
+
+        if(this.serverFilter == null) {
+            this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
+        }
+
+
         Server server = null;
-        String requestHeaderVersion = this.abstractDiscoveryProvider.getRequestHeaderVersion();
         while (server == null) {
             // get hold of the current reference in case it is changed from the other thread
             List<Double> currentWeights = accumulatedWeights;
             if (Thread.interrupted()) {
                 return null;
             }
-            List<Server> allList = abstractDiscoveryProvider.getServicesAuto(getLoadBalancer().getAllServers(), requestHeaderVersion);
+            List<Server> allList = serverFilter.getServicesAuto(getLoadBalancer().getAllServers());
 
             int serverCount = allList.size();
 

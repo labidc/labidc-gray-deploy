@@ -4,7 +4,7 @@ package com.labidc.gray.deploy.zipkin;
 import brave.Span;
 import brave.Tracer;
 import com.labidc.gray.deploy.constant.GrayDeployConstant;
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.handler.DiscoveryProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.sleuth.instrument.web.TraceWebServletAutoConfiguration;
 import org.springframework.context.ApplicationContext;
@@ -66,7 +66,7 @@ public class DelegatingGrayDeployFilter implements Filter {
             return;
         }
 
-        AbstractDiscoveryProvider abstractDiscoveryProvider = this.applicationContext.getBean("DiscoveryProvider", AbstractDiscoveryProvider.class);
+        DiscoveryProvider abstractDiscoveryProvider = this.applicationContext.getBean(DiscoveryProvider.class);
         if (StringUtils.isEmpty(abstractDiscoveryProvider.getCurrentVersion())) {
             chain.doFilter(request, response);
             return;

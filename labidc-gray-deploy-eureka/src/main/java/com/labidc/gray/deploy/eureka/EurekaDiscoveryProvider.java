@@ -2,12 +2,11 @@ package com.labidc.gray.deploy.eureka;
 
 import com.labidc.gray.deploy.constant.GrayDeployConstant;
 import com.labidc.gray.deploy.exception.DiscoveryServerException;
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.handler.DiscoveryProvider;
 import com.netflix.loadbalancer.Server;
 import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Map;
@@ -18,8 +17,7 @@ import java.util.Map;
  * @author: ChenXingLiang
  * @date: 2018-11-08 20:43
  **/
-@Component(value = "DiscoveryProvider")
-public class EurekaDiscoveryProvider extends AbstractDiscoveryProvider {
+public class EurekaDiscoveryProvider implements DiscoveryProvider {
 
 
     @Autowired

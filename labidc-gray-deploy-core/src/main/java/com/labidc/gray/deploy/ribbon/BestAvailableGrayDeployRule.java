@@ -1,6 +1,7 @@
 package com.labidc.gray.deploy.ribbon;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.filter.ServerFilter;
+import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.loadbalancer.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,7 +17,7 @@ import java.util.List;
 public class BestAvailableGrayDeployRule extends ClientConfigEnabledRoundRobinGrayDeployRule {
 
     @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
+    private ServerFilter serverFilter;
 
     private LoadBalancerStats loadBalancerStats;
 
@@ -26,8 +27,11 @@ public class BestAvailableGrayDeployRule extends ClientConfigEnabledRoundRobinGr
             return super.choose(key);
         }
 
-        String requestHeaderVersion = this.abstractDiscoveryProvider.getRequestHeaderVersion();
-        List<Server> serverList = abstractDiscoveryProvider.getServicesAuto(getLoadBalancer().getAllServers(), requestHeaderVersion);
+        if(this.serverFilter == null) {
+            this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
+        }
+
+        List<Server> serverList = serverFilter.getServicesAuto(getLoadBalancer().getAllServers());
 
         int minimalConcurrentConnections = Integer.MAX_VALUE;
         long currentTime = System.currentTimeMillis();

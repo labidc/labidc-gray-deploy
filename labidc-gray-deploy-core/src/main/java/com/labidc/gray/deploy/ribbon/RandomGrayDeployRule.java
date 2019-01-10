@@ -1,6 +1,6 @@
 package com.labidc.gray.deploy.ribbon;
 
-import com.labidc.gray.deploy.handler.AbstractDiscoveryProvider;
+import com.labidc.gray.deploy.filter.ServerFilter;
 import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
@@ -9,7 +9,6 @@ import com.netflix.loadbalancer.Server;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Random;
 
@@ -23,9 +22,9 @@ import java.util.Random;
 public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
 
 
-    @Resource(name = "DiscoveryProvider")
+
     @Autowired
-    private AbstractDiscoveryProvider abstractDiscoveryProvider;
+    private ServerFilter serverFilter;
 
     Random rand;
 
@@ -42,19 +41,18 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
             return null;
         }
 
-        if (this.abstractDiscoveryProvider == null) {
-            this.abstractDiscoveryProvider = SpringContextUtils.getBean(AbstractDiscoveryProvider.class);
+        if(this.serverFilter == null) {
+            this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
         }
 
-        String requestHeaderVersion = abstractDiscoveryProvider.getRequestHeaderVersion();
 
 
         while (true) {
             if (Thread.interrupted()) {
                 return null;
             }
-            List<Server> upList = abstractDiscoveryProvider.getServicesAuto(lb.getReachableServers(), requestHeaderVersion);
-            List<Server> allList = abstractDiscoveryProvider.getServicesAuto(lb.getAllServers(), requestHeaderVersion);
+            List<Server> upList = serverFilter.getServicesAuto(lb.getReachableServers());
+            List<Server> allList = serverFilter.getServicesAuto(lb.getAllServers());
 
 
             int serverCount = allList.size();
