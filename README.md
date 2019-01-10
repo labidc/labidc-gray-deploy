@@ -117,7 +117,7 @@ spring:
 ```
 2. maven添加依赖
 #### labidc-gray-deploy-consul
-``` 
+```xml
   <dependency>
     <groupId>com.labidc</groupId>
     <artifactId>labidc-gray-deploy-consul</artifactId>
@@ -133,7 +133,7 @@ spring:
 
 3. 【网关】, gateway, 由于gateway 基与webflux 使用Netty 作为容器, 所有有个专门为gateway实现的一个插件（注意该插件以来了consul,如果需要和eureka配合使用，请自行修改源码）, 其他配置方法一样
 ##### labidc-gray-deploy-gateway
-``` maven
+```xml
     <dependency>
         <groupId>com.labidc</groupId>
         <artifactId>labidc-gray-deploy-gateway</artifactId>
@@ -182,7 +182,7 @@ spring:
 ```
 2. maven添加依赖
 #### labidc-gray-deploy-eureka 
-``` 
+```xml
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
@@ -197,7 +197,7 @@ spring:
 
 ```
 3. 【网关】zuul2 
-``` yaml
+```yaml
 # 路由规则配置
 zuul:
   #忽略所有默认服务配置
@@ -214,7 +214,7 @@ zuul:
       serviceId: product-service-demo1 
 ```
 添加maven 配置
-``` 
+```xml
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-eureka</artifactId>
@@ -231,7 +231,7 @@ zuul:
 
 ### 三、调用链追加记录
 调用链记录服务版本加入依赖
-```
+```xml
   <dependency>
       <groupId>com.labidc</groupId>
       <artifactId>labidc-gray-deploy-zipkin</artifactId>
