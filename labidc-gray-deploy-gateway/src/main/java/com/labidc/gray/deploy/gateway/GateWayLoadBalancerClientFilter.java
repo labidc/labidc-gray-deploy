@@ -48,12 +48,12 @@ public class GateWayLoadBalancerClientFilter implements GlobalFilter, Ordered {
             GateWayVersionProvider.GRAY_DEPLOY_THREAD_LOCAL.remove();
         }
 
-        Map<String, Object> map = new HashMap<>();
+       /* Map<String, Object> map = new HashMap<>();
         for (Map.Entry<String, List<String>> headerEntry : headers.entrySet()) {
             List<String> value = headerEntry.getValue();
             map.put(headerEntry.getKey(), CollectionUtils.isEmpty(value) ? null : value.get(0));
         }
-        GateWayVersionProvider.GRAY_DEPLOY_SELF_DATA_THREAD_LOCAL.set(map);
+        GateWayVersionProvider.GRAY_DEPLOY_SELF_DATA_THREAD_LOCAL.set(map);*/
 
 
         return chain.filter(exchange);

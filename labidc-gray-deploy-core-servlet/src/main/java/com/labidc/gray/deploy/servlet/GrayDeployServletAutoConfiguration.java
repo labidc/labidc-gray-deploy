@@ -1,7 +1,9 @@
 package com.labidc.gray.deploy.servlet;
 
+import com.labidc.gray.deploy.handler.RequestSelfDataProvider;
 import com.labidc.gray.deploy.handler.VersionProvider;
 import com.labidc.gray.deploy.servlet.properties.GrayDeployTransmitProerties;
+import com.labidc.gray.deploy.servlet.provider.ServletRequestSelfDataProvider;
 import com.labidc.gray.deploy.servlet.provider.ServletVersionProvider;
 import com.labidc.gray.deploy.servlet.transmit.HeadTransmit;
 import com.labidc.gray.deploy.servlet.transmit.HeadTransmitAttributeObjectTransform;
@@ -34,7 +36,13 @@ public class GrayDeployServletAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(VersionProvider.class)
-    public VersionProvider ersionProvider(){
+    public VersionProvider versionProvider(){
         return new ServletVersionProvider();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(RequestSelfDataProvider.class)
+    public RequestSelfDataProvider requestSelfDataProvider(){
+        return new ServletRequestSelfDataProvider();
     }
 }

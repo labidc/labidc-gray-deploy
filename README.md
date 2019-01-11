@@ -263,5 +263,5 @@ spring:
 可以自定义筛选 灰度服务/正式服务 
 
     实现接口com.labidc.gray.deploy.filter.ServerFilter 并注册为bean
-    可在实现里注入 DiscoveryProvider  VersionProvider  辅助过滤
+    可在实现里注入 DiscoveryProvider  VersionProvider  RequestSelfDataProvider 辅助过滤
 
