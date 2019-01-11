@@ -1,7 +1,6 @@
 package com.labidc.gray.deploy.filter;
 
 import com.labidc.gray.deploy.handler.DiscoveryProvider;
-import com.labidc.gray.deploy.handler.RequestSelfDataProvider;
 import com.labidc.gray.deploy.handler.VersionProvider;
 import com.netflix.loadbalancer.Server;
 import org.apache.commons.lang.StringUtils;
@@ -24,8 +23,8 @@ public class DefaultServerFilter extends AbstractServerFilter {
     @Autowired
     protected VersionProvider versionProvider;
 
-    @Autowired(required = false)
-    protected RequestSelfDataProvider requestSelfDataProvider;
+   /* @Autowired(required = false)
+    protected RequestSelfDataProvider requestSelfDataProvider;*/
 
 
     @Override
