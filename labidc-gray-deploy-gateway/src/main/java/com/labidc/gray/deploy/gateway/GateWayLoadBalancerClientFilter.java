@@ -6,16 +6,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
+import org.springframework.cloud.gateway.filter.LoadBalancerClientFilter;
 import org.springframework.core.Ordered;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @program: servicedemo
@@ -31,9 +27,10 @@ public class GateWayLoadBalancerClientFilter implements GlobalFilter, Ordered {
     private static final Log log = LogFactory.getLog(GateWayLoadBalancerClientFilter.class);
 
     /**
-     * 过滤器加载顺序
+     * 过滤器加载顺序 需要在 LoadBalancerClientFilter 执行之前加载
+     * 服务选取 为 {@link LoadBalancerClientFilter} 加载顺序为 {@link LoadBalancerClientFilter.LOAD_BALANCER_CLIENT_FILTER_ORDER}
      */
-    public static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = 10099;
+    public static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = LoadBalancerClientFilter.LOAD_BALANCER_CLIENT_FILTER_ORDER - 1;
 
 
     @Override
