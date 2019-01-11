@@ -23,27 +23,23 @@ import org.springframework.context.annotation.Import;
 public class AutoGateWayConfiguration {
 
 
-
-
-
     @Bean
     @ConditionalOnMissingBean(VersionProvider.class)
-    public GateWayVersionProvider versionProvider(){
+    public GateWayVersionProvider versionProvider() {
         return new GateWayVersionProvider();
     }
 
     @Bean
     @ConditionalOnMissingBean(DiscoveryProvider.class)
-    public DiscoveryProvider discoveryProvider(){
+    public DiscoveryProvider discoveryProvider() {
         return new ConsulDiscoveryProvider();
     }
 
     @Bean
     @ConditionalOnBean(GateWayVersionProvider.class)
-    public GlobalFilter loadLoadBalancerFilter(){
-        return new GateWayLoadBalancerClientFilter();
+    public GlobalFilter gateWayVersionHeaderReadFilter() {
+        return new GateWayVersionHeaderReadFilter();
     }
-
 
 
 }

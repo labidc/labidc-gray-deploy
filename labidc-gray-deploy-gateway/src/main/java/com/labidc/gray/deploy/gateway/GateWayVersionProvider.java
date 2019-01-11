@@ -11,7 +11,7 @@ import com.labidc.gray.deploy.handler.VersionProvider;
 public class GateWayVersionProvider implements VersionProvider {
 
     /**
-     * 数据来源 {@link GateWayLoadBalancerClientFilter}
+     * 数据来源 {@link GateWayVersionHeaderReadFilter}
      */
     static final ThreadLocal<String> GRAY_DEPLOY_THREAD_LOCAL = new ThreadLocal<String>();
 

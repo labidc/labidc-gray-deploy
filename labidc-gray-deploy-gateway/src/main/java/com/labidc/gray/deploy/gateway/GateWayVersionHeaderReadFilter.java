@@ -19,12 +19,12 @@ import reactor.core.publisher.Mono;
  * @author: ChenXingLiang
  * @date: 2019-01-02 14:24
  **/
-public class GateWayLoadBalancerClientFilter implements GlobalFilter, Ordered {
+public class GateWayVersionHeaderReadFilter implements GlobalFilter, Ordered {
 
     /**
      * 日志打印
      */
-    private static final Log log = LogFactory.getLog(GateWayLoadBalancerClientFilter.class);
+    private static final Log log = LogFactory.getLog(GateWayVersionHeaderReadFilter.class);
 
     /**
      * 过滤器加载顺序 需要在 LoadBalancerClientFilter 执行之前加载
