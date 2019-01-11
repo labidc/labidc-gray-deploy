@@ -5,6 +5,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class ServletRequestSelfDataProvider implements RequestSelfDataProvider {
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (requestAttributes == null) {
             //System.out.println("==================================11111线程ID"+ Thread.currentThread());
-            return null;
+            return Collections.emptyMap();
         }
 
         Map<String, Object> map = new HashMap<>();
