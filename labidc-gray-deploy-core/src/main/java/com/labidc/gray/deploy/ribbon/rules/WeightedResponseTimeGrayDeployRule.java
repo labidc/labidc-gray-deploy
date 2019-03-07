@@ -41,9 +41,9 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
     private static final int DEFAULT_TIMER_INTERVAL = 30 * 1000;
     private static final Logger LOGGER = LoggerFactory.getLogger(WeightedResponseTimeRule.class);
     private final Random random = new Random();
+    String name = "unknown";
     private Timer serverWeightTimer = null;
     private AtomicBoolean serverWeightAssignmentInProgress = new AtomicBoolean(false);
-    String name = "unknown";
     @Autowired
     private ServerFilter serverFilter;
     private int serverWeightTaskTimerInterval = DEFAULT_TIMER_INTERVAL;
@@ -82,7 +82,7 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
         sw.maintainWeights();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            LOGGER.info("Stopping NFLoadBalancer-serverWeightTimer-" + name);
+            LOGGER.info("Stopping NFLoadBalancer-serverWeightTimer-{}", name);
             serverWeightTimer.cancel();
             //serverWeightTimer.shutdown();
         }));
@@ -90,7 +90,7 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
 
     public void shutdown() {
         if (serverWeightTimer != null) {
-            LOGGER.info("Stopping NFLoadBalancer-serverWeightTimer-" + name);
+            LOGGER.info("Stopping NFLoadBalancer-serverWeightTimer-{}", name);
             serverWeightTimer.cancel();
             //serverWeightTimer.shutdown();
         }

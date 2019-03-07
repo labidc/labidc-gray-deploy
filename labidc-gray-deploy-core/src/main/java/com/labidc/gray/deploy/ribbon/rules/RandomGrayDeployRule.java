@@ -29,7 +29,7 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
     private ServerFilter serverFilter;
 
     public RandomGrayDeployRule() {
-
+        //
     }
 
     /**
@@ -87,7 +87,7 @@ public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
 
     @Override
     public void initWithNiwsConfig(IClientConfig clientConfig) {
-        // TODO Auto-generated method stub
+        //
 
     }
 }

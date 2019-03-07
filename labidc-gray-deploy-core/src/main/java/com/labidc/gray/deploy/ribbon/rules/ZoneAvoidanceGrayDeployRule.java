@@ -31,7 +31,7 @@ public class ZoneAvoidanceGrayDeployRule extends PredicateBasedGrayDeployRule {
     }
 
     public static Map<String, ZoneSnapshot> createSnapshot(LoadBalancerStats lbStats) {
-        Map<String, ZoneSnapshot> map = new HashMap<String, ZoneSnapshot>();
+        Map<String, ZoneSnapshot> map = new HashMap<>();
         for (String zone : lbStats.getAvailableZones()) {
             ZoneSnapshot snapshot = lbStats.getZoneSnapshot(zone);
             map.put(zone, snapshot);
@@ -41,7 +41,7 @@ public class ZoneAvoidanceGrayDeployRule extends PredicateBasedGrayDeployRule {
 
     static String randomChooseZone(Map<String, ZoneSnapshot> snapshot,
                                    Set<String> chooseFrom) {
-        if (chooseFrom == null || chooseFrom.size() == 0) {
+        if (chooseFrom == null || chooseFrom.isEmpty()) {
             return null;
         }
         String selectedZone = chooseFrom.iterator().next();
@@ -70,11 +70,11 @@ public class ZoneAvoidanceGrayDeployRule extends PredicateBasedGrayDeployRule {
         if (snapshot.isEmpty()) {
             return null;
         }
-        Set<String> availableZones = new HashSet<String>(snapshot.keySet());
+        Set<String> availableZones = new HashSet<>(snapshot.keySet());
         if (availableZones.size() == 1) {
             return availableZones;
         }
-        Set<String> worstZones = new HashSet<String>();
+        Set<String> worstZones = new HashSet<>();
         double maxLoadPerServer = 0;
         boolean limitedZoneAvailability = false;
 

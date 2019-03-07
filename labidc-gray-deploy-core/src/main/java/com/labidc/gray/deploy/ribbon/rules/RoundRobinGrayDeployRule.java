@@ -62,7 +62,7 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
             int serverCount = allServers.size();
 
             if ((upCount == 0) || (serverCount == 0)) {
-                log.warn("No up servers available from load balancer: " + lb);
+                log.warn("No up servers available from load balancer: {}", lb);
                 return null;
             }
 
@@ -113,6 +113,7 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
 
     @Override
     public void initWithNiwsConfig(IClientConfig clientConfig) {
+        //
     }
 
 }

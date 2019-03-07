@@ -55,11 +55,8 @@ public class AvailabilityGrayDeployPredicate extends AbstractServerPredicate {
 
 
     private boolean shouldSkipServer(ServerStats stats) {
-        if ((CIRCUIT_BREAKER_FILTERING.get() && stats.isCircuitBreakerTripped())
-                || stats.getActiveRequestsCount() >= activeConnectionsLimit.get()) {
-            return true;
-        }
-        return false;
+        return (CIRCUIT_BREAKER_FILTERING.get() && stats.isCircuitBreakerTripped())
+                || (stats.getActiveRequestsCount() >= activeConnectionsLimit.get());
     }
 
 }

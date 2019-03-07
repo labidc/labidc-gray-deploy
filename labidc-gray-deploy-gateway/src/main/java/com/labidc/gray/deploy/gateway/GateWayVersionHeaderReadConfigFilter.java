@@ -46,9 +46,7 @@ public class GateWayVersionHeaderReadConfigFilter implements GlobalFilter, Order
         String versionHeader = headers.getFirst(GrayDeployConstant.VERSION);
         if (StringUtils.isEmpty(versionHeader)) {
             ServerHttpRequest.Builder builder = exchange.getRequest().mutate();
-            builder.headers((o) -> {
-                o.set(GrayDeployConstant.VERSION, discoveryProvider.getCurrentVersion());
-            });
+            builder.headers((o) -> o.set(GrayDeployConstant.VERSION, discoveryProvider.getCurrentVersion()));
             return chain.filter(exchange.mutate().request(builder.build()).build());
         }
 
