@@ -5,6 +5,7 @@ import com.labidc.gray.deploy.handler.DiscoveryProvider;
 import com.labidc.gray.deploy.handler.VersionProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -39,6 +40,12 @@ public class AutoGateWayConfiguration {
     @ConditionalOnBean(GateWayVersionProvider.class)
     public GlobalFilter gateWayVersionHeaderReadFilter() {
         return new GateWayVersionHeaderReadFilter();
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "spring.gray.deploy", name = "readConfigVersion", matchIfMissing = false)
+    public GlobalFilter gateWayVersionHeaderReadConfigFilter() {
+        return new GateWayVersionHeaderReadConfigFilter();
     }
 
 

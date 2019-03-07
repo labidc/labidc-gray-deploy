@@ -1,6 +1,8 @@
 package com.labidc.gray.deploy.servlet.feign;
 
 import com.labidc.gray.deploy.constant.GrayDeployConstant;
+import com.labidc.gray.deploy.handler.DiscoveryProvider;
+import com.labidc.gray.deploy.properties.GrayDeployProerties;
 import com.labidc.gray.deploy.servlet.transmit.HeadTransmit;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
@@ -29,6 +31,12 @@ public class FeignHeadConfiguration {
     @Autowired
     private HeadTransmit<HttpServletRequest, RequestTemplate> headTransmit;
 
+    @Autowired
+    private GrayDeployProerties grayDeployProerties;
+
+    @Autowired
+    private DiscoveryProvider discoveryProvider;
+
     /**
      * 传递指定请求头
      *
@@ -44,13 +52,14 @@ public class FeignHeadConfiguration {
                 String version = request.getHeader(GrayDeployConstant.VERSION);
                 if (!StringUtils.isEmpty(version)) {
                     requestTemplate.header(GrayDeployConstant.VERSION, version);
+                } else if (grayDeployProerties.getReadConfigVersion()) {
+                    requestTemplate.header(GrayDeployConstant.VERSION, discoveryProvider.getCurrentVersion());
                 }
 
-                headTransmit.transmit(request,requestTemplate);
+                headTransmit.transmit(request, requestTemplate);
             }
         };
     }
-
 
 
 }

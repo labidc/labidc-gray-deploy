@@ -33,7 +33,12 @@ public class GrayDeployProerties {
     /**
      * 最长重试时间(毫秒) (当重试策略启用时有效)
      */
-    private long maxRetryMillis = 500L;
+    private Long maxRetryMillis = 500L;
+
+    /**
+     * 当 header 中没有携带 version 读取当前服务 version 并传递给下一个服务
+     */
+    private Boolean readConfigVersion = false;
 
     /**
      * 默认调用服务版本号
