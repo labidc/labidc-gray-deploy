@@ -29,7 +29,7 @@ public class ServletVersionProvider implements VersionProvider {
         }
         HttpServletRequest request = requestAttributes.getRequest();
         String headers = request.getHeader(GrayDeployConstant.VERSION);
-        if (!StringUtils.isEmpty(headers)) {
+        if (StringUtils.isEmpty(headers)) {
             return Collections.emptyList();
         }
 
