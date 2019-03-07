@@ -2,8 +2,13 @@ package com.labidc.gray.deploy.properties;
 
 import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum;
 import lombok.Data;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @program: labidc-manager
@@ -30,4 +35,27 @@ public class GrayDeployProerties {
      */
     private long maxRetryMillis = 500L;
 
+    /**
+     * 默认调用服务版本号
+     */
+    private List<String> defaultServiceVersions = Collections.emptyList();
+
+
+    public void setDefaultServiceVersions(List<String> defaultServiceVersions) {
+        if (CollectionUtils.isEmpty(defaultServiceVersions)) {
+            return;
+        }
+
+        List<String> list = new ArrayList<>();
+        for (String defaultServiceVersion : defaultServiceVersions) {
+            if (defaultServiceVersion != null) {
+                String trim = defaultServiceVersion.toUpperCase().trim();
+                if (!trim.isEmpty()) {
+                    list.add(trim);
+                }
+            }
+        }
+
+        this.defaultServiceVersions = list;
+    }
 }

@@ -1,0 +1,1 @@
+mvn clean install -T 1C -U -Dmaven.compile.fork=true  -Dmaven.test.skip=true -Pdev

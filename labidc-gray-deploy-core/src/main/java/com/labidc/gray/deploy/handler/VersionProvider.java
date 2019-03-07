@@ -1,6 +1,8 @@
 package com.labidc.gray.deploy.handler;
 
 
+import java.util.List;
+
 /**
  * @program: servicedemo
  * @description: 版本提供者
@@ -10,10 +12,9 @@ package com.labidc.gray.deploy.handler;
 public interface VersionProvider {
 
     /**
-     * 获取版本号
+     * 获取版本号  需要大写去头尾空
      * @return
      */
-    String getRequestHeaderVersion();
-
+    List<String> getRequestHeaderVersions();
 
 }

@@ -2,7 +2,9 @@ package com.labidc.gray.deploy.filter;
 
 import com.labidc.gray.deploy.handler.DiscoveryProvider;
 import com.labidc.gray.deploy.handler.VersionProvider;
+import com.labidc.gray.deploy.properties.GrayDeployProerties;
 import com.netflix.loadbalancer.Server;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,23 +25,34 @@ public class DefaultServerFilter extends AbstractServerFilter {
     @Autowired
     protected VersionProvider versionProvider;
 
+    @Autowired
+    private GrayDeployProerties grayDeployProerties;
+
    /* @Autowired(required = false)
     protected RequestSelfDataProvider requestSelfDataProvider;*/
 
 
     @Override
     public List<Server> getProdServices(List<Server> serverList) {
-        return serverList.stream().filter((item) -> StringUtils.isEmpty(discoveryProvider.getVersion(item))).collect(toList());
+
+        List<String> defaultServiceVersions = grayDeployProerties.getDefaultServiceVersions();
+
+        return serverList.stream().filter((item) -> {
+            String version = discoveryProvider.getVersion(item);
+            if (StringUtils.isEmpty(version)) {
+                return true;
+            }
+
+            return defaultServiceVersions.contains(version.toUpperCase().trim());
+        }).collect(toList());
     }
 
     @Override
     public List<Server> getGrayServices(List<Server> serverList) {
-
-        if (StringUtils.isBlank(versionProvider.getRequestHeaderVersion())) {
+        List<String> requestHeaderVersions = versionProvider.getRequestHeaderVersions();
+        if (CollectionUtils.isEmpty(requestHeaderVersions)) {
             return Collections.emptyList();
         }
-
-        String requestHeaderVersion = versionProvider.getRequestHeaderVersion().toUpperCase().trim();
 
         return serverList.stream().filter((item) -> {
             String version = discoveryProvider.getVersion(item);
@@ -47,7 +60,7 @@ public class DefaultServerFilter extends AbstractServerFilter {
                 return false;
             }
 
-            return requestHeaderVersion.equals(discoveryProvider.getVersion(item).toUpperCase().trim());
+            return requestHeaderVersions.contains(version.toUpperCase().trim());
         }).collect(toList());
     }
 }

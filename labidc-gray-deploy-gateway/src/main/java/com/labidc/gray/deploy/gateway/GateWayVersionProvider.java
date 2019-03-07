@@ -2,6 +2,8 @@ package com.labidc.gray.deploy.gateway;
 
 import com.labidc.gray.deploy.handler.VersionProvider;
 
+import java.util.List;
+
 /**
  * @program: servicedemo
  * @description: gateway版本提供者
@@ -13,10 +15,12 @@ public class GateWayVersionProvider implements VersionProvider {
     /**
      * 数据来源 {@link GateWayVersionHeaderReadFilter}
      */
-    static final ThreadLocal<String> GRAY_DEPLOY_THREAD_LOCAL = new ThreadLocal<String>();
+    static final ThreadLocal<List<String>> GRAY_DEPLOY_THREAD_LOCAL = new ThreadLocal<>();
 
     @Override
-    public String getRequestHeaderVersion() {
+    public List<String> getRequestHeaderVersions() {
         return GRAY_DEPLOY_THREAD_LOCAL.get();
     }
+
+
 }

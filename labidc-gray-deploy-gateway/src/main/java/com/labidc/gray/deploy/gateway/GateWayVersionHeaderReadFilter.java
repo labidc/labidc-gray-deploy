@@ -13,6 +13,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @program: servicedemo
  * @description: 自定义过滤器
@@ -20,7 +23,7 @@ import reactor.core.publisher.Mono;
  * @date: 2019-01-02 14:24
  **/
 public class GateWayVersionHeaderReadFilter implements GlobalFilter, Ordered {
-
+    private static final String VERSION_HEADER_SPLIT = ",";
     /**
      * 日志打印
      */
@@ -43,7 +46,16 @@ public class GateWayVersionHeaderReadFilter implements GlobalFilter, Ordered {
         HttpHeaders headers = exchange.getRequest().getHeaders();
         String versionHeader = headers.getFirst(GrayDeployConstant.VERSION);
         if (!StringUtils.isEmpty(versionHeader)) {
-            GateWayVersionProvider.GRAY_DEPLOY_THREAD_LOCAL.set(versionHeader);
+
+            List<String> versionList = new ArrayList<>();
+            for (String version : versionHeader.split(VERSION_HEADER_SPLIT)) {
+                String trim = version.toLowerCase().trim();
+                if (!trim.isEmpty()) {
+                    versionList.add(trim);
+                }
+            }
+
+            GateWayVersionProvider.GRAY_DEPLOY_THREAD_LOCAL.set(versionList);
         } else {
             GateWayVersionProvider.GRAY_DEPLOY_THREAD_LOCAL.remove();
         }
