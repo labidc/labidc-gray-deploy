@@ -18,10 +18,11 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 /**
- * @program: servicedemo
- * @description: TODO
- * @author: ChenXingLiang
- * @date: 2019-01-03 17:44
+ * servicedemo
+ * TODO
+ *
+ * @author ChenXingLiang
+ * @date 2019-01-03 17:44
  **/
 @Component
 @Order(TraceWebServletAutoConfiguration.TRACING_FILTER_ORDER + 1)

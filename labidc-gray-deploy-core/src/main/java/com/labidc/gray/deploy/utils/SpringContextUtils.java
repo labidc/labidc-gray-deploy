@@ -1,6 +1,5 @@
 package com.labidc.gray.deploy.utils;
 
-import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -18,68 +17,57 @@ public class SpringContextUtils implements ApplicationContextAware {
     /**
      * 上下文对象实例
      */
-    private static ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(ApplicationContext _applicationContext) throws BeansException {
-        applicationContext = _applicationContext;
-
-    }
+    private static ApplicationContext APPLICATIONCONTEXT;
 
     /**
      * 获取applicationContext
-     *
-     * @return
      */
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
+    private static ApplicationContext getAPPLICATIONCONTEXT() {
+        return APPLICATIONCONTEXT;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) {
+        SpringContextUtils.APPLICATIONCONTEXT = applicationContext;
     }
 
     /**
      * 通过name获取 Bean.
      *
-     * @param name
-     * @return
+
      */
     public static Object getBean(String name) {
-        return getApplicationContext().getBean(name);
+        return getAPPLICATIONCONTEXT().getBean(name);
     }
 
     /**
      * 通过class获取Bean.
      *
-     * @param clazz
-     * @param <T>
-     * @return
+
      */
     public static <T> T getBean(Class<T> clazz) {
 
-        return getApplicationContext().getBean(clazz);
+        return getAPPLICATIONCONTEXT().getBean(clazz);
     }
 
 
     /**
      * 通过class获取Bean.
      *
-     * @param clazz
-     * @param <T>
-     * @return
-     */
-    public static <T> Map<String, T>  getBeans(Class<T> clazz) {
 
-        return getApplicationContext().getBeansOfType(clazz);
+     */
+    public static <T> Map<String, T> getBeans(Class<T> clazz) {
+
+        return getAPPLICATIONCONTEXT().getBeansOfType(clazz);
     }
 
 
     /**
      * 通过name,以及Clazz返回指定的Bean
      *
-     * @param name
-     * @param clazz
-     * @param <T>
-     * @return
+
      */
     public static <T> T getBean(String name, Class<T> clazz) {
-        return getApplicationContext().getBean(name, clazz);
+        return getAPPLICATIONCONTEXT().getBean(name, clazz);
     }
 }

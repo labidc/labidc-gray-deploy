@@ -5,13 +5,16 @@ import com.labidc.gray.deploy.ribbon.rules.*;
 import com.netflix.loadbalancer.AbstractLoadBalancerRule;
 
 /**
- * @program: labidc-manager
- * @description: 灰度发布负载均衡规则工厂
- * @author: ChenXingLiang
- * @date: 2018-11-09 00:13
+ * labidc-manager
+ * 灰度发布负载均衡规则工厂
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-09 00:13
  **/
 public class GrayDeployRibbonRuleFactory {
-
+    private GrayDeployRibbonRuleFactory() {
+        //
+    }
 
     /**
      * 获取当前设置的负载均衡规则

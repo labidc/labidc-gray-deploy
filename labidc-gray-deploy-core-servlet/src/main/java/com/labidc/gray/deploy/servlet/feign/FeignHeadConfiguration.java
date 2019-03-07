@@ -18,10 +18,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * @program: labidc-manager
- * @description: Feign拦截器配置，传递指定请求头
- * @author: ChenXingLiang
- * @date: 2018-11-08 16:38
+ * labidc-manager
+ * Feign拦截器配置，传递指定请求头
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-08 16:38
  **/
 @Configuration
 public class FeignHeadConfiguration {

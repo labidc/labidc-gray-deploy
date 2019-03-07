@@ -30,7 +30,7 @@ public class ServletRequestSelfDataProvider implements RequestSelfDataProvider {
         Enumeration<String> headerNames = request.getHeaderNames();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
-            map.put(headerName,request.getHeader(headerName));
+            map.put(headerName, request.getHeader(headerName));
         }
         return map;
     }

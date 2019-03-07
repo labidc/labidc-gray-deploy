@@ -15,22 +15,21 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- * @program: labidc-manager
- * @description: consul发现中心服务提供者
- * @author: ChenXingLiang
- * @date: 2018-11-08 20:43
+ * labidc-manager
+ * consul发现中心服务提供者
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-08 20:43
  **/
 public class ConsulDiscoveryProvider implements DiscoveryProvider {
 
-    @Autowired
-    private ConsulDiscoveryProperties consulDiscoveryProperties;
-
     private static final int VERSION_SPLIT_LENGTH = 2;
-
     /**
      * 日志控制器
      */
     private static final Logger logger = LoggerFactory.getLogger(ConsulDiscoveryProvider.class);
+    @Autowired
+    private ConsulDiscoveryProperties consulDiscoveryProperties;
 
     @Override
     public Map<String, String> getServerMetadata(Server server) {
@@ -40,9 +39,8 @@ public class ConsulDiscoveryProvider implements DiscoveryProvider {
             ConsulServer consulServer = (ConsulServer) server;
             return consulServer.getMetadata();
         }
-        throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是："+server.getClass().getSimpleName());
+        throw new DiscoveryServerException("======================该服务器实例不是Consul提供它是：" + server.getClass().getSimpleName());
     }
-
 
 
     @Override
@@ -54,7 +52,7 @@ public class ConsulDiscoveryProvider implements DiscoveryProvider {
             String[] versionSplit = optional.get().split("=", VERSION_SPLIT_LENGTH);
             if (versionSplit.length == VERSION_SPLIT_LENGTH) {
                 String version = versionSplit[versionSplit.length - 1];
-                if(StringUtils.isEmpty(version)){
+                if (StringUtils.isEmpty(version)) {
                     return null;
                 }
                 return version;

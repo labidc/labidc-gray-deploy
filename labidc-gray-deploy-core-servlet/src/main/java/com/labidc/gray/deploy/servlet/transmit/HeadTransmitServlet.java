@@ -33,7 +33,7 @@ public class HeadTransmitServlet extends AbstractHeadTransmit<HttpServletRequest
     @Override
     protected boolean nextRequestHasHeader(RequestTemplate needTransmit, String header) {
         Map<String, Collection<String>> headers = needTransmit.headers();
-        if(headers.isEmpty()){
+        if (headers.isEmpty()) {
             return false;
         }
 
@@ -42,7 +42,7 @@ public class HeadTransmitServlet extends AbstractHeadTransmit<HttpServletRequest
 
     @Override
     protected void nextRequestSetHeader(RequestTemplate needTransmit, String headerName, String headerValue) {
-        needTransmit.header(headerName,headerValue);
+        needTransmit.header(headerName, headerValue);
     }
 
 

@@ -13,18 +13,16 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * @program: labidc-manager
- * @description: 根据平均响应时间计算所有服务的权重, 响应时间越快, 服务权重越大, 被选中的机率越高;
+ * labidc-manager
+ * 根据平均响应时间计算所有服务的权重, 响应时间越快, 服务权重越大, 被选中的机率越高;
  * 继承 RoundRobinGrayDeployRule 对象，原继承 RoundRobinRule
- * @author: ChenXingLiang
- * @date: 2018-11-08 16:48
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-08 16:48
  **/
 public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule {
 
-    @Autowired
-    private ServerFilter serverFilter;
-
-    public static final IClientConfigKey<Integer> WEIGHT_TASK_TIMER_INTERVAL_CONFIG_KEY = new IClientConfigKey<Integer>() {
+    private static final IClientConfigKey<Integer> WEIGHT_TASK_TIMER_INTERVAL_CONFIG_KEY = new IClientConfigKey<Integer>() {
         @Override
         public String key() {
             return "ServerWeightTaskTimerInterval";
@@ -40,25 +38,18 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
             return Integer.class;
         }
     };
-
-    public static final int DEFAULT_TIMER_INTERVAL = 30 * 1000;
-
-    private int serverWeightTaskTimerInterval = DEFAULT_TIMER_INTERVAL;
-
+    private static final int DEFAULT_TIMER_INTERVAL = 30 * 1000;
     private static final Logger LOGGER = LoggerFactory.getLogger(WeightedResponseTimeRule.class);
-
+    private final Random random = new Random();
+    private Timer serverWeightTimer = null;
+    private AtomicBoolean serverWeightAssignmentInProgress = new AtomicBoolean(false);
+    String name = "unknown";
+    @Autowired
+    private ServerFilter serverFilter;
+    private int serverWeightTaskTimerInterval = DEFAULT_TIMER_INTERVAL;
     // holds the accumulated weight from index 0 to current index
     // for example, element at index 2 holds the sum of weight of servers from 0 to 2
-    private volatile List<Double> accumulatedWeights = new ArrayList<Double>();
-
-
-    private final Random random = new Random();
-
-    protected Timer serverWeightTimer = null;
-
-    protected AtomicBoolean serverWeightAssignmentInProgress = new AtomicBoolean(false);
-
-    String name = "unknown";
+    private volatile List<Double> accumulatedWeights = new ArrayList<>();
 
     public WeightedResponseTimeGrayDeployRule() {
         super();
@@ -77,7 +68,7 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
         initialize(lb);
     }
 
-    void initialize(ILoadBalancer lb) {
+    private void initialize(ILoadBalancer lb) {
         if (serverWeightTimer != null) {
             serverWeightTimer.cancel();
             //serverWeightTimer.shutdown();
@@ -90,13 +81,10 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
         WeightedResponseTimeGrayDeployRule.ServerWeight sw = new WeightedResponseTimeGrayDeployRule.ServerWeight();
         sw.maintainWeights();
 
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                LOGGER.info("Stopping NFLoadBalancer-serverWeightTimer-" + name);
-                serverWeightTimer.cancel();
-                //serverWeightTimer.shutdown();
-            }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            LOGGER.info("Stopping NFLoadBalancer-serverWeightTimer-" + name);
+            serverWeightTimer.cancel();
+            //serverWeightTimer.shutdown();
         }));
     }
 
@@ -118,7 +106,7 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
             return null;
         }
 
-        if(this.serverFilter == null) {
+        if (this.serverFilter == null) {
             this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
         }
 
@@ -141,7 +129,7 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
             int serverIndex = 0;
 
             // last one in the list is the sum of all weights
-            double maxTotalWeight = currentWeights.size() == 0 ? 0 : currentWeights.get(currentWeights.size() - 1);
+            double maxTotalWeight = currentWeights.isEmpty() ? 0 : currentWeights.get(currentWeights.size() - 1);
             // No server has been hit yet and total weight is not initialized
             // fallback to use round robin
             if (maxTotalWeight < 0.001d || serverCount != currentWeights.size()) {
@@ -180,6 +168,16 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
             server = null;
         }
         return server;
+    }
+
+    void setWeights(List<Double> weights) {
+        this.accumulatedWeights = weights;
+    }
+
+    @Override
+    public void initWithNiwsConfig(IClientConfig clientConfig) {
+        super.initWithNiwsConfig(clientConfig);
+        serverWeightTaskTimerInterval = clientConfig.get(WEIGHT_TASK_TIMER_INTERVAL_CONFIG_KEY, DEFAULT_TIMER_INTERVAL);
     }
 
     class DynamicServerWeightTask extends TimerTask {
@@ -229,7 +227,7 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
                 Double weightSoFar = 0.0;
 
                 // create new list and hot swap the reference
-                List<Double> finalWeights = new ArrayList<Double>();
+                List<Double> finalWeights = new ArrayList<>();
                 for (Server server : nlb.getAllServers()) {
                     ServerStats ss = stats.getSingleServerStat(server);
                     double weight = totalResponseTime - ss.getResponseTimeAvg();
@@ -244,16 +242,6 @@ public class WeightedResponseTimeGrayDeployRule extends RoundRobinGrayDeployRule
             }
 
         }
-    }
-
-    void setWeights(List<Double> weights) {
-        this.accumulatedWeights = weights;
-    }
-
-    @Override
-    public void initWithNiwsConfig(IClientConfig clientConfig) {
-        super.initWithNiwsConfig(clientConfig);
-        serverWeightTaskTimerInterval = clientConfig.get(WEIGHT_TASK_TIMER_INTERVAL_CONFIG_KEY, DEFAULT_TIMER_INTERVAL);
     }
 
 }

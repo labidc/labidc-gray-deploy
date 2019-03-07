@@ -15,10 +15,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @program: labidc-manager
- * @description: 自动配置对象
- * @author: ChenXingLiang
- * @date: 2018-11-08 20:46
+ * labidc-manager
+ * 自动配置对象
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-08 20:46
  **/
 
 @ComponentScan(value = "com.labidc.gray.deploy.servlet")
@@ -30,19 +31,19 @@ public class GrayDeployServletAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(HeadTransmit.class)
-    public HeadTransmitServlet transmitServlet(GrayDeployTransmitProerties grayDeployTransmitProerties){
-        return new HeadTransmitServlet(grayDeployTransmitProerties,headTransmitAttributeObjectTransform);
+    public HeadTransmitServlet transmitServlet(GrayDeployTransmitProerties grayDeployTransmitProerties) {
+        return new HeadTransmitServlet(grayDeployTransmitProerties, headTransmitAttributeObjectTransform);
     }
 
     @Bean
     @ConditionalOnMissingBean(VersionProvider.class)
-    public VersionProvider versionProvider(){
+    public VersionProvider versionProvider() {
         return new ServletVersionProvider();
     }
 
     @Bean
     @ConditionalOnMissingBean(RequestSelfDataProvider.class)
-    public RequestSelfDataProvider requestSelfDataProvider(){
+    public RequestSelfDataProvider requestSelfDataProvider() {
         return new ServletRequestSelfDataProvider();
     }
 }

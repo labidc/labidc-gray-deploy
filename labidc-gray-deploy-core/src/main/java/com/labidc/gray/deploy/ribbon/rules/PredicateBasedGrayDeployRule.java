@@ -4,18 +4,17 @@ import com.google.common.base.Optional;
 import com.labidc.gray.deploy.filter.ServerFilter;
 import com.labidc.gray.deploy.utils.SpringContextUtils;
 import com.netflix.loadbalancer.AbstractServerPredicate;
-import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 /**
- * @program: labidc-manager
- * @description: 断言基类，继承 ClientConfigEnabledRoundRobinGrayDeployRule 类
+ * 断言基类，继承 ClientConfigEnabledRoundRobinGrayDeployRule 类
  * 默认是轮询模式，因为ClientConfigEnabledRoundRobinGrayDeployRule 包含了轮询
- * @author: ChenXingLiang
- * @date: 2018-11-13 19:21
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-13 19:21
  **/
 public abstract class PredicateBasedGrayDeployRule extends ClientConfigEnabledRoundRobinGrayDeployRule {
 
@@ -24,7 +23,6 @@ public abstract class PredicateBasedGrayDeployRule extends ClientConfigEnabledRo
 
     /**
      * Method that provides an instance of {@link AbstractServerPredicate} to be used by this class.
-     *
      */
     public abstract AbstractServerPredicate getPredicate();
 
@@ -34,13 +32,12 @@ public abstract class PredicateBasedGrayDeployRule extends ClientConfigEnabledRo
      */
     @Override
     public Server choose(Object key) {
-        ILoadBalancer lb = getLoadBalancer();
 
-        if(this.serverFilter == null) {
+        if (this.serverFilter == null) {
             this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
         }
 
-        List<Server> serverList =  serverFilter.getServicesAuto(getLoadBalancer().getAllServers());
+        List<Server> serverList = serverFilter.getServicesAuto(getLoadBalancer().getAllServers());
 
         Optional<Server> server = getPredicate().chooseRoundRobinAfterFiltering(serverList, key);
         if (server.isPresent()) {

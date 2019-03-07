@@ -6,11 +6,12 @@ import com.netflix.loadbalancer.ILoadBalancer;
 import com.netflix.loadbalancer.Server;
 
 /**
- * @program: labidc-manager
- * @description: 客户端配置开启轮询模式
+ * labidc-manager
+ * 客户端配置开启轮询模式
  * 包含了轮询模式
- * @author: ChenXingLiang
- * @date: 2018-11-13 18:50
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-13 18:50
  **/
 public class ClientConfigEnabledRoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
 

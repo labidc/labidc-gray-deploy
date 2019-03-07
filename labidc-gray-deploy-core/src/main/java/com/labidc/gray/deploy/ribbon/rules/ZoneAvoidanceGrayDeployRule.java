@@ -11,12 +11,13 @@ import com.netflix.loadbalancer.ZoneSnapshot;
 import java.util.*;
 
 /**
- * @program: labidc-manager
- * @description: 默认规则,复合判断server所在区域的性能和server的可用性选择服务器;
- * @author: ChenXingLiang
- * @date: 2018-11-09 01:17
+ * labidc-manager
+ * 默认规则, 复合判断server所在区域的性能和server的可用性选择服务器;
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-09 01:17
  **/
-public class ZoneAvoidanceGrayDeployRule  extends PredicateBasedGrayDeployRule  {
+public class ZoneAvoidanceGrayDeployRule extends PredicateBasedGrayDeployRule {
 
     private static final Random RANDOM = new Random();
 
@@ -26,22 +27,6 @@ public class ZoneAvoidanceGrayDeployRule  extends PredicateBasedGrayDeployRule  
         super();
         ZoneAvoidanceGrayDeployPredicate zonePredicate = new ZoneAvoidanceGrayDeployPredicate(this);
         AvailabilityGrayDeployPredicate availabilityPredicate = new AvailabilityGrayDeployPredicate(this);
-        compositePredicate = createCompositePredicate(zonePredicate, availabilityPredicate);
-    }
-
-    private CompositePredicate createCompositePredicate(ZoneAvoidanceGrayDeployPredicate p1, AvailabilityGrayDeployPredicate p2) {
-        return CompositePredicate.withPredicates(p1, p2)
-                .addFallbackPredicate(p2)
-                .addFallbackPredicate(AbstractServerPredicate.alwaysTrue())
-                .build();
-
-    }
-
-
-    @Override
-    public void initWithNiwsConfig(IClientConfig clientConfig) {
-        ZoneAvoidanceGrayDeployPredicate zonePredicate = new ZoneAvoidanceGrayDeployPredicate(this, clientConfig);
-        AvailabilityGrayDeployPredicate availabilityPredicate = new AvailabilityGrayDeployPredicate(this, clientConfig);
         compositePredicate = createCompositePredicate(zonePredicate, availabilityPredicate);
     }
 
@@ -141,6 +126,21 @@ public class ZoneAvoidanceGrayDeployRule  extends PredicateBasedGrayDeployRule  
         Map<String, ZoneSnapshot> snapshot = createSnapshot(lbStats);
         return getAvailableZones(snapshot, triggeringLoad,
                 triggeringBlackoutPercentage);
+    }
+
+    private CompositePredicate createCompositePredicate(ZoneAvoidanceGrayDeployPredicate p1, AvailabilityGrayDeployPredicate p2) {
+        return CompositePredicate.withPredicates(p1, p2)
+                .addFallbackPredicate(p2)
+                .addFallbackPredicate(AbstractServerPredicate.alwaysTrue())
+                .build();
+
+    }
+
+    @Override
+    public void initWithNiwsConfig(IClientConfig clientConfig) {
+        ZoneAvoidanceGrayDeployPredicate zonePredicate = new ZoneAvoidanceGrayDeployPredicate(this, clientConfig);
+        AvailabilityGrayDeployPredicate availabilityPredicate = new AvailabilityGrayDeployPredicate(this, clientConfig);
+        compositePredicate = createCompositePredicate(zonePredicate, availabilityPredicate);
     }
 
     @Override

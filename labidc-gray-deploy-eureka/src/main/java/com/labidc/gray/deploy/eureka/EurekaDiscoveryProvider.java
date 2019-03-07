@@ -12,10 +12,11 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 
 /**
- * @program: labidc-manager
- * @description: eureka发现中心服务提供者
- * @author: ChenXingLiang
- * @date: 2018-11-08 20:43
+ * labidc-manager
+ * eureka发现中心服务提供者
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-08 20:43
  **/
 public class EurekaDiscoveryProvider implements DiscoveryProvider {
 
@@ -29,7 +30,7 @@ public class EurekaDiscoveryProvider implements DiscoveryProvider {
             DiscoveryEnabledServer eurekaServer = (DiscoveryEnabledServer) server;
             return eurekaServer.getInstanceInfo().getMetadata();
         }
-        throw new DiscoveryServerException("该服务器实例不是Eureka提供，它是："+server.getClass().getSimpleName());
+        throw new DiscoveryServerException("该服务器实例不是Eureka提供，它是：" + server.getClass().getSimpleName());
     }
 
     @Override
@@ -37,7 +38,7 @@ public class EurekaDiscoveryProvider implements DiscoveryProvider {
         Map<String, String> metadataMap = this.eurekaInstanceConfigBean.getMetadataMap();
         if (metadataMap != null && metadataMap.size() > 0) {
             String version = metadataMap.get(GrayDeployConstant.VERSION);
-            if(StringUtils.isEmpty(version)){
+            if (StringUtils.isEmpty(version)) {
                 return null;
             }
             return version;

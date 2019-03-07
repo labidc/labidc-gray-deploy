@@ -15,22 +15,21 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * @program: labidc-manager
- * @description: 轮询
- * @author: ChenXingLiang
- * @date: 2018-11-09 00:55
+ * labidc-manager
+ * 轮询
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-09 00:55
  **/
 public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
 
 
-    @Autowired
-    private ServerFilter serverFilter;
-
-    private AtomicInteger nextServerCyclicCounter;
     private static final boolean AVAILABLE_ONLY_SERVERS = true;
     private static final boolean ALL_SERVERS = false;
-
     private static Logger log = LoggerFactory.getLogger(RoundRobinRule.class);
+    @Autowired
+    private ServerFilter serverFilter;
+    private AtomicInteger nextServerCyclicCounter;
 
 
     public RoundRobinGrayDeployRule() {
@@ -49,7 +48,7 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
         }
 
         // RetryGrayDeployRule 依赖了 RoundRobinGrayDeployRule对象，内部new 创建，所以无法注入，这里需检查
-        if(this.serverFilter == null) {
+        if (this.serverFilter == null) {
             this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
         }
 
@@ -98,7 +97,7 @@ public class RoundRobinGrayDeployRule extends AbstractLoadBalancerRule {
      * @return The next value.
      */
     private int incrementAndGetModulo(int modulo) {
-        for (;;) {
+        for (; ; ) {
             int current = nextServerCyclicCounter.get();
             int next = (current + 1) % modulo;
             if (nextServerCyclicCounter.compareAndSet(current, next)) {

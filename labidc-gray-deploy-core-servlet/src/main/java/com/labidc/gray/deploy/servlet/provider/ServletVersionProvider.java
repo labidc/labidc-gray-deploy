@@ -16,10 +16,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @program: servicedemo
- * @description: servlet 版本提供者
- * @author: ChenXingLiang
- * @date: 2019-01-03 13:15
+ * servicedemo
+ * servlet 版本提供者
+ *
+ * @author ChenXingLiang
+ * @date 2019-01-03 13:15
  **/
 public class ServletVersionProvider implements VersionProvider {
     private static final String VERSION_HEADER_SPLIT = ",";

@@ -5,10 +5,11 @@ import com.labidc.gray.deploy.handler.VersionProvider;
 import java.util.List;
 
 /**
- * @program: servicedemo
- * @description: gateway版本提供者
- * @author: ChenXingLiang
- * @date: 2019-01-03 13:29
+ * servicedemo
+ * gateway版本提供者
+ *
+ * @author ChenXingLiang
+ * @date 2019-01-03 13:29
  **/
 public class GateWayVersionProvider implements VersionProvider {
 

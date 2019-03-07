@@ -1,4 +1,5 @@
 package com.labidc.gray.deploy.eureka;
+
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -10,4 +11,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Documented
 @Import({AutoEurekaDiscoveryConfiguration.class})
-public @interface EnableGrayDeploy { }
+public @interface EnableGrayDeploy {
+}

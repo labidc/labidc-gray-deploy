@@ -9,10 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @program: servicedemo
- * @description: TODO
- * @author: ChenXingLiang
- * @date: 2018-12-28 16:48
+ * @author ChenXingLiang
+ * @date 2018-12-28 16:48
  **/
 
 @Configuration
@@ -22,7 +20,6 @@ public class DefaultRibbonConfig {
      * 日志控制器
      */
     private static final Logger logger = LoggerFactory.getLogger(GrayDeployAutoConfiguration.class);
-
 
 
     @Bean

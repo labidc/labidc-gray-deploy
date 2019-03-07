@@ -8,11 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * @program: labidc-manager
- * @description: 会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务, 然后选择一个并发量最小的服务;
+ * 会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务, 然后选择一个并发量最小的服务;
  * 实际上是继承的轮询模式，再做的一个升级
- * @author: ChenXingLiang
- * @date: 2018-11-09 01:15
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-09 01:15
  **/
 public class BestAvailableGrayDeployRule extends ClientConfigEnabledRoundRobinGrayDeployRule {
 
@@ -27,7 +27,7 @@ public class BestAvailableGrayDeployRule extends ClientConfigEnabledRoundRobinGr
             return super.choose(key);
         }
 
-        if(this.serverFilter == null) {
+        if (this.serverFilter == null) {
             this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
         }
 
@@ -36,7 +36,7 @@ public class BestAvailableGrayDeployRule extends ClientConfigEnabledRoundRobinGr
         int minimalConcurrentConnections = Integer.MAX_VALUE;
         long currentTime = System.currentTimeMillis();
         Server chosen = null;
-        for (Server server: serverList) {
+        for (Server server : serverList) {
             ServerStats serverStats = loadBalancerStats.getSingleServerStat(server);
             if (!serverStats.isCircuitBreakerTripped(currentTime)) {
                 int concurrentConnections = serverStats.getActiveRequestsCount(currentTime);

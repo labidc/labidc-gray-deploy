@@ -23,10 +23,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @program: labidc-manager
- * @description: 解决定义Feign拦截器配置之后，熔断器报错的问题
- * @author: ChenXingLiang
- * @date: 2018-11-08 16:46
+ * labidc-manager
+ * 解决定义Feign拦截器配置之后，熔断器报错的问题
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-08 16:46
  **/
 @Component
 public class RequestAttributeHystrixConcurrencyStrategy extends HystrixConcurrencyStrategy {
@@ -58,8 +59,7 @@ public class RequestAttributeHystrixConcurrencyStrategy extends HystrixConcurren
             HystrixPlugins.getInstance().registerEventNotifier(eventNotifier);
             HystrixPlugins.getInstance().registerMetricsPublisher(metricsPublisher);
             HystrixPlugins.getInstance().registerPropertiesStrategy(propertiesStrategy);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             log.error("Failed to register Sleuth Hystrix Concurrency Strategy", e);
         }
     }
@@ -114,7 +114,7 @@ public class RequestAttributeHystrixConcurrencyStrategy extends HystrixConcurren
         private final Callable<T> target;
         private final RequestAttributes requestAttributes;
 
-        public WrappedCallable(Callable<T> target, RequestAttributes requestAttributes) {
+        private WrappedCallable(Callable<T> target, RequestAttributes requestAttributes) {
             this.target = target;
             this.requestAttributes = requestAttributes;
         }
@@ -124,8 +124,7 @@ public class RequestAttributeHystrixConcurrencyStrategy extends HystrixConcurren
             try {
                 RequestContextHolder.setRequestAttributes(requestAttributes);
                 return target.call();
-            }
-            finally {
+            } finally {
                 RequestContextHolder.resetRequestAttributes();
             }
         }

@@ -1,7 +1,4 @@
-package com.labidc.gray.deploy.ribbon.rules.predicate;/**
- * @author ChenXingLiang
- * @date date time
- */
+package com.labidc.gray.deploy.ribbon.rules.predicate;
 
 import com.netflix.client.config.IClientConfig;
 import com.netflix.config.ChainedDynamicProperty;
@@ -13,12 +10,10 @@ import com.netflix.loadbalancer.*;
 import javax.annotation.Nullable;
 
 /**
- * @program: labidc-manager
- * @description: TODO
- * @author: ChenXingLiang
- * @date: 2018-11-13 21:52
+ * @author ChenXingLiang
+ * @date 2018-11-13 21:52
  **/
-public class AvailabilityGrayDeployPredicate  extends AbstractServerPredicate {
+public class AvailabilityGrayDeployPredicate extends AbstractServerPredicate {
 
     private static final DynamicBooleanProperty CIRCUIT_BREAKER_FILTERING =
             DynamicPropertyFactory.getInstance().getBooleanProperty("niws.loadbalancer.availabilityFilteringRule.filterCircuitTripped", true);
@@ -43,9 +38,8 @@ public class AvailabilityGrayDeployPredicate  extends AbstractServerPredicate {
     }
 
     private void initDynamicProperty(IClientConfig clientConfig) {
-        String id = "default";
         if (clientConfig != null) {
-            id = clientConfig.getClientName();
+            String id = clientConfig.getClientName();
             activeConnectionsLimit = new ChainedDynamicProperty.IntProperty(id + "." + clientConfig.getNameSpace() + ".ActiveConnectionsLimit", ACTIVE_CONNECTIONS_LIMIT);
         }
     }

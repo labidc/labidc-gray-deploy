@@ -14,22 +14,20 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @program: labidc-manager
- * @description: TODO
- * @author: ChenXingLiang
- * @date: 2018-11-13 21:46
+ * labidc-manager
+ * TODO
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-13 21:46
  **/
 public class ZoneAvoidanceGrayDeployPredicate extends AbstractServerPredicate {
 
-    private volatile DynamicDoubleProperty triggeringLoad = new DynamicDoubleProperty("ZoneAwareNIWSDiscoveryLoadBalancer.triggeringLoadPerServerThreshold", 0.2d);
-
-    private volatile DynamicDoubleProperty triggeringBlackoutPercentage = new DynamicDoubleProperty("ZoneAwareNIWSDiscoveryLoadBalancer.avoidZoneWithBlackoutPercetage", 0.99999d);
-
     private static final Logger logger = LoggerFactory.getLogger(ZoneAvoidancePredicate.class);
-
     private static final DynamicBooleanProperty ENABLED = DynamicPropertyFactory
             .getInstance().getBooleanProperty(
                     "niws.loadbalancer.zoneAvoidanceRule.enabled", true);
+    private volatile DynamicDoubleProperty triggeringLoad = new DynamicDoubleProperty("ZoneAwareNIWSDiscoveryLoadBalancer.triggeringLoadPerServerThreshold", 0.2d);
+    private volatile DynamicDoubleProperty triggeringBlackoutPercentage = new DynamicDoubleProperty("ZoneAwareNIWSDiscoveryLoadBalancer.avoidZoneWithBlackoutPercetage", 0.99999d);
 
 
     public ZoneAvoidanceGrayDeployPredicate(IRule rule, IClientConfig clientConfig) {
@@ -38,7 +36,7 @@ public class ZoneAvoidanceGrayDeployPredicate extends AbstractServerPredicate {
     }
 
     public ZoneAvoidanceGrayDeployPredicate(LoadBalancerStats lbStats,
-                                  IClientConfig clientConfig) {
+                                            IClientConfig clientConfig) {
         super(lbStats, clientConfig);
         initDynamicProperties(clientConfig);
     }

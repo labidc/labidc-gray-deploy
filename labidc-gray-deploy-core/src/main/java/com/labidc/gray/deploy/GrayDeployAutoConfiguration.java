@@ -9,10 +9,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @program: labidc-manager
- * @description: 自动配置对象
- * @author: ChenXingLiang
- * @date: 2018-11-08 20:46
+ * labidc-manager
+ * 自动配置对象
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-08 20:46
  **/
 
 @ComponentScan(value = "com.labidc.gray.deploy")
@@ -22,7 +23,7 @@ public class GrayDeployAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ServerFilter.class)
-    public ServerFilter serverFilter(){
+    public ServerFilter serverFilter() {
         return new DefaultServerFilter();
     }
 }

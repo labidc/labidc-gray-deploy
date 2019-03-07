@@ -9,13 +9,13 @@ import com.netflix.servo.annotations.Monitor;
 import java.util.List;
 
 /**
- * @program: labidc-manager
- * @description: 会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务, 以及并发的连接数量
+ * 会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务, 以及并发的连接数量
  * 超过阈值的服务,然后对剩余的服务列表按照轮询策略进行访问;
- * @author: ChenXingLiang
- * @date: 2018-11-09 00:57
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-09 00:57
  **/
-public class AvailabilityFilteringGrayDeployRule extends PredicateBasedGrayDeployRule  {
+public class AvailabilityFilteringGrayDeployRule extends PredicateBasedGrayDeployRule {
 
     private AbstractServerPredicate predicate;
 
@@ -34,7 +34,7 @@ public class AvailabilityFilteringGrayDeployRule extends PredicateBasedGrayDeplo
                 .build();
     }
 
-    @Monitor(name="AvailableServersCount", type = DataSourceType.GAUGE)
+    @Monitor(name = "AvailableServersCount", type = DataSourceType.GAUGE)
     public int getAvailableServersCount() {
         ILoadBalancer lb = getLoadBalancer();
         List<Server> servers = lb.getAllServers();

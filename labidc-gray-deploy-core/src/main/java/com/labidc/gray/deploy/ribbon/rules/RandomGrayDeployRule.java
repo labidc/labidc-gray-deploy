@@ -13,38 +13,37 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @program: labidc-manager
- * @description: 随机
- * @author: ChenXingLiang
- * @date: 2018-11-08 17:10
+ * labidc-manager
+ * 随机
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-08 17:10
  **/
 @Log
 public class RandomGrayDeployRule extends AbstractLoadBalancerRule {
 
 
+    private Random rand = new Random();
 
     @Autowired
     private ServerFilter serverFilter;
 
-    Random rand;
-
     public RandomGrayDeployRule() {
-        rand = new Random();
+
     }
 
     /**
      * Randomly choose from all living servers
      */
     @SuppressWarnings(value = "RCN_REDUNDANT_NULLCHECK_OF_NULL_VALUE")
-    public Server choose(ILoadBalancer lb, Object key) {
+    private Server choose(ILoadBalancer lb, Object key) {
         if (lb == null) {
             return null;
         }
 
-        if(this.serverFilter == null) {
+        if (this.serverFilter == null) {
             this.serverFilter = SpringContextUtils.getBean(ServerFilter.class);
         }
-
 
 
         while (true) {

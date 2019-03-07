@@ -9,10 +9,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 
 /**
- * @program: labidc-manager
- * @description: 自动配置启动
- * @author: ChenXingLiang
- * @date: 2018-11-10 13:26
+ * labidc-manager
+ * 自动配置启动
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-10 13:26
  **/
 @Import({GrayDeployAutoConfiguration.class})
 @ComponentScan(value = "com.labidc.gray.deploy.consul")
@@ -20,7 +21,7 @@ import org.springframework.context.annotation.Import;
 public class AutoConsulGrayDeployConfiguration {
     @Bean
     @ConditionalOnMissingBean(DiscoveryProvider.class)
-    public DiscoveryProvider discoveryProvider(){
+    public DiscoveryProvider discoveryProvider() {
         return new ConsulDiscoveryProvider();
     }
 }

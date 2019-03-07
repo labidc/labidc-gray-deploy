@@ -9,5 +9,5 @@ public interface HeadTransmitAttributeObjectTransform {
     /**
      * 对象转换为String
      */
-    String transform(String attributeName,Object attributeValue);
+    String transform(String attributeName, Object attributeValue);
 }

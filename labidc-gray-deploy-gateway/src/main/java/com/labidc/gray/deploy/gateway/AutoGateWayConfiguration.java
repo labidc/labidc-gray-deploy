@@ -13,10 +13,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
- * @program: servicedemo
- * @description: 自动加载
- * @author: ChenXingLiang
- * @date: 2019-01-02 13:42
+ * servicedemo
+ * 自动加载
+ *
+ * @author ChenXingLiang
+ * @date 2019-01-02 13:42
  **/
 @Configuration
 @Import({GrayDeployAutoConfiguration.class})

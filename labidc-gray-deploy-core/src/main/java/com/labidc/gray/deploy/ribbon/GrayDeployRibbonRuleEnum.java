@@ -1,10 +1,11 @@
 package com.labidc.gray.deploy.ribbon;
 
 /**
- * @program: servicedemo
- * @description: TODO
- * @author: ChenXingLiang
- * @date: 2019-01-07 10:50
+ * servicedemo
+ * TODO
+ *
+ * @author ChenXingLiang
+ * @date 2019-01-07 10:50
  **/
 public enum GrayDeployRibbonRuleEnum {
     /**

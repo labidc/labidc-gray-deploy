@@ -11,4 +11,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE})
 @Documented
 @Import({AutoConsulGrayDeployConfiguration.class})
-public @interface EnableGrayDeploy { }
+public @interface EnableGrayDeploy {
+}

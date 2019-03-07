@@ -17,24 +17,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @program: servicedemo
- * @description: 自定义过滤器
- * @author: ChenXingLiang
- * @date: 2019-01-02 14:24
+ * servicedemo
+ * 自定义过滤器
+ *
+ * @author ChenXingLiang
+ * @date 2019-01-02 14:24
  **/
 public class GateWayVersionHeaderReadFilter implements GlobalFilter, Ordered {
-    private static final String VERSION_HEADER_SPLIT = ",";
-    /**
-     * 日志打印
-     */
-    private static final Log log = LogFactory.getLog(GateWayVersionHeaderReadFilter.class);
-
     /**
      * 过滤器加载顺序 需要在 LoadBalancerClientFilter 执行之前加载
      * 服务选取 为 {@link LoadBalancerClientFilter} 加载顺序为 {@link LoadBalancerClientFilter.LOAD_BALANCER_CLIENT_FILTER_ORDER}
      */
     public static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = LoadBalancerClientFilter.LOAD_BALANCER_CLIENT_FILTER_ORDER - 1;
-
+    private static final String VERSION_HEADER_SPLIT = ",";
+    /**
+     * 日志打印
+     */
+    private static final Log log = LogFactory.getLog(GateWayVersionHeaderReadFilter.class);
 
     @Override
     public int getOrder() {

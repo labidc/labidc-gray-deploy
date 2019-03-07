@@ -11,10 +11,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @program: labidc-manager
- * @description: 自动配置文件
- * @author: ChenXingLiang
- * @date: 2018-11-09 00:04
+ * labidc-manager
+ * 自动配置文件
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-09 00:04
  **/
 @ConfigurationProperties("spring.gray.deploy")
 @Component

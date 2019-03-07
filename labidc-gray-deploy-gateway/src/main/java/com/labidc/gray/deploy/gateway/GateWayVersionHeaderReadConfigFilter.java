@@ -16,24 +16,22 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * @program: servicedemo
- * @description: 自定义过滤器
- * @author: ChenXingLiang
- * @date: 2019-01-02 14:24
+ * servicedemo
+ * 自定义过滤器
+ *
+ * @author ChenXingLiang
+ * @date 2019-01-02 14:24
  **/
 public class GateWayVersionHeaderReadConfigFilter implements GlobalFilter, Ordered {
-    /**
-     * 日志打印
-     */
-    private static final Log log = LogFactory.getLog(GateWayVersionHeaderReadConfigFilter.class);
-
     /**
      * 过滤器加载顺序 需要在 GateWayVersionHeaderReadFilter 执行之前加载
      * 服务选取 为 {@link GateWayVersionHeaderReadFilter} 加载顺序为 {@link GateWayVersionHeaderReadFilter.LOAD_BALANCER_CLIENT_FILTER_ORDER}
      */
     public static final int LOAD_BALANCER_CLIENT_FILTER_ORDER = GateWayVersionHeaderReadFilter.LOAD_BALANCER_CLIENT_FILTER_ORDER - 10;
-
-
+    /**
+     * 日志打印
+     */
+    private static final Log log = LogFactory.getLog(GateWayVersionHeaderReadConfigFilter.class);
     @Autowired
     private DiscoveryProvider discoveryProvider;
 

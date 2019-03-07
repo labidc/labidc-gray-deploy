@@ -4,18 +4,17 @@ import com.netflix.client.config.IClientConfig;
 import com.netflix.loadbalancer.*;
 
 /**
- * @program: labidc-manager
- * @description: 先按照RoundRobinRule的策略获取服务,如果获取服务失败,则在指定时间内会进行重试,获取可用的服务;
+ * 先按照RoundRobinRule的策略获取服务, 如果获取服务失败, 则在指定时间内会进行重试, 获取可用的服务;
  * 原代码就是包含数组合了 RoundRobinGrayDeployRule 的策略
- * @author: ChenXingLiang
- * @date: 2018-11-09 01:12
+ *
+ * @author ChenXingLiang
+ * @date 2018-11-09 01:12
  **/
 public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
 
 
-
-    IRule subRule = null;
-    long maxRetryMillis = 500;
+    private IRule subRule;
+    private long maxRetryMillis = 500;
 
 
     public RetryGrayDeployRule() {
@@ -31,12 +30,16 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
         this.maxRetryMillis = (maxRetryMillis > 0) ? maxRetryMillis : 500;
     }
 
+    public IRule getRule() {
+        return subRule;
+    }
+
     public void setRule(IRule subRule) {
         this.subRule = (subRule != null) ? subRule : new RoundRobinRule();
     }
 
-    public IRule getRule() {
-        return subRule;
+    public long getMaxRetryMillis() {
+        return maxRetryMillis;
     }
 
     public void setMaxRetryMillis(long maxRetryMillis) {
@@ -46,12 +49,6 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
             this.maxRetryMillis = 500;
         }
     }
-
-    public long getMaxRetryMillis() {
-        return maxRetryMillis;
-    }
-
-
 
     @Override
     public void setLoadBalancer(ILoadBalancer lb) {
@@ -64,13 +61,12 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
      * subRule, because we're not spawning additional threads and returning
      * early.
      */
-    public Server choose(ILoadBalancer lb, Object key) {
+    private Server choose(ILoadBalancer lb, Object key) {
         long requestTime = System.currentTimeMillis();
         long deadline = requestTime + maxRetryMillis;
 
-        Server answer = null;
 
-        answer = subRule.choose(key);
+        Server answer = subRule.choose(key);
 
         if (((answer == null) || (!answer.isAlive()))
                 && (System.currentTimeMillis() < deadline)) {
@@ -93,7 +89,7 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
             task.cancel();
         }
 
-         if ((answer == null) || (!answer.isAlive())) {
+        if ((answer == null) || (!answer.isAlive())) {
             return null;
         } else {
             return answer;
@@ -106,5 +102,7 @@ public class RetryGrayDeployRule extends AbstractLoadBalancerRule {
     }
 
     @Override
-    public void initWithNiwsConfig(IClientConfig clientConfig) {}
+    public void initWithNiwsConfig(IClientConfig clientConfig) {
+        //
+    }
 }
