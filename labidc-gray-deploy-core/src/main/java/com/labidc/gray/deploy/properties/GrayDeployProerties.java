@@ -1,6 +1,5 @@
 package com.labidc.gray.deploy.properties;
 
-import com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum;
 import lombok.Data;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -21,21 +20,6 @@ import java.util.List;
 @Component
 @Data
 public class GrayDeployProerties {
-    /**
-     * 负载均衡规则
-     */
-    private GrayDeployRibbonRuleEnum ribbonRule = GrayDeployRibbonRuleEnum.ROUND_ROBIN;
-
-    /**
-     * 启用重试策略
-     */
-    private Boolean retry = false;
-
-    /**
-     * 最长重试时间(毫秒) (当重试策略启用时有效)
-     */
-    private Long maxRetryMillis = 500L;
-
     /**
      * 当 header 中没有携带 version 读取当前服务 version 并传递给下一个服务
      */
