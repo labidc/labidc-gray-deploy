@@ -36,11 +36,16 @@ public class DefaultServerFilter extends AbstractServerFilter {
     public List<Server> getProdServices(List<Server> serverList) {
 
         List<String> defaultServiceVersions = grayDeployProerties.getDefaultServiceVersions();
+        boolean notFindDefaultServiceVersions = CollectionUtils.isEmpty(defaultServiceVersions);
 
         return serverList.stream().filter((item) -> {
             String version = discoveryProvider.getVersion(item);
             if (StringUtils.isEmpty(version)) {
                 return true;
+            }
+
+            if (notFindDefaultServiceVersions) {
+                return false;
             }
 
             return defaultServiceVersions.contains(version.toUpperCase().trim());
