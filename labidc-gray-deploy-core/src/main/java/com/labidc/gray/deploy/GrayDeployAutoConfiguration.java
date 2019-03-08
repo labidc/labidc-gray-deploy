@@ -18,7 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 @ComponentScan(value = "com.labidc.gray.deploy")
 @Configuration
-@RibbonClients(defaultConfiguration = DefaultRibbonConfig.class)
+@RibbonClients(defaultConfiguration = GrayDeployRibbonConfig.class)
 public class GrayDeployAutoConfiguration {
 
     @Bean

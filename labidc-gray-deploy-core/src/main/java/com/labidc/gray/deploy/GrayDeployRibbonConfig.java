@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Bean;
  **/
 @EnableConfigurationProperties
 //@AutoConfigureBefore(RibbonClientConfiguration.class)
-public class DefaultRibbonConfig {
+public class GrayDeployRibbonConfig {
 
     /**
      * 日志控制器
