@@ -108,16 +108,6 @@ spring:
          tags:
            - version=1.0.1
 ```
-相关负载均衡规则修改配置, 查看 com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum
-```yaml
-spring:
-  gray:
-    deploy:
-      ribbonRule: ROUND_ROBIN
-      defaultServiceVersions: #当版本不存在时 默认调用的版本  （包含无版本的服务）
-        - version1
-        - version2
-```
 2. maven添加依赖
 #### labidc-gray-deploy-consul
 ```xml
@@ -175,13 +165,6 @@ eureka:
   instance:
     metadata-map:
       version: 1.0.0
-```
-相关负载均衡规则修改配置, 查看 com.labidc.gray.deploy.ribbon.GrayDeployRibbonRuleEnum
-```yaml
-spring:
-  gray:
-    deploy:
-      ribbonRule: ROUND_ROBIN
 ```
 2. maven添加依赖
 #### labidc-gray-deploy-eureka 
