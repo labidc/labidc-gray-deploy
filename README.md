@@ -97,6 +97,10 @@ graph LR
 
 
 ## 开始安装
+    相关负载均衡规则请使用 com.labidc.gray.deploy.ribbon.rules 下的实现 跟官方一一对应    
+    默认是 com.labidc.gray.deploy.ribbon.rules.GrayDeployZoneAvoidanceRule  
+    如果有自己实现的规则请修改 setLoadBalancer 的 loadBalancer 为 com.labidc.gray.deploy.ribbon.GrayDeployILoadBalancerWrapper
+
 ### 一、网关：gateway，注册中心：consul ，以上面讲的案例为例子。
 
 1. 添加tag
