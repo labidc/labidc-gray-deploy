@@ -5,7 +5,7 @@ package com.labidc.gray.deploy.servlet.transmit;
  * @author xiongchuang
  * @date 2018-01-15
  */
-public interface HeadTransmitAttributeObjectTransform {
+public interface HeadTransmitObjectTransform {
     /**
      * 对象转换为String
      */

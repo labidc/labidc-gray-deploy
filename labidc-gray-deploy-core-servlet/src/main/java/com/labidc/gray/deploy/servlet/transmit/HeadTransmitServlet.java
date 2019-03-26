@@ -16,8 +16,8 @@ import java.util.Map;
 public class HeadTransmitServlet extends AbstractHeadTransmit<HttpServletRequest, RequestTemplate> {
 
 
-    public HeadTransmitServlet(GrayDeployTransmitProerties grayDeployTransmitProerties, HeadTransmitAttributeObjectTransform headTransmitAttributeObjectTransform) {
-        super(grayDeployTransmitProerties, headTransmitAttributeObjectTransform);
+    public HeadTransmitServlet(GrayDeployTransmitProerties grayDeployTransmitProerties, HeadTransmitObjectTransform headTransmit) {
+        super(grayDeployTransmitProerties, headTransmit);
     }
 
     @Override
@@ -28,6 +28,11 @@ public class HeadTransmitServlet extends AbstractHeadTransmit<HttpServletRequest
     @Override
     protected Object getAttribute(HttpServletRequest request, String attribute) {
         return request.getAttribute(attribute);
+    }
+
+    @Override
+    protected Object getParamter(HttpServletRequest request, String paramter) {
+        return request.getParameter(paramter);
     }
 
     @Override

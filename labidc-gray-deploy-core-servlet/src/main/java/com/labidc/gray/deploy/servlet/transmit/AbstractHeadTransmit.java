@@ -15,11 +15,12 @@ public abstract class AbstractHeadTransmit<S, N> implements HeadTransmit<S, N> {
 
 
     private GrayDeployTransmitProerties grayDeployTransmitProerties;
-    private HeadTransmitAttributeObjectTransform headTransmitAttributeObjectTransform;
+    private HeadTransmitObjectTransform headTransmitObjectTransform;
 
-    public AbstractHeadTransmit(GrayDeployTransmitProerties grayDeployTransmitProerties, HeadTransmitAttributeObjectTransform headTransmitAttributeObjectTransform) {
+    public AbstractHeadTransmit(GrayDeployTransmitProerties grayDeployTransmitProerties,
+                                HeadTransmitObjectTransform headTransmitObjectTransform) {
         this.grayDeployTransmitProerties = grayDeployTransmitProerties;
-        this.headTransmitAttributeObjectTransform = headTransmitAttributeObjectTransform;
+        this.headTransmitObjectTransform = headTransmitObjectTransform;
     }
 
 
@@ -32,6 +33,11 @@ public abstract class AbstractHeadTransmit<S, N> implements HeadTransmit<S, N> {
      * 获取需要传递的attribute的值
      */
     protected abstract Object getAttribute(S transmitSource, String attribute);
+
+    /**
+     * 获取需要传递的paramter的值
+     */
+    protected abstract Object getParamter(S transmitSource, String paramter);
 
     /**
      * 查看本次请求是否已经有当前header
@@ -47,8 +53,13 @@ public abstract class AbstractHeadTransmit<S, N> implements HeadTransmit<S, N> {
      * 获取需要传递的attribute的值（string）
      */
     protected String getAttributeString(S transmitSource, String attribute) {
-        return HeadTransmitAttributeUtil.attributeObjectToString(attribute, this.getAttribute(transmitSource, attribute), this.headTransmitAttributeObjectTransform);
+        return HeadTransmitAttributeUtil.objectToString(attribute, this.getAttribute(transmitSource, attribute), this.headTransmitObjectTransform);
     }
+
+    protected String getParamterString(S transmitSource, String paramter) {
+        return HeadTransmitAttributeUtil.objectToString(paramter, this.getParamter(transmitSource, paramter), this.headTransmitObjectTransform);
+    }
+
 
     /**
      * 设置传输的 header
@@ -79,7 +90,21 @@ public abstract class AbstractHeadTransmit<S, N> implements HeadTransmit<S, N> {
                 this.setHeader(needTransmit, attribute, attributeString);
             }
         }
+
+        // 将请求头中指定paramters的转发到下游服务
+        List<String> paramters = grayDeployTransmitProerties.getParamters();
+        if (!CollectionUtils.isEmpty(paramters)) {
+            for (String paramter : paramters) {
+                if (this.nextRequestHasHeader(needTransmit, paramter)) {
+                    continue;
+                }
+
+                String paramterString = this.getParamterString(transmitSource, paramter);
+                this.setHeader(needTransmit, paramter, paramterString);
+            }
+        }
     }
+
 
     /**
      * 设置header

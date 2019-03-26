@@ -15,7 +15,7 @@ class HeadTransmitAttributeUtil {
     private HeadTransmitAttributeUtil() {
     }
 
-    static String attributeObjectToString(String headerName, Object headerValueObject, HeadTransmitAttributeObjectTransform feignHeadTransmitAttributeObjectTransform) {
+    static String objectToString(String headerName, Object headerValueObject, HeadTransmitObjectTransform feignHeadTransmitAttributeObjectTransform) {
         if (headerValueObject == null) {
             return null;
         }
