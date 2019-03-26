@@ -5,6 +5,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.function.Function;
 
 /***
  *
@@ -61,48 +62,34 @@ public abstract class AbstractHeadTransmit<S, N> implements HeadTransmit<S, N> {
     }
 
 
+    protected void transmit(N needTransmit, List<String> names, Function<String, String> valueFunction) {
+        if (CollectionUtils.isEmpty(names)) {
+            return;
+        }
+
+        for (String name : names) {
+            if (this.nextRequestHasHeader(needTransmit, name)) {
+                continue;
+            }
+
+            this.setHeader(needTransmit, name, valueFunction.apply(name));
+        }
+    }
+
     /**
      * 设置传输的 header
      */
     @Override
     public void transmit(S transmitSource, N needTransmit) {
         // 将请求头中指定headers的转发到下游服务
-        List<String> headers = grayDeployTransmitProerties.getHeaders();
-        if (!CollectionUtils.isEmpty(headers)) {
-            for (String header : headers) {
-                if (this.nextRequestHasHeader(needTransmit, header)) {
-                    continue;
-                }
-
-                this.setHeader(needTransmit, header, this.getHeader(transmitSource, header));
-            }
-        }
+        this.transmit(needTransmit, grayDeployTransmitProerties.getHeaders(), (header) -> this.getHeader(transmitSource, header));
 
         // 将请求头中指定attributes的转发到下游服务
-        List<String> attributes = grayDeployTransmitProerties.getAttributes();
-        if (!CollectionUtils.isEmpty(attributes)) {
-            for (String attribute : attributes) {
-                if (this.nextRequestHasHeader(needTransmit, attribute)) {
-                    continue;
-                }
-
-                String attributeString = this.getAttributeString(transmitSource, attribute);
-                this.setHeader(needTransmit, attribute, attributeString);
-            }
-        }
+        this.transmit(needTransmit, grayDeployTransmitProerties.getAttributes(), (attribute) -> this.getAttributeString(transmitSource, attribute));
 
         // 将请求头中指定paramters的转发到下游服务
-        List<String> paramters = grayDeployTransmitProerties.getParamters();
-        if (!CollectionUtils.isEmpty(paramters)) {
-            for (String paramter : paramters) {
-                if (this.nextRequestHasHeader(needTransmit, paramter)) {
-                    continue;
-                }
+        this.transmit(needTransmit, grayDeployTransmitProerties.getParamters(), (paramter) -> this.getParamterString(transmitSource, paramter));
 
-                String paramterString = this.getParamterString(transmitSource, paramter);
-                this.setHeader(needTransmit, paramter, paramterString);
-            }
-        }
     }
 
 
