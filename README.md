@@ -16,66 +16,17 @@
 
 ### 实现原理：
 1. 一般我们微服务调用是多层级的，比如 
+![图1](readme/1.png)
 
-```mermaid
-graph LR
-    start[正常请求] --> input[网关 gateway/zuul ]
-    input --> conditionA{负载均衡算法}
-    conditionA -- 命中 --> B{服务1-实例1}
-    conditionA -- 未命中 --> C{服务1-实例2}
-    B --> D{服务2}
-    D --> E{服务3}
-```
 2. 这个时候，如果我们整个链条下的某个服务开发了新版本需要灰度发布，但是其他服务是正式版本, 比如 服务1 有个灰度版本需要上线
-
-```mermaid
-graph LR
-    start[正常请求] --> input[网关 gateway/zuul ]
-    start2[灰度请求] -. version:1.0.1 .-> input[网关 gateway/zuul ]
-    input --> conditionA{负载均衡算法}
-    input -. version:1.0.1 .-> 服务1-version:1.0.1
-    服务1-version:1.0.1 --> D{服务2}
-    conditionA -- 命中 --> B{服务1-实例1}
-    conditionA -- 未命中 --> C{服务1-实例2}
-    B --> D{服务2}
-    D --> E{服务3}
-```
+![图2](readme/2.png)
 
 3. 如果我们 服务2 有灰度版本，如下
-
-```mermaid
-graph LR
-    start[正常请求] --> input[网关 gateway/zuul ]
-    start2[灰度请求] -. version:1.0.1 .-> input[网关 gateway/zuul ]
-    input --> conditionA{负载均衡算法}
-    input -. version:1.0.1 .-> conditionA{负载均衡算法}
-    conditionA -- 命中 --> B{服务1-实例1}
-    conditionA -. version:1.0.1 .-> B{服务1-实例1}
-    conditionA -- 未命中 --> C{服务1-实例2}
-    B --> D{服务2}
-    B -. version:1.0.1 .-> F{服务2-version:1.0.1}
-    D --> E{服务3}
-    F --> E{服务3}
-```
-
+![图3](readme/3.png)
 
 4. 或者所有服务都有灰度版本
+![图4](readme/3.png)
 
-```mermaid
-graph LR
-    start[正常请求] --> input[网关 gateway/zuul ]
-    input --> conditionA{负载均衡算法}
-    conditionA -- 命中 --> B{服务1-实例1}
-    conditionA -- 未命中 --> C{服务1-实例2}
-    B --> D{服务2}
-    D --> E{服务3}
-    start2[灰度请求] -. version:1.0.1 .->  input[网关 gateway/zuul ]
-    input -. version:1.0.1 .->  conditionA2{负载均衡算法}
-    conditionA2 -. version:1.0.1命中 .-> B2{服务1-version:1.0.1-实例1}
-    conditionA2 -. version:1.0.1未命中 .-> C2{服务1-version:1.0.1-实例2}
-    B2 -. version:1.0.1命中 .-> D2{服务2-version:1.0.1}
-    D2 -. version:1.0.1命中 .-> E2{服务3-version:1.0.1}
-```
 
 5. 基本原理介绍完了，说一下细节，上面流程图中，服务3，没有调用下层服务了，相当于他是最底层服务【叶级服务】。
 所以这个层级的服务，只需要设置 标识就行了，标注他是不是灰度服务，同时标注他的版本号, consul和eureka 设置方法不同。
