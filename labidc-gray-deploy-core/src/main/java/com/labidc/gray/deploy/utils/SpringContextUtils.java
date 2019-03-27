@@ -26,6 +26,10 @@ public class SpringContextUtils implements ApplicationContextAware {
         return applicationContext;
     }
 
+    private static void setStaticApplicationContext(ApplicationContext applicationContext) {
+        SpringContextUtils.applicationContext = applicationContext;
+    }
+
     /**
      * 通过name获取 Bean.
      */
@@ -56,8 +60,9 @@ public class SpringContextUtils implements ApplicationContextAware {
         return getApplicationContext().getBean(name, clazz);
     }
 
+
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
-        SpringContextUtils.applicationContext = applicationContext;
+        SpringContextUtils.setStaticApplicationContext(applicationContext);
     }
 }
