@@ -8,7 +8,6 @@ import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
@@ -29,22 +28,15 @@ public class FeignHeadConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FeignHeadConfiguration.class);
 
-    @Autowired
-    private HeadTransmit<HttpServletRequest, RequestTemplate> headTransmit;
-
-    @Autowired
-    private GrayDeployProerties grayDeployProerties;
-
-    @Autowired
-    private DiscoveryProvider discoveryProvider;
-
     /**
      * 传递指定请求头
      *
      * @return
      */
     @Bean
-    public RequestInterceptor requestInterceptor() {
+    public RequestInterceptor requestInterceptor(HeadTransmit<HttpServletRequest, RequestTemplate> headTransmit,
+                                                 GrayDeployProerties grayDeployProerties,
+                                                 DiscoveryProvider discoveryProvider) {
         return requestTemplate -> {
             ServletRequestAttributes attrs = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             if (attrs != null) {

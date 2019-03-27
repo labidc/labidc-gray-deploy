@@ -26,12 +26,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class GrayDeployServletAutoConfiguration {
 
-    @Autowired(required = false)
-    private HeadTransmitObjectTransform headTransmitObjectTransform;
-
     @Bean
     @ConditionalOnMissingBean(HeadTransmit.class)
-    public HeadTransmitServlet transmitServlet(GrayDeployTransmitProerties grayDeployTransmitProerties) {
+    public HeadTransmitServlet transmitServlet(GrayDeployTransmitProerties grayDeployTransmitProerties,
+                                               @Autowired(required = false) HeadTransmitObjectTransform headTransmitObjectTransform) {
         return new HeadTransmitServlet(grayDeployTransmitProerties, headTransmitObjectTransform);
     }
 
