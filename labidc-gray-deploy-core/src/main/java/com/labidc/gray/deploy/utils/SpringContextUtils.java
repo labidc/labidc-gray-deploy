@@ -17,24 +17,27 @@ public class SpringContextUtils implements ApplicationContextAware {
     /**
      * 上下文对象实例
      */
-    private static ApplicationContext applicationContext;
+    private static ApplicationContext staticApplicationContext;
 
     /**
      * 获取applicationContext
      */
-    private static ApplicationContext getApplicationContext() {
-        return applicationContext;
+    private static ApplicationContext getStaticApplicationContext() {
+        return staticApplicationContext;
     }
 
+    /**
+     * 设置applicationContext
+     */
     private static void setStaticApplicationContext(ApplicationContext applicationContext) {
-        SpringContextUtils.applicationContext = applicationContext;
+        SpringContextUtils.staticApplicationContext = applicationContext;
     }
 
     /**
      * 通过name获取 Bean.
      */
     public static Object getBean(String name) {
-        return getApplicationContext().getBean(name);
+        return getStaticApplicationContext().getBean(name);
     }
 
     /**
@@ -42,7 +45,7 @@ public class SpringContextUtils implements ApplicationContextAware {
      */
     public static <T> T getBean(Class<T> clazz) {
 
-        return getApplicationContext().getBean(clazz);
+        return getStaticApplicationContext().getBean(clazz);
     }
 
     /**
@@ -50,16 +53,15 @@ public class SpringContextUtils implements ApplicationContextAware {
      */
     public static <T> Map<String, T> getBeans(Class<T> clazz) {
 
-        return getApplicationContext().getBeansOfType(clazz);
+        return getStaticApplicationContext().getBeansOfType(clazz);
     }
 
     /**
      * 通过name,以及Clazz返回指定的Bean
      */
     public static <T> T getBean(String name, Class<T> clazz) {
-        return getApplicationContext().getBean(name, clazz);
+        return getStaticApplicationContext().getBean(name, clazz);
     }
-
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
