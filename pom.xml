@@ -11,7 +11,7 @@
 
     <groupId>com.labidc</groupId>
     <artifactId>labidc-gray-deploy</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
@@ -78,37 +78,37 @@
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-core</artifactId>
-                <version>1.0.12</version>
+                <version>1.0.13-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-consul</artifactId>
-                <version>1.0.12</version>
+                <version>1.0.13-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-eureka</artifactId>
-                <version>1.0.12</version>
+                <version>1.0.13-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-core-servlet</artifactId>
-                <version>1.0.12</version>
+                <version>1.0.13-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-zipkin</artifactId>
-                <version>1.0.12</version>
+                <version>1.0.13-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>com.labidc</groupId>
                 <artifactId>labidc-gray-deploy-gateway</artifactId>
-                <version>1.0.12</version>
+                <version>1.0.13-SNAPSHOT</version>
             </dependency>
 
 
