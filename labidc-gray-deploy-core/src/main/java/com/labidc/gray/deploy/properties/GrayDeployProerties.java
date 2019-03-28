@@ -30,6 +30,11 @@ public class GrayDeployProerties {
      */
     private List<String> defaultServiceVersions = Collections.emptyList();
 
+    /**
+     * 当所有默认调用服务版本号都不存在时 直接返回所有服务
+     */
+    private Boolean noDefaultServiceReturnAll = false;
+
 
     public void setDefaultServiceVersions(List<String> defaultServiceVersions) {
         if (CollectionUtils.isEmpty(defaultServiceVersions)) {

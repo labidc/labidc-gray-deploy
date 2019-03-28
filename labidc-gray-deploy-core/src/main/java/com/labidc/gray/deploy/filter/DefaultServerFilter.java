@@ -38,7 +38,7 @@ public class DefaultServerFilter extends AbstractServerFilter {
         List<String> defaultServiceVersions = grayDeployProerties.getDefaultServiceVersions();
         boolean notFindDefaultServiceVersions = CollectionUtils.isEmpty(defaultServiceVersions);
 
-        return serverList.stream().filter((item) -> {
+        List<Server> prodServices = serverList.stream().filter((item) -> {
             String version = discoveryProvider.getVersion(item);
             if (StringUtils.isEmpty(version)) {
                 return true;
@@ -50,6 +50,16 @@ public class DefaultServerFilter extends AbstractServerFilter {
 
             return defaultServiceVersions.contains(version.toUpperCase().trim());
         }).collect(toList());
+
+        if (CollectionUtils.isNotEmpty(prodServices)) {
+            return prodServices;
+        }
+
+        if (Boolean.TRUE.equals(grayDeployProerties.getNoDefaultServiceReturnAll())) {
+            return serverList;
+        }
+
+        return Collections.emptyList();
     }
 
     @Override
