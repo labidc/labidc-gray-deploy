@@ -48,7 +48,7 @@ public class GateWayVersionHeaderReadFilter implements GlobalFilter, Ordered {
 
             List<String> versionList = new ArrayList<>();
             for (String version : versionHeader.split(VERSION_HEADER_SPLIT)) {
-                String trim = version.toLowerCase().trim();
+                String trim = version.toUpperCase().trim();
                 if (!trim.isEmpty()) {
                     versionList.add(trim);
                 }
