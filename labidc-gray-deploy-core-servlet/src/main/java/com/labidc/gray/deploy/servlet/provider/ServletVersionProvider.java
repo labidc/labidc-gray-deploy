@@ -68,7 +68,7 @@ public class ServletVersionProvider implements VersionProvider {
 
         List<String> versionList = new ArrayList<>();
         for (String version : headers.split(VERSION_HEADER_SPLIT)) {
-            String trim = version.toLowerCase().trim();
+            String trim = version.toUpperCase().trim();
             if (!trim.isEmpty()) {
                 versionList.add(trim);
             }
